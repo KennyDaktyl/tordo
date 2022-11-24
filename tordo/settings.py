@@ -150,6 +150,9 @@ STATICFILES_FINDERS = (
     "compressor.finders.CompressorFinder",
 )
 
+MEDIA_URL = "/media/"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
+
 COMPRESS_URL = STATIC_URL
 COMPRESS_ROOT = STATIC_ROOT
 COMPRESS_PRECOMPILERS = (("text/jsx", "third_party.react_compressor.ReactFilter"),)
