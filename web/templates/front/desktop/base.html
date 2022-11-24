@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block main_header %}
+    {% load compress %}
+        {% compress css %}
+            <link rel="stylesheet" href="/static/desktop/css/main_desktop.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        {% endcompress %}
+        {% block head %}{% endblock %}
+        {% block header %}{% endblock %}
+{% endblock %}
+{% block main_body %}
+    {% block message %}
+        {% if messages %}
+            <ul id="message_django" class="">
+                {% for message in messages %}
+                <li class="{{ message.tags }}">
+                    <p class="">{{ message|safe }}</p>
+                    <a href="#" class="" onclick="closeMessage(this)">x</a>
+                </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endblock %}
+    <main class="" id="main">
+        {% block content %}{% endblock %}
+    </main>
+{% endblock %}
+
+{% block main_script %}
+{% block script_link %}{% endblock %}
+
+{% block main_script %}
+    {% block script_link %}{% endblock %}
+
+    {% load compress %}
+    {% compress js %}
+        <script defer src="/static/js/main.js"></script>
+        <script>
+            function closeMessage(element) {
+            var message_django = document.getElementById('message_django');
+                message_django.style.display = 'none';
+            }
+        </script>
+        {% block script %}{% endblock %}
+{% endblock %}

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta name="robots" content="noindex">
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="/media/icons/favicon.png">
+    {% load compress %}
+        {% compress css %}
+            <link rel="stylesheet" href="/static/css/main.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+        {% endcompress %}
+   
+    {% block main_header %}
+    {% endblock %}
+</head>
+<body>
+    {% block main_body %}{% endblock %}
+    {% block main_script %}{% endblock %}
+</body>
+</html>
