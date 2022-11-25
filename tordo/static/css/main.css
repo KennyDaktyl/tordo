@@ -4,7 +4,6 @@
     box-sizing: border-box;
     list-style: none;
     color: #2F313E;
-    background: #F5F5F5;
     outline: none;
     -webkit-tap-highlight-color: transparent;
     -webkit-user-select: none;
@@ -16,6 +15,7 @@
 
 body {
     font-family: 'Montserrat';
+    background: #F5F5F5;
 }
 
 @font-face {
