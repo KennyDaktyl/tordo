@@ -1,0 +1,22 @@
+/* Layout */
+
+.in-layout {
+    width: 100%;
+}
+
+.in-layout-content {
+    margin-left: 20px;
+    margin-right: 20px;
+}
+
+.box_container {
+    top:10px
+}
+
+.motto_box {
+    width: 80%;
+    height: 109px;
+    box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.03);
+    border-radius: 20px;
+    filter: drop-shadow(0px 10px 40px rgba(0, 0, 0, 0.03));
+}

@@ -3,7 +3,7 @@
 {% block main_header %}
     {% load compress %}
         {% compress css %}
-            <link rel="stylesheet" href="/static/css/desktop/main_desktop.css?v-4" as="style" onload="this.onload=null;this.rel='stylesheet'">
+            <link rel="stylesheet" href="/static/css/mobile/main_mobile.css?v-4" as="style" onload="this.onload=null;this.rel='stylesheet'">
         {% endcompress %}
         {% block head %}{% endblock %}
         {% block header %}{% endblock %}
@@ -23,11 +23,11 @@
     {% endblock %}
     <main class="w-100 flex wrap j-center a-top flex-row" id="main">
         {% block content %}{% endblock %}
-        <footer class="in-layout-content footer flex j-left a-top margin-t-30">
-            <div class="w-25">
+        <footer class="in-layout-content footer flex wrap j-left a-top margin-t-30">
+            <div class="w-100">
                 <img class="" src="/media/svg/Tordo.svg" alt="Logo Tordo" width="135" height="37">
             </div>
-            <div class="w-25 flex wrap j-left a-top">
+            <div class="w-100 flex wrap j-left a-top">
                 <span class="text-bold w-100">Strefa Klienta</span>
                 <a href="" class="w-100">Polityka ocen i recenzji</a>
                 <a href="" class="w-100">Polityka prywatności</a>
@@ -35,18 +35,18 @@
                 <a href="" class="w-100">Załóż konto</a>
                 <a href="" class="w-100">Kontakt</a>
             </div>
-            <div class="w-25 flex wrap j-left a-top">
+            <div class="w-100 flex wrap j-left a-top">
                 <span class="text-bold w-100">Strefa restauracji</span>
                 <a href="" class="w-100">Dodaj restaurację</a>
                 <a href="" class="w-100">Logowanie BOK</a>
             </div>
-            <div class="w-25 flex wrap j-left a-top">
+            <div class="w-100 flex wrap j-left a-top">
                 <span class="text-bold w-100">O nas</span>
                 <a href="" class="w-100">Recenzenci</a>
                 <div class="w-100 flex j-left a-center">
-                    <a class="margin-r-5"><img class="" src="/media/svg/fb.svg" alt="Logo facebook" width="28" height="28"></a>
-                    <a class="margin-r-5"><img class="" src="/media/svg/inst.svg" alt="Logo Instagram" width="28" height="28"></a>
-                    <a class="margin-r-5"><img class="" src="/media/svg/tw.svg" alt="Logo Twitter" width="28" height="28"></a>
+                    <a href="" class="margin-r-5"><img class="" src="/media/svg/fb.svg" alt="Logo facebook" width="28" height="28"></a>
+                    <a href="" class="margin-r-5"><img class="" src="/media/svg/inst.svg" alt="Logo Instagram" width="28" height="28"></a>
+                    <a href="" class="margin-r-5"><img class="" src="/media/svg/tw.svg" alt="Logo Twitter" width="28" height="28"></a>
                 </div>
             </div>
         </footer>

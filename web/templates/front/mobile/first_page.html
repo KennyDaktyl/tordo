@@ -1,3 +1,47 @@
+{% extends "front/mobile/base.html" %}
+
+{% block content %}
+<div class="in-layout-content flex wrap j-center a-center ">
+    <header class="h-100 w-100 p-relative">
+        <img class="logo-tordo p-absolute" src="/media/svg/Tordo.svg" alt="Logo Tordo" width="135" height="37">
+    </header>
+    <div class="motto__container p-relative w-100">
+        <figure class="w-100">
+            <picture class="">
+                <source class="" srcset="{{ MEDIA_URL }}main/mobile/zamawiaj-jedz-komentuj-na-tordo.webp" type="image/webp"/>
+                <img class="" src="{{ MEDIA_URL }}main/mobile/zamawiaj-jedz-komentuj-na-tordo.jpg" >
+            </picture>
+        </figure>
+        <div class="box_container w-80 flex j-around a-top wrap p-absolute z-index-top">
+            <a href="" class="motto_box z-index-top bg-white p-relative">
+                <div class="p-absolute element-center-top">
+                    <img src="/media/svg/zamawiaj.svg" alt="zamawiaj" width="78" height="69">
+                    <h2 class="p-absolute text-bold element-center">Zamawiaj</h2>
+                </div>
+            </a>
+            <a href="" class="motto_box z-index-top bg-white p-relative">
+                <div class="p-absolute element-center-top">
+                    <img src="/media/svg/odbieraj.svg" alt="zamawiaj" width="78" height="69">
+                    <h2 class="p-absolute text-bold element-center text-red">Odbieraj</h2>
+                </div>
+            </a>
+            <a href="" class="motto_box z-index-top bg-white p-relative">
+                <div class="p-absolute element-center-top">
+                    <img src="/media/svg/oceniaj.svg" alt="zamawiaj" width="78" height="69">
+                    <h2 class="p-absolute text-bold element-center">Oceniaj</h2>
+                </div>
+            </a>
+        </div>
+        <div class="red_container w-100 flex j-center a-center bg-red margin-t-30">
+            <a href="" class="bg-white button_box flex a-center j-center">
+                <span class="text-red text-bold">Zaczynamy</span>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
 <figure class="restaurant_image h-100">
     <picture>
         <source srcset="{{ MEDIA_URL }}main/mobile/zamawiaj-jedz-komentuj-na-tordo.webp" type="image/webp"/>

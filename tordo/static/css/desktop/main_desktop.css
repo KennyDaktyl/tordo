@@ -1,3 +1,58 @@
-h1 {
-    font-size: 30px;
+/* Layout */
+
+.in-layout {
+    width: 1570px;
+}
+
+.in-layout-content {
+    width: 1280px;
+}
+
+.logo-tordo {
+    top: 31px;
+}
+
+.button_box {
+    border: 2px solid #E60023;
+    border-radius: 30px;
+    height: 60px;
+}
+
+#add_restaurant_button {
+    right: 200px;
+    top: 20px;
+    width: 221px;
+}
+
+#login_button {
+    right: 0px;
+    top: 20px;
+    width: 173px;
+}
+
+.box_container {
+    top: 214px;
+}
+
+.motto_box {
+    width: 324px;
+    height: 292px;
+    box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.03);
+    border-radius: 20px;
+    filter: drop-shadow(0px 10px 40px rgba(0, 0, 0, 0.03));
+}
+
+.motto_box h2 {
+    font-size: 40px;
+    line-height: 57px;
+}
+
+.red_container {
+    box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.03);
+    border-radius: 30px;
+    height: 195px;
+}
+
+.red_container a {
+    width: 324px;
 }
