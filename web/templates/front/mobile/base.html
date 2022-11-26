@@ -21,27 +21,41 @@
             </ul>
         {% endif %}
     {% endblock %}
+    <menu class="menu__conatiner w-100 flex j-center a-top wrap bg-red p-fixed z-index-top">
+        <div class="menu_elements w-80 flex wrap j-center a-top">
+            <div class="w-80 flex j-right a-center margin-t-30"><span id="closeMenu" class="text-white" onclick="closeMenu(this)">X</span></div>
+            <a id="add_restaurant_button" class="button_box flex w-80 j-center a-center margin-t-30" href=""><span class="text-white">Dodaj restauracje</span></a>
+            <a id="login_button" class="button_box flex w-80 j-center a-center bg-white margin-t-30" href=""><span class="text-red text-bold">Zaloguj</span></a>
+        </div>
+    </menu>
+
     <main class="w-100 flex wrap j-center a-top flex-row" id="main">
+        <div class="in-layout-content flex wrap j-center a-center ">
+            <header class="h-100 w-100 p-relative margin-t-30">
+                <img class="logo-tordo p-absolute" src="/media/svg/Tordo.svg" alt="Logo Tordo" width="135" height="37">
+                <img class="hamburger_menu p-absolute" src="/media/svg/more.svg" alt="Menu Tordo" width="30" height="43" onclick="openMenu(this)">
+            </header>
+        </div>
         {% block content %}{% endblock %}
         <footer class="in-layout-content footer flex wrap j-left a-top margin-t-30">
             <div class="w-100">
                 <img class="" src="/media/svg/Tordo.svg" alt="Logo Tordo" width="135" height="37">
             </div>
-            <div class="w-100 flex wrap j-left a-top">
-                <span class="text-bold w-100">Strefa Klienta</span>
+            <div class="w-100 flex wrap j-left a-top margin-t-30">
+                <span class="text-bold w-100 margin-b-20">Strefa Klienta</span>
                 <a href="" class="w-100">Polityka ocen i recenzji</a>
                 <a href="" class="w-100">Polityka prywatności</a>
                 <a href="" class="w-100">Polityka cookies</a>
                 <a href="" class="w-100">Załóż konto</a>
                 <a href="" class="w-100">Kontakt</a>
             </div>
-            <div class="w-100 flex wrap j-left a-top">
-                <span class="text-bold w-100">Strefa restauracji</span>
+            <div class="w-100 flex wrap j-left a-top margin-t-30">
+                <span class="text-bold w-100 margin-b-20">Strefa restauracji</span>
                 <a href="" class="w-100">Dodaj restaurację</a>
                 <a href="" class="w-100">Logowanie BOK</a>
             </div>
-            <div class="w-100 flex wrap j-left a-top">
-                <span class="text-bold w-100">O nas</span>
+            <div class="w-100 flex wrap j-left a-top margin-t-30">
+                <span class="text-bold w-100 margin-b-20">O nas</span>
                 <a href="" class="w-100">Recenzenci</a>
                 <div class="w-100 flex j-left a-center">
                     <a href="" class="margin-r-5"><img class="" src="/media/svg/fb.svg" alt="Logo facebook" width="28" height="28"></a>
@@ -63,6 +77,19 @@
             function closeMessage(element) {
             var message_django = document.getElementById('message_django');
                 message_django.style.display = 'none';
+            }
+
+            function openMenu() {
+                let menu_container = document.querySelector(".menu__conatiner");
+                let main = document.getElementById("main");
+                main.style.display = "none"
+                menu_container.style.display = "flex";
+            };
+            function closeMenu() {
+                let menu_container = document.querySelector(".menu__conatiner");
+                menu_container.style.display = "none"
+                let main = document.getElementById("main");
+                main.style.display = "flex"
             }
         </script>
         {% block script %}{% endblock %}

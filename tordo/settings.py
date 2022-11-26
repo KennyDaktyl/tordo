@@ -110,8 +110,8 @@ WSGI_APPLICATION = 'tordo.wsgi.application'
 DATABASES = {
     "default": {
         "NAME": DATABASE_NAME,
-        # "ENGINE": "django.db.backends.postgresql",
-        "ENGINE": "django.contrib.gis.db.backends.postgis",
+        "ENGINE": "django.db.backends.postgresql",
+        # "ENGINE": "django.contrib.gis.db.backends.postgis",
         "USER": os.environ.get("DB_USER"),
         "PASSWORD": os.environ.get("DB_PASSWORD"),
         "HOST": DATABASE_HOST,

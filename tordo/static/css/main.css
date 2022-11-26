@@ -43,6 +43,11 @@ body {
 }
 
 /* Tags style */
+.hamburger_menu {
+    right: 0px;
+    top: 0px;
+}
+
 a {
     text-decoration: none;
     color: #212121;
@@ -253,7 +258,7 @@ input {
 }
 
 .a-top {
-    align-items:flex-start
+    align-items:start
 }
 
 .a-base {

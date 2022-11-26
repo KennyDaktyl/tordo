@@ -5,12 +5,27 @@
 }
 
 .in-layout-content {
+    width: 100%;
     margin-left: 20px;
     margin-right: 20px;
 }
 
+.menu__conatiner {
+    display: none;
+    height: 100vh;
+}
+
+#add_restaurant_button {
+    border: 2px solid white;
+    border-radius: 30px;
+}
+
+#closeMenu {
+    font-size: 30px;
+}
+
 .box_container {
-    top:10px
+    top:0px
 }
 
 .motto_box {
@@ -19,4 +34,20 @@
     box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.03);
     border-radius: 20px;
     filter: drop-shadow(0px 10px 40px rgba(0, 0, 0, 0.03));
+}
+
+.button_box {
+    border: 2px solid #E60023;
+    border-radius: 30px;
+    height: 60px;
+}
+
+.red_container {
+    box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.03);
+    border-radius: 30px;
+    height: 166px;
+}
+
+.red_container a {
+    width: 324px;
 }
