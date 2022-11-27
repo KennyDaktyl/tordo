@@ -57,3 +57,23 @@
 .red_container a {
     width: 324px;
 }
+
+.filters__container {
+    height: 182px;
+    box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.03);
+    border-radius: 30px;
+}
+
+.filter_box.bg-white {
+    box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.03);
+    border-radius: 20px;
+    height: 60px;
+    width: 300px;
+}
+
+.filter_box.bg-green {
+    box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.03);
+    border-radius: 20px;
+    height: 60px;
+    width: 271px;
+}

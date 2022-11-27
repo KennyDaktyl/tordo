@@ -69,6 +69,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'web',
+    'django.contrib.gis',
+    'rest_framework',
     'compressor',
 ]
 
@@ -110,8 +112,8 @@ WSGI_APPLICATION = 'tordo.wsgi.application'
 DATABASES = {
     "default": {
         "NAME": DATABASE_NAME,
-        "ENGINE": "django.db.backends.postgresql",
-        # "ENGINE": "django.contrib.gis.db.backends.postgis",
+        # "ENGINE": "django.db.backends.postgresql",
+        "ENGINE": "django.contrib.gis.db.backends.postgis",
         "USER": os.environ.get("DB_USER"),
         "PASSWORD": os.environ.get("DB_PASSWORD"),
         "HOST": DATABASE_HOST,
@@ -155,7 +157,8 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
 COMPRESS_URL = STATIC_URL
 COMPRESS_ROOT = STATIC_ROOT
-COMPRESS_PRECOMPILERS = (("text/jsx", "third_party.react_compressor.ReactFilter"),)
+COMPRESS_PRECOMPILERS = (
+    ("text/jsx", "third_party.react_compressor.ReactFilter"),)
 COMPRESS_DEBUG_TOGGLE = False
 COMPRESS_CSS_COMPRESSOR = "compressor.css.CssCompressor"
 COMPRESS_JS_COMPRESSOR = "compressor.js.JsCompressor"

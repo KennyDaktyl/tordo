@@ -1,0 +1,56 @@
+{% extends "base_desktop.html" %}
+
+{% block content %}
+<div class="in-layout-content flex wrap j-center a-center">
+    <div class="filters__container bg-red w-100 flex j-center a-center wrap">
+        <div class="text-container w-100 flex wrap j-left a-center">
+            <div class="flex no-wrap j-center a-center margin-r-10">
+                <img src="/media/svg/map.svg" alt="Ikonka mapy" width="25" height="28">
+                <span class="text-white text-container">Mapa</span>
+            </div>
+            <div class="flex no-wrap j-center a-center">
+                <img src="/media/svg/recenzenci.svg" alt="Ikonka recenzentów" width="25" height="28">
+                <span class="text-white text-container">Recenzenci</span>
+            </div>
+        </div>
+        <div class="text-container filters w-100 flex j-between a-center no-wrap">
+            <div class="filter_box bg-green flex j-center a-center">
+                <div class="flex j-between a-center w-80">
+                    <span class="text-white text-bold">Filtry</span>
+                    <img src="/media/svg/filtr.svg" alt="Ikonka filtrów" width="30" height="18">
+                </div>
+            </div>
+            <div class="filter_box bg-white  flex j-center a-center">
+                <div class="flex j-center a-center w-100">
+                    <div class="w-20 flex j-center a-center">
+                        <img src="/media/svg/lok.svg" alt="Ikonka lokalizacji" width="18" height="23">
+                    </div>
+                    <div class="w-80">
+                        <span class="w-100">Podaj lokalizację</span>
+                    </div>
+                </div>
+            </div>
+            <div class="filter_box bg-white  flex j-center a-center">
+                <div class="flex j-center a-center w-100">
+                    <div class="w-20 flex j-center a-center">
+                        <img src="/media/svg/lupa.svg" alt="Ikonka lokalizacji" width="18" height="23">
+                    </div>
+                    <div class="w-80">
+                        <span class="w-100 ">Szukaj, lokalu, kuchni, dań</span>
+                    </div>
+                </div>
+            </div>
+            <div class="filter_box bg-white  flex j-center a-center">
+                <div class="flex j-center a-center w-100">
+                    <div class="w-80 flex j-center a-center">
+                        <span class="w-100 text-center">Odbiór - jak najszybciej</span>
+                    </div>
+                    <div class="w-20 flex j-center a-center">
+                        <span class="w-100 text-center text-bold rotate-90">></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

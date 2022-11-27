@@ -6,6 +6,7 @@
 
 .in-layout-content {
     width: 100%;
+    max-width: 500px;
     margin-left: 20px;
     margin-right: 20px;
 }
@@ -30,6 +31,7 @@
 
 .motto_box {
     width: 80%;
+    max-width: 297px;
     height: 109px;
     box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.03);
     border-radius: 20px;
@@ -49,5 +51,19 @@
 }
 
 .red_container a {
-    width: 324px;
+    width: 297px;
+}
+
+
+.filters__container {
+    height: 382px;
+    box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.03);
+    border-radius: 30px;
+}
+
+.filter_box {
+    box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.03);
+    border-radius: 20px;
+    height: 60px;
+    width: 300px;
 }

@@ -1,12 +1,7 @@
-{% extends "front/desktop/base.html" %}
+{% extends "base_desktop.html" %}
 
 {% block content %}
 <div class="in-layout-content flex wrap j-center a-center ">
-    <header class="h-100 w-100 p-relative">
-        <img class="logo-tordo p-absolute" src="/media/svg/Tordo.svg" alt="Logo Tordo" width="135" height="37">
-        <a id="add_restaurant_button" class="button_box p-absolute flex w-100 j-center a-center" href=""><span class="text-red">Dodaj restauracje</span></a>
-        <a id="login_button" class="button_box p-absolute flex w-100 j-center a-center bg-red" href=""><span class="text-white text-bold">Zaloguj</span></a>
-    </header>
     <div class="motto__container p-relative w-100">
         <figure class="w-100h">
             <picture class="">
@@ -15,7 +10,7 @@
             </picture>
         </figure>
         <div class="box_container w-100 flex j-around a-top flex-nowrap p-absolute z-index-top">
-            <a href="" class="motto_box z-index-top bg-white p-relative">
+            <a href="{% url 'restaurants' %}" class="motto_box z-index-top bg-white p-relative">
                 <div class="p-absolute element-center-top">
                     <img src="/media/svg/zamawiaj.svg" alt="zamawiaj" width="78" height="69">
                     <h2 class="p-absolute text-bold element-center">Zamawiaj</h2>

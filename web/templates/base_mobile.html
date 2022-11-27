@@ -22,8 +22,8 @@
         {% endif %}
     {% endblock %}
     <menu class="menu__conatiner w-100 flex j-center a-top wrap bg-red p-fixed z-index-top">
-        <div class="menu_elements w-80 flex wrap j-center a-top">
-            <div class="w-80 flex j-right a-center margin-t-30"><span id="closeMenu" class="text-white" onclick="closeMenu(this)">X</span></div>
+        <div class="menu_elements in-layout-content flex wrap j-center a-top">
+            <div class="w-100 h-100 flex j-right a-center"><span id="closeMenu" class="text-white" onclick="closeMenu(this)">X</span></div>
             <a id="add_restaurant_button" class="button_box flex w-80 j-center a-center margin-t-30" href=""><span class="text-white">Dodaj restauracje</span></a>
             <a id="login_button" class="button_box flex w-80 j-center a-center bg-white margin-t-30" href=""><span class="text-red text-bold">Zaloguj</span></a>
         </div>
@@ -32,7 +32,9 @@
     <main class="w-100 flex wrap j-center a-top flex-row" id="main">
         <div class="in-layout-content flex wrap j-center a-center ">
             <header class="h-100 w-100 p-relative margin-t-30">
-                <img class="logo-tordo p-absolute" src="/media/svg/Tordo.svg" alt="Logo Tordo" width="135" height="37">
+                <a href="/" class="logo-tordo p-absolute">
+                    <img class="" src="/media/svg/Tordo.svg" alt="Logo Tordo" width="135" height="37">
+                </a>
                 <img class="hamburger_menu p-absolute" src="/media/svg/more.svg" alt="Menu Tordo" width="30" height="43" onclick="openMenu(this)">
             </header>
         </div>

@@ -1,4 +1,4 @@
-{% extends "front/mobile/base.html" %}
+{% extends "base_mobile.html" %}
 
 {% block content %}
 <div class="in-layout-content flex wrap j-center a-center ">
@@ -10,7 +10,7 @@
             </picture>
         </figure>
         <div class="box_container w-100 flex j-center a-top wrap p-absolute z-index-top margin-t-30">
-            <a href="" class="motto_box z-index-top bg-white flex j-center a-center">
+            <a href="{% url 'restaurants' %}" class="motto_box z-index-top bg-white flex j-center a-center">
                 <div class="w-100 flex no-wrap j-around a-center">
                     <img src="/media/svg/zamawiaj.svg" alt="zamawiaj" width="71" height="61">
                     <h2 class="text-bold">Zamawiaj</h2>

@@ -369,6 +369,9 @@ input {
     line-height: 36px;
 }
 
+.text-container {
+    padding: 10px 20px;
+}
 
 /* Margin i paddning*/
 .margin-b-250 {
