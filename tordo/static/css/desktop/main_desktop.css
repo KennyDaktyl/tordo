@@ -77,3 +77,71 @@
     height: 60px;
     width: 271px;
 }
+
+.restaurants__container {
+    width: 900px;
+}
+
+.advertisement__container {
+    width: 380px;
+}
+
+.restaurant_box {
+    width: 890px;
+    height: 187px;
+    border-radius: 30px;
+}
+
+.restaurant_box p {
+    font-size: 20px;
+}
+
+.restaurant_box span {
+    font-size: 14px;
+}
+
+.restaurant_image_listing {
+    width: 277px;
+    height: 187px;
+    object-fit: cover;
+    border-radius: 30px 0px 0px 30px;
+}
+
+.promo_box {
+    width: 148px;
+    height: 24px;
+    border-radius: 30px;
+}
+
+.promo_box.p-absolute {
+    width: 181px;
+    height: 24px;
+    bottom: 30px;
+    left: 40px;
+}
+
+.promo_box span {
+    font-size: 12px;
+}
+
+a.underline {
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.advertisement__container picture {
+    border-radius: 30px;
+}
+
+.advertisement__container img {
+    border-radius: 30px;
+    opacity: .7;
+}
+
+.advertisement__container strong {
+    font-size: 24px;
+    top: 50%;
+    transform: translate(0, -50%);
+    left: 40px;
+    max-width: 173px;
+}

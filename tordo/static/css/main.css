@@ -430,12 +430,16 @@ input {
     margin-bottom: 35px;
 }
 
-.margin-left-20 {
+.margin-l-20 {
     margin-left: 20px;
 }
 
 .margin-l-10 {
     margin-left: 10px;
+}
+
+.margin-l-5 {
+    margin-left: 5px;
 }
 
 .margin-r-5 {
@@ -498,6 +502,10 @@ input {
 
 .bg-yellow {
     background-color: #FFD23F;
+}
+
+.bg-dark {
+    background-color: black;
 }
 
 .svg-grey {
@@ -566,4 +574,8 @@ input {
 
 .checked {
     color: #66bb6a;
+}
+
+.underline {
+    text-decoration-line: underline;
 }
