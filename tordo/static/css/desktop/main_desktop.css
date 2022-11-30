@@ -18,6 +18,10 @@
     height: 60px;
 }
 
+.button {
+    min-width: 241px;
+}
+
 #add_restaurant_button {
     right: 200px;
     top: 20px;
@@ -64,6 +68,19 @@
     border-radius: 30px;
 }
 
+.filters_box {
+    width: 1200px;
+    height: 680px;
+    top:70px;
+    border: 1px solid #E3E3E3;
+    box-shadow: 0px 10px 20px rgba(20, 20, 51, 0.1);
+    border-radius: 30px;
+}
+
+.filters_header p {
+    font-size: 18px;
+}
+
 .filter_box.bg-white {
     box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.03);
     border-radius: 20px;
@@ -76,6 +93,30 @@
     border-radius: 20px;
     height: 60px;
     width: 271px;
+}
+
+.sort_box {
+    width: 324px;
+    height: 500px;
+}
+
+#filters {
+    display: none;
+}
+
+.filters_box span{
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.filter_box {
+    width: 876px;
+    height: 500px;
+  
+}
+
+.border {
+    border: 1px solid #E3E3E3;
 }
 
 .restaurants__container {
@@ -105,6 +146,11 @@
     height: 187px;
     object-fit: cover;
     border-radius: 30px 0px 0px 30px;
+}
+
+a.restaurant_image_listing {
+    width: 277px;
+    height: 187px;
 }
 
 .promo_box {
@@ -144,4 +190,71 @@ a.underline {
     transform: translate(0, -50%);
     left: 40px;
     max-width: 173px;
+}
+
+.container {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+  
+.container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+}
+  
+.checkmark {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+    
+    border: 1px solid black;
+}
+
+.circle {
+    border-radius: 15px;
+}
+
+.square {
+    border-radius: 6px;
+}
+  
+.container input:checked ~ .checkmark {
+    background-color:#CA001C;
+    border: 0px solid #CA001C;
+}
+
+.checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+}
+  
+.container input:checked ~ .checkmark:after {
+    display: block;
+}
+  
+.container .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
 }

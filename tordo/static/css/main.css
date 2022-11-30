@@ -285,6 +285,10 @@ input {
     justify-content: space-between;
 }
 
+.self-top {
+    align-self: start;
+}
+
 /* Position */
 
 .p-fixed {
@@ -321,7 +325,7 @@ input {
 }
 
 .z-index-top {
-    z-index: 99;
+    z-index: 999;
 }
 
 /* Text format */
@@ -370,7 +374,7 @@ input {
 }
 
 .text-container {
-    padding: 10px 20px;
+    padding: 7px 0px 7px 20px
 }
 
 /* Margin i paddning*/

@@ -3,7 +3,7 @@
 {% block main_header %}
     {% load compress %}
         {% compress css %}
-            <link rel="stylesheet" href="/static/css/desktop/main_desktop.css?v-6" as="style" onload="this.onload=null;this.rel='stylesheet'">
+            <link rel="stylesheet" href="/static/css/desktop/main_desktop.css?v-10" as="style" onload="this.onload=null;this.rel='stylesheet'">
         {% endcompress %}
         {% block head %}{% endblock %}
         {% block header %}{% endblock %}
@@ -73,6 +73,28 @@
             var message_django = document.getElementById('message_django');
                 message_django.style.display = 'none';
             }
+
+            function onlyOne(checkbox, class_name) {
+                var inputs = document.querySelectorAll('input.' + class_name);
+                var spans = document.querySelectorAll('span.' + class_name);
+
+                inputs.forEach((item) => {
+                    if (item !== checkbox) { item.checked = false }
+                    else {
+                        item.checked = true;
+                        var span = checkbox.parentNode.querySelector('span.' + class_name);
+                        spans.forEach((item) => {
+                            if (span !== item) {
+                                item.classList.remove('checked');
+                            }
+                            else {
+                                item.classList.add('checked');
+                            }
+                        })
+                    }
+                });
+            }
+            
         </script>
         {% block script %}{% endblock %}
     {% endcompress %}
