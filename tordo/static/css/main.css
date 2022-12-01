@@ -536,6 +536,9 @@ input {
     border: 1px solid #E0E0E0;
 }
 
+.border-bottom {
+    border-bottom: 1px solid #E3E3E3;;
+}
 
 /* Border*/
 .border {
