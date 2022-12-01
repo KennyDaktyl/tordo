@@ -109,6 +109,14 @@
     font-weight: 500;
 }
 
+#filters_counter {
+    width: 25px;
+}
+
+.clear {
+    color: #4A90E2;
+}
+
 .filter_box {
     width: 876px;
     height: 500px;
