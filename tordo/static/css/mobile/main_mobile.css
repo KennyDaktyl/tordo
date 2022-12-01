@@ -54,6 +54,10 @@
     width: 297px;
 }
 
+.red_container button {
+    width: 297px;
+}
+
 #filters {
     display: none;
 }
@@ -62,6 +66,10 @@
     height: 382px;
     box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.03);
     border-radius: 30px;
+}
+
+#filters_counter {
+    width: 26px;
 }
 
 .filters_box p {
