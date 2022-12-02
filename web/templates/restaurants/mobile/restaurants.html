@@ -1,326 +1,12 @@
 {% extends "base_mobile.html" %}
 
 {% block filters %}
-<div id="filters" class="in-layout filters_box bg-white flex j-center a-top wrap">
-    <div class="in-layout-content bg-white flex j-center a-top wrap">
-        <div class="w-100 text-container flex j-center a-center filters_header h-80 p-fixed bg-white z-index-top">
-            <div class="w-90 flex j-left a-center">
-                <p class="text-left text-bold margin-r-10">Filtry</p>
-                <p id="filters_counter" class="text-left text-bold">(0)</p>
-                <span class="text-left clear pointer margin-l-20" onclick="clearFilters(this)">Wyczyść wszystkie</span>
-            </div>
-            <div class="w-10 flex j-right a-center margin-r-20">
-                <p class="text-left text-bold pointer" onclick="closeFilters()">X</p>
-            </div>
-        </div>
-        <div class="w-100 flex wrap a-top j-center border-bottom margin-t-80">
-            <div class="h-80 w-100 flex wrap a-center j-center">
-                <p class="w-100 text-left text-bold margin-l-20">Sortowanie najbliżej Ciebie</p>
-            </div>
-            <div class="w-100 flex wrap a-top j-center elements">
-            <div class="w-100 text-container flex wrap a-center j-center self-top">
-                <label class="container flex w-100 j-center a-center no-wrap">
-                    <input name="sorted" value="distance" type="checkbox" class="check circle" checked="checked"  onclick="onlyOne(this, 'check')">
-                    <span class="checkmark circle"></span>
-                    <span class="w-100 text-left filter_sorted" {% if request.session.sorted == 'alphabetical' %}text-red{% endif %}">Alfabetycznie</span>
-                </label>
-            </div>
-            <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                <label class="container flex w-100 j-center a-center no-wrap ">
-                    <input name="sorted" value="open_up" type="checkbox" class="check circle" {% if request.session.sorted == "open_up" %}checked{% endif %} onclick="onlyOne(this, 'check')">
-                    <span class="checkmark circle"></span>
-                    <span class="w-100 text-left filter_sorted {% if request.session.sorted == 'open_up' %}text-red{% endif %}">Najwcześniej otwarte</span>
-                </label>
-            </div>
-            <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                <label class="container flex w-100 j-center a-center no-wrap ">
-                    <input name="sorted" value="open_down" type="checkbox" class="check circle" {% if request.session.sorted == "open_down" %}checked="checked" {% endif %}
-                        onclick="onlyOne(this, 'check')">
-                    <span class="checkmark circle"></span>
-                    <span class="w-100 text-left filter_sorted {% if request.session.sorted == 'open_down' %}text-red{% endif %}">Najdłużej otwarte</span>
-                </label>
-            </div>
-                <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap ">
-                        <input name="sorted" value="promo" type="checkbox" class="check circle" {% if request.session.sorted == "promo" %}checked="checked" {% endif %} onclick="onlyOne(this, 'check')">
-                        <span class="checkmark circle"></span>
-                        <span
-                            class="w-100 text-left filter_sorted {% if request.session.sorted == 'promo' %}text-red{% endif %}">Promocje</span>
-                    </label>
-                </div>
-                <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap ">
-                        <input name="sorted" value="lunch" type="checkbox" class="check circle" {% if request.session.sorted == "lunch" %}checked="checked" {% endif %} onclick="onlyOne(this, 'check')">
-                        <span class="checkmark circle"></span>
-                        <span
-                            class="w-100 text-left filter_sorted {% if request.session.sorted == 'lunch' %}text-red{% endif %}">Lunch</span>
-                    </label>
-                </div>
-                <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap ">
-                        <input name="sorted" value="food" type="checkbox" class="check circle" {% if request.session.sorted == "food" %}checked="checked" {% endif %} onclick="onlyOne(this, 'check')">
-                        <span class="checkmark circle"></span>
-                        <span
-                            class="w-100 text-left filter_sorted {% if request.session.sorted == 'food' %}text-red{% endif %}">Jedzenie</span>
-                    </label>
-                </div>
-                <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap ">
-                        <input name="sorted" value="design" type="checkbox" class="check circle" {% if request.session.sorted == "design" %}checked="checked" {% endif %} onclick="onlyOne(this, 'check')">
-                        <span class="checkmark circle"></span>
-                        <span
-                            class="w-100 text-left filter_sorted {% if request.session.sorted == 'design' %}text-red{% endif %}">Wystrój</span>
-                    </label>
-                </div>
-                <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap ">
-                        <input name="sorted" value="service" type="checkbox" class="check circle" {% if request.session.sorted == "service" %}checked="checked" {% endif %} onclick="onlyOne(this, 'check')">
-                        <span class="checkmark circle"></span>
-                        <span
-                            class="w-100 text-left filter_sorted {% if request.session.sorted == 'service' %}text-red{% endif %}">Obsługa</span>
-                    </label>
-                </div>
-            </div>
-        </div>
-        <div class="w-100 flex wrap a-top j-center border-bottom">
-            <div class="h-80 w-100 flex wrap a-center j-left">
-                <p class="w-100 text-left text-bold margin-l-20">Potrawy</p>
-            </div>
-            <div class="w-100 flex wrap a-center j-center elements">
-                <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap">
-                        <input name="" value="Burgery" type="checkbox" class="filter_sorted square" {% if request.session.sorted == 'Burgery' %}checked="checked" {% endif %}>
-                        <span class="checkmark square"></span>
-                        <span class="w-100 text-left filter_sorted {% if request.session.sorted == 'Burgery' %}text-red{% endif %}">Burgery</span>
-                    </label>
-                </div>
-                <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap">
-                        <input name="" value="Pizza" type="checkbox" class="filter_sorted square" {% if request.session.sorted == 'Pizza' %}checked="checked" {% endif %}>
-                        <span class="checkmark square"></span>
-                        <span class="w-100 text-left filter_sorted {% if request.session.sorted == 'Pizza' %}text-red{% endif %}">Pizza</span>
-                    </label>
-                </div>
-                <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap">
-                        <input name="" value="Halal" type="checkbox" class="filter_sorted square" {% if request.session.sorted == 'Halal' %}checked="checked" {% endif %}>
-                        <span class="checkmark square"></span>
-                        <span class="w-100 text-left filter_sorted {% if request.session.sorted == 'Halal' %}text-red{% endif %}">Halal</span>
-                    </label>
-                </div>
-                <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap">
-                        <input name="" value="Sushi" type="checkbox" class="filter_sorted square" {% if request.session.sorted == 'Sushi' %}checked="checked" {% endif %}>
-                        <span class="checkmark square"></span>
-                        <span class="w-100 text-left filter_sorted {% if request.session.sorted == 'Sushi' %}text-red{% endif %}">Sushi</span>
-                    </label>
-                </div>
-                <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap">
-                        <input name="" value="Owoce morza" type="checkbox" class="filter_sorted square" {% if request.session.sorted == 'Owoce morza' %}checked="checked" {% endif %}>
-                        <span class="checkmark square"></span>
-                        <span class="w-100 text-left filter_sorted {% if request.session.sorted == 'Owoce morza' %}text-red{% endif %}">Owoce
-                            morza</span>
-                    </label>
-                </div>
-                <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap">
-                        <input name="" value="Słodkości" type="checkbox" class="filter_sorted square" {% if request.session.sorted == 'Słodkości' %}checked="checked" {% endif %}>
-                        <span class="checkmark square"></span>
-                        <span class="w-100 text-left filter_sorted {% if request.session.sorted == 'Słodkości' %}text-red{% endif %}">Słodkości</span>
-                    </label>
-                </div>
-                <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap">
-                        <input name="" value="Vege" type="checkbox" class="filter_sorted square" {% if request.session.sorted == 'Vege' %}checked="checked" {% endif %}>
-                        <span class="checkmark square"></span>
-                        <span class="w-100 text-left filter_sorted {% if request.session.sorted == 'Vege' %}text-red{% endif %}">Vege</span>
-                    </label>
-                </div>
-                <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap">
-                        <input name="" value="Gluten free" type="checkbox" class="filter_sorted square" {% if request.session.sorted == 'Gluten free' %}checked="checked" {% endif %}>
-                        <span class="checkmark square"></span>
-                        <span class="w-100 text-left filter_sorted {% if request.session.sorted == 'Gluten free' %}text-red{% endif %}">Gluten
-                            free</span>
-                    </label>
-                </div>
-            </div>
-        </div>
-        <div class="w-100 flex j-left a-top wrap border-bottom">
-            <div class="h-80 w-100 flex wrap a-center j-left">
-                <p class="w-100 text-left text-bold  margin-l-20">Dodatkowe atuty</p>
-            </div>
-            <div class="flex wrap a-top j-center elements">
-                <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap">
-                        <input name="" value="events" type="checkbox" class="filter_sorted square" {% if request.session.sorted == 'events' %}checked="checked" {% endif %}>
-                        <span class="checkmark square"></span>
-                        <span class="w-100 text-left filter_sorted {% if request.session.sorted == 'events' %}text-red{% endif %}">Wydarzenia
-                            10.10.2022</span>
-                    </label>
-                </div>
-                <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap">
-                        <input name="" value="kids" type="checkbox" class="filter_sorted square" {% if request.session.sorted == 'kids' %}checked="checked" {% endif %}>
-                        <span class="checkmark square"></span>
-                        <span class="w-100 text-left filter_sorted {% if request.session.sorted == 'kids' %}text-red{% endif %}">Menu
-                            dziecięce</span>
-                    </label>
-                </div>
-                <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap">
-                        <input name="" value="music" type="checkbox" class="filter_sorted square" {% if request.session.sorted == 'music' %}checked="checked" {% endif %}>
-                        <span class="checkmark square"></span>
-                        <span class="w-100 text-left filter_sorted {% if request.session.sorted == 'music' %}text-red{% endif %}">Muzyka
-                            na żywo</span>
-                    </label>
-                </div>
-                <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap">
-                        <input name="" value="dancing" type="checkbox" class="filter_sorted square" {% if request.session.sorted == 'dancing' %}checked="checked" {% endif %}>
-                        <span class="checkmark square"></span>
-                        <span class="w-100 text-left filter_sorted {% if request.session.sorted == 'dancing' %}text-red{% endif %}">Zabawa
-                            i taniec</span>
-                    </label>
-                </div>
-                <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap">
-                        <input name="" value="party" type="checkbox" class="filter_sorted square" {% if request.session.sorted == 'party' %}checked="checked" {% endif %}>
-                        <span class="checkmark square"></span>
-                        <span class="w-100 text-left filter_sorted {% if request.session.sorted == 'party' %}text-red{% endif %}">Na
-                            imprezę</span>
-                    </label>
-                </div>
-                <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap">
-                        <input name="" value="vine" type="checkbox" class="filter_sorted square" {% if request.session.sorted == 'vine' %}checked="checked" {% endif %}>
-                        <span class="checkmark square"></span>
-                        <span class="w-100 text-left filter_sorted {% if request.session.sorted == 'vine' %}text-red{% endif %}">Wino
-                            i alkohol</span>
-                    </label>
-                </div>
-                <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap">
-                        <input name="" value="smoke" type="checkbox" class="filter_sorted square" {% if request.session.sorted == 'smoke' %}checked="checked" {% endif %}>
-                        <span class="checkmark square"></span>
-                        <span class="w-100 text-left filter_sorted {% if request.session.sorted == 'smoke' %}text-red{% endif %}">Dla
-                            palących</span>
-                    </label>
-                </div>
-                <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap">
-                        <input name="" value="animals" type="checkbox" class="filter_sorted square" {% if request.session.sorted == 'animals' %}checked="checked" {% endif %}>
-                        <span class="checkmark square"></span>
-                        <span class="w-100 text-left filter_sorted {% if request.session.sorted == 'animals' %}text-red{% endif %}">Przyjazne
-                            zwierzętom</span>
-                    </label>
-                </div>
-                <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap">
-                        <input name="" value="garden" type="checkbox" class="filter_sorted square" {% if request.session.sorted == 'garden' %}checked="checked" {% endif %}>
-                        <span class="checkmark square"></span>
-                        <span class="w-100 text-left filter_sorted {% if request.session.sorted == 'garden' %}text-red{% endif %}">Ogródek
-                            letni</span>
-                    </label>
-                </div>
-                <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap">
-                        <input name="" value="vip" type="checkbox" class="filter_sorted square" {% if request.session.sorted == 'vip' %}checked="checked" {% endif %}>
-                        <span class="checkmark square"></span>
-                        <span class="w-100 text-left filter_sorted {% if request.session.sorted == 'vip' %}text-red{% endif %}">Vip room</span>
-                    </label>
-                </div>
-            </div>
-        </div>
-        <div class="w-100 flex j-left a-top wrap border-bottom margin-b-20">
-            <div class="h-80 w-100 flex wrap a-center j-left">
-                <p class="w-100 text-left text-bold margin-l-20">Kuchnie</p>
-            </div>
-            <div class="w-100 flex wrap a-center j-center elements">
-                <div class="w-50 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap">
-                        <input name="" value="Halal" type="checkbox" class="filter_sorted square" {% if request.session.sorted == 'Halal' %}checked="checked" {% endif %}>
-                        <span class="checkmark square"></span>
-                        <span class="w-100 text-left filter_sorted {% if request.session.sorted == 'Halal' %}text-red{% endif %}">Halal</span>
-                    </label>
-                </div>
-                <div class="w-50 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap">
-                        <input name="" value="Halal" type="checkbox" class="filter_sorted square" {% if request.session.sorted == 'Halal' %}checked="checked" {% endif %}>
-                        <span class="checkmark square"></span>
-                        <span class="w-100 text-left filter_sorted {% if request.session.sorted == 'Halal' %}text-red{% endif %}">Halal</span>
-                    </label>
-                </div>
-                <div class="w-50 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap">
-                        <input name="" value="Halal" type="checkbox" class="filter_sorted square" {% if request.session.sorted == 'Halal' %}checked="checked" {% endif %}>
-                        <span class="checkmark square"></span>
-                        <span class="w-100 text-left filter_sorted {% if request.session.sorted == 'Halal' %}text-red{% endif %}">Halal</span>
-                    </label>
-                </div>
-                <div class="w-50 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap">
-                        <input name="" value="Halal" type="checkbox" class="filter_sorted square" {% if request.session.sorted == 'Halal' %}checked="checked" {% endif %}>
-                        <span class="checkmark square"></span>
-                        <span class="w-100 text-left filter_sorted {% if request.session.sorted == 'Halal' %}text-red{% endif %}">Halal</span>
-                    </label>
-                </div>
-                <div class="w-50 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap">
-                        <input name="" value="Halal" type="checkbox" class="filter_sorted square" {% if request.session.sorted == 'Halal' %}checked="checked" {% endif %}>
-                        <span class="checkmark square"></span>
-                        <span class="w-100 text-left filter_sorted {% if request.session.sorted == 'Halal' %}text-red{% endif %}">Halal</span>
-                    </label>
-                </div>
-                <div class="w-50 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap">
-                        <input name="" value="Halal" type="checkbox" class="filter_sorted square" {% if request.session.sorted == 'Halal' %}checked="checked" {% endif %}>
-                        <span class="checkmark square"></span>
-                        <span class="w-100 text-left filter_sorted {% if request.session.sorted == 'Halal' %}text-red{% endif %}">Halal</span>
-                    </label>
-                </div>
-                <div class="w-50 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap">
-                        <input name="" value="Halal" type="checkbox" class="filter_sorted square" {% if request.session.sorted == 'Halal' %}checked="checked" {% endif %}>
-                        <span class="checkmark square"></span>
-                        <span class="w-100 text-left filter_sorted {% if request.session.sorted == 'Halal' %}text-red{% endif %}">Halal</span>
-                    </label>
-                </div>
-                <div class="w-50 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap">
-                        <input name="" value="Halal" type="checkbox" class="filter_sorted square" {% if request.session.sorted == 'Halal' %}checked="checked" {% endif %}>
-                        <span class="checkmark square"></span>
-                        <span class="w-100 text-left filter_sorted {% if request.session.sorted == 'Halal' %}text-red{% endif %}">Halal</span>
-                    </label>
-                </div>
-                <div class="w-50 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap">
-                        <input name="" value="Halal" type="checkbox" class="filter_sorted square" {% if request.session.sorted == 'Halal' %}checked="checked" {% endif %}>
-                        <span class="checkmark square"></span>
-                        <span class="w-100 text-left filter_sorted {% if request.session.sorted == 'Halal' %}text-red{% endif %}">Halal</span>
-                    </label>
-                </div>
-                <div class="w-50 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
-                    <label class="container flex w-100 j-center a-center no-wrap">
-                        <input name="" value="Halal" type="checkbox" class="filter_sorted square" {% if request.session.sorted == 'Halal' %}checked="checked" {% endif %}>
-                        <span class="checkmark square"></span>
-                        <span class="w-100 text-left filter_sorted {% if request.session.sorted == 'Halal' %}text-red{% endif %}">Halal</span>
-                    </label>
-                </div>
-            </div>
-        </div>
-        <div class="w-100 flex j-center a-center h-100 red_container">
-            <button class="button_box button flex j-center a-center bg-red" href=""><span class="text-white text-bold">Pokaż
-                    wyniki</span><span class="text-white text-bold">(25)</span></button>
-        </div>
-    </div>
-</div>
+    {% include "restaurants/mobile/includes/filters.html" %}
 {% endblock %}
 
 {% block content %}
 <div class="in-layout-content flex wrap j-center a-center">
-    <div class="filters__container bg-red w-100 flex j-center a-top wrap">
+    <div class="filters__container bg-red w-100 flex j-center a-top wrap margin-b-20">
         <div class="text-container w-100 flex wrap j-left a-center">
             <div class="flex no-wrap j-center a-center margin-r-10">
                 <img src="/media/svg/map.svg" alt="Ikonka mapy" width="25" height="28">
@@ -367,6 +53,202 @@
                 </div>
             </div>
         </div>
+    </div>
+    <div class="restaurants__container w-100 flex j-center a-top wrap padding-b-20 margin-b-20">
+        <a href="" class="restaurant_box flex j-center a-top wrap w-100 margin-b-20">
+            <picture class="w-100">
+                <source class="" srcset="{{ MEDIA_URL }}main/mobile/restaurants/restaurant_1.webp" type="image/webp"/>
+                <img class="restaurant_image_listing" src="{{ MEDIA_URL }}main/mobile/restaurants/restaurant_1.jpg" height="145">
+            </picture>
+            <div class="restaurant_info_box w-100 text-container bg-white flex j-center a-top wrap padding-b-20">
+                <p class="w-100 text-left text-bold">Akademia</p>
+                <div class="w-100 flex wrap j-left a-center margin-t-10 margin-b-10">
+                    <small class="text-bold">Kuchnia:&nbsp</small><small class="">Meksykańska, Ostra</small>
+                    <div class="flex j-left a-center w-100">
+                        <div class="flex j-left a-center">
+                            <img class="margin-r-10" src="/media/svg/lok.svg" alt="Ikonka lokalizacji" width="13" height="16">
+                            <small class="text-dark">Warszawa</small>
+                        </div>
+                        <div class="flex j-left a-center margin-l-20 margin-t-10 margin-b-10">
+                            <img class="margin-r-10" src="/media/svg/time.svg" alt="Ikonka lokalizacji">
+                            <small class="text-dark">10:00 - 22:00</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex j-left a-center w-100 margin-t-10">
+                    <div class="promo_box flex a-center j-center">
+                        <span class="w-100 text-center text-red text-bold">-30% na całe menu </span>
+                    </div>
+                </div>
+                <div class="flex j-center a-bottom wrap">
+                    <div class="w-50 margin-t-20 text-left">
+                        <small href="www.onet.pl" class="underline w-100 text-left text-bold" href="">recenzje (4)</small>
+                    </div>
+                    <div class="flex j-right a-top w-50 wrap padding-r-10">
+                        <div class="flex w-50 j-center a-top wrap">
+                            <small class="w-100 text-right margin-t-10">jedzenie</small>
+                            <small class="w-100 text-right margin-t-10">wystrój</small>
+                            <small class="w-100 text-right margin-t-10">obsługa</small>
+                        </div>
+                        <div class="flex j-left a-center w-50 wrap padding-l-10">
+                            <div class="flex j-left a-center w-100 margin-t-10">
+                                <img src="/media/svg/Star.svg" alt="Ikonka gwiazdki" width="19" height="19">
+                                <small class="w-100 text-bold margin-l-5">4.8</small>
+                            </div>
+                            <div class="flex j-left a-center w-100 margin-t-10">
+                                <img src="/media/svg/Star.svg" alt="Ikonka gwiazdki" width="19" height="19">
+                                <small class="w-100 text-bold margin-l-5">4.8</small>
+                            </div>
+                            <div class="flex j-left a-center w-100 margin-t-10">
+                                <img src="/media/svg/Star.svg" alt="Ikonka gwiazdki" width="19" height="19">
+                                <small class="w-100 text-bold margin-l-5">4.8</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <div class="advertisement__container w-100 flex a-center j-left wrap margin-b-20">
+            <span class="w-100 text-left">Reklama</span>
+            <div class="w-100 flex j-left a-center no-wrap slider_box">
+                <a href="" class="w-100 flex a-center j-left no-wrap p-relative">
+                    <picture id="slide-1" class="w-100 margin-r-20 slide">
+                        <source class="" srcset="{{ MEDIA_URL }}main/mobile/restaurants/reklama_1.webp" type="image/webp"/>
+                        <img class="advertisement_image" src="{{ MEDIA_URL }}main/mobile/restaurants/reklama_1.jpg" height="145">
+                    </picture>
+                    <strong class="p-absolute text-bold text-white">Promocja miesiąca</strong>
+                    <div class="bg-red flex a-center j-center p-absolute">
+                        <small class="w-100 text-center text-white text-bold">-50% na wszystkie dania</small>
+                    </div>
+                </a>
+                <a href="" class="w-100 flex a-center j-left no-wrap p-relative">
+                    <picture id="slide-1" class="w-100 margin-r-20 slide">
+                        <source class="" srcset="{{ MEDIA_URL }}main/mobile/restaurants/reklama_1.webp" type="image/webp"/>
+                        <img class="advertisement_image" src="{{ MEDIA_URL }}main/mobile/restaurants/reklama_1.jpg" height="145">
+                    </picture>
+                    <strong class="p-absolute text-bold text-white">Promocja miesiąca</strong>
+                    <div class="bg-red flex a-center j-center p-absolute">
+                        <small class="w-100 text-center text-white text-bold">-50% na wszystkie dania</small>
+                    </div>
+                </a>
+                <a href="" class="w-100 flex a-center j-left no-wrap p-relative">
+                    <picture id="slide-1" class="w-100 margin-r-20 slide">
+                        <source class="" srcset="{{ MEDIA_URL }}main/mobile/restaurants/reklama_1.webp" type="image/webp"/>
+                        <img class="advertisement_image" src="{{ MEDIA_URL }}main/mobile/restaurants/reklama_1.jpg" height="145">
+                    </picture>
+                    <strong class="p-absolute text-bold text-white">Promocja miesiąca</strong>
+                    <div class="bg-red flex a-center j-center p-absolute">
+                        <small class="w-100 text-center text-white text-bold">-50% na wszystkie dania</small>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <a href="" class="restaurant_box flex j-center a-top wrap w-100 margin-b-20">
+            <picture class="w-100">
+                <source class="" srcset="{{ MEDIA_URL }}main/mobile/restaurants/restaurant_1.webp" type="image/webp"/>
+                <img class="restaurant_image_listing" src="{{ MEDIA_URL }}main/mobile/restaurants/restaurant_1.jpg" height="145">
+            </picture>
+            <div class="restaurant_info_box w-100 text-container bg-white flex j-center a-top wrap padding-b-20">
+                <p class="w-100 text-left text-bold">Akademia</p>
+                <div class="w-100 flex wrap j-left a-center margin-t-10 margin-b-10">
+                    <small class="text-bold">Kuchnia:&nbsp</small><small class="">Meksykańska, Ostra</small>
+                    <div class="flex j-left a-center w-100">
+                        <div class="flex j-left a-center">
+                            <img class="margin-r-10" src="/media/svg/lok.svg" alt="Ikonka lokalizacji" width="13" height="16">
+                            <small class="text-dark">Warszawa</small>
+                        </div>
+                        <div class="flex j-left a-center margin-l-20 margin-t-10 margin-b-10">
+                            <img class="margin-r-10" src="/media/svg/time.svg" alt="Ikonka lokalizacji">
+                            <small class="text-dark">10:00 - 22:00</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex j-left a-center w-100 margin-t-10">
+                    <div class="promo_box flex a-center j-center">
+                        <span class="w-100 text-center text-red text-bold">-30% na całe menu </span>
+                    </div>
+                </div>
+                <div class="flex j-center a-bottom wrap">
+                    <div class="w-50 margin-t-20 text-left">
+                        <small href="www.onet.pl" class="underline w-100 text-left text-bold" href="">recenzje (4)</small>
+                    </div>
+                    <div class="flex j-right a-top w-50 wrap padding-r-10">
+                        <div class="flex w-50 j-center a-top wrap">
+                            <small class="w-100 text-right margin-t-10">jedzenie</small>
+                            <small class="w-100 text-right margin-t-10">wystrój</small>
+                            <small class="w-100 text-right margin-t-10">obsługa</small>
+                        </div>
+                        <div class="flex j-left a-center w-50 wrap padding-l-10">
+                            <div class="flex j-left a-center w-100 margin-t-10">
+                                <img src="/media/svg/Star.svg" alt="Ikonka gwiazdki" width="19" height="19">
+                                <small class="w-100 text-bold margin-l-5">4.8</small>
+                            </div>
+                            <div class="flex j-left a-center w-100 margin-t-10">
+                                <img src="/media/svg/Star.svg" alt="Ikonka gwiazdki" width="19" height="19">
+                                <small class="w-100 text-bold margin-l-5">4.8</small>
+                            </div>
+                            <div class="flex j-left a-center w-100 margin-t-10">
+                                <img src="/media/svg/Star.svg" alt="Ikonka gwiazdki" width="19" height="19">
+                                <small class="w-100 text-bold margin-l-5">4.8</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>
+        <a href="" class="restaurant_box flex j-center a-top wrap w-100 margin-b-20">
+            <picture class="w-100">
+                <source class="" srcset="{{ MEDIA_URL }}main/mobile/restaurants/restaurant_1.webp" type="image/webp"/>
+                <img class="restaurant_image_listing" src="{{ MEDIA_URL }}main/mobile/restaurants/restaurant_1.jpg" height="145">
+            </picture>
+            <div class="restaurant_info_box w-100 text-container bg-white flex j-center a-top wrap  padding-b-20">
+                <p class="w-100 text-left text-bold">Akademia</p>
+                <div class="w-100 flex wrap j-left a-center margin-t-10 margin-b-10">
+                    <small class="text-bold">Kuchnia:&nbsp</small><small class="">Meksykańska, Ostra</small>
+                    <div class="flex j-left a-center w-100">
+                        <div class="flex j-left a-center">
+                            <img class="margin-r-10" src="/media/svg/lok.svg" alt="Ikonka lokalizacji" width="13" height="16">
+                            <small class="text-dark">Warszawa</small>
+                        </div>
+                        <div class="flex j-left a-center margin-l-20 margin-t-10 margin-b-10">
+                            <img class="margin-r-10" src="/media/svg/time.svg" alt="Ikonka lokalizacji">
+                            <small class="text-dark">10:00 - 22:00</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex j-left a-center w-100 margin-t-10">
+                    <div class="promo_box flex a-center j-center">
+                        <span class="w-100 text-center text-red text-bold">-30% na całe menu </span>
+                    </div>
+                </div>
+                <div class="flex j-center a-bottom wrap">
+                    <div class="w-50 margin-t-20 text-left">
+                        <small href="www.onet.pl" class="underline w-100 text-left text-bold" href="">recenzje (4)</small>
+                    </div>
+                    <div class="flex j-right a-top w-50 wrap padding-r-10">
+                        <div class="flex w-50 j-center a-top wrap">
+                            <small class="w-100 text-right margin-t-10">jedzenie</small>
+                            <small class="w-100 text-right margin-t-10">wystrój</small>
+                            <small class="w-100 text-right margin-t-10">obsługa</small>
+                        </div>
+                        <div class="flex j-left a-center w-50 wrap padding-l-10">
+                            <div class="flex j-left a-center w-100 margin-t-10">
+                                <img src="/media/svg/Star.svg" alt="Ikonka gwiazdki" width="19" height="19">
+                                <small class="w-100 text-bold margin-l-5">4.8</small>
+                            </div>
+                            <div class="flex j-left a-center w-100 margin-t-10">
+                                <img src="/media/svg/Star.svg" alt="Ikonka gwiazdki" width="19" height="19">
+                                <small class="w-100 text-bold margin-l-5">4.8</small>
+                            </div>
+                            <div class="flex j-left a-center w-100 margin-t-10">
+                                <img src="/media/svg/Star.svg" alt="Ikonka gwiazdki" width="19" height="19">
+                                <small class="w-100 text-bold margin-l-5">4.8</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </a>          
     </div>
 </div>
 {% endblock %}
