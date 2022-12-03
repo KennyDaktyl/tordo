@@ -1,3 +1,4 @@
+import os
 from django.urls import reverse
 from django.core.exceptions import ValidationError
 from django.core.validators import FileExtensionValidator
@@ -110,7 +111,7 @@ class Restaurant(models.Model):
     likes_counter = models.IntegerField(
         verbose_name="Licznik lików", default=0)
     image_listing_photo = models.ImageField(
-        verbose_name="Zdjęcie na listing 200x170",
+        verbose_name="Zdjęcie na listing",
         upload_to="restaurants",
         validators=[
             FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS)
@@ -157,32 +158,32 @@ class Restaurant(models.Model):
         if not self.slug:
             self.slug = slugify(self.name.replace("ł", "l"))
         self.thumbnails_cache = {
-            "thumbnails_listing": {},
-            "thumbnails_logo": {},
-            "thumbnails_main_desktop": {},
-            "thumbnails_main_mobile": {},
+            "listing": {},
+            "logo": {},
+            "main_desktop": {},
+            "main_mobile": {},
         }
         super(Restaurant, self).save()
         if self.image_listing_photo:
-            self.thumbnails_cache["thumbnails_listing"] = make_thumbnail(
+            self.thumbnails_cache["listing"] = make_thumbnail(
                 self.image_listing_photo,
-                [(200, 170), (340, 200)],
+                [(200, 170), (277, 187)],
                 2,
                 self,
                 "restaurant",
             )
         if self.image_logo_photo:
-            self.thumbnails_cache["thumbnails_logo"] = make_thumbnail(
+            self.thumbnails_cache["logo"] = make_thumbnail(
                 self.image_logo_photo, [
-                    (170, 170), (340, 340)], 0, self, "restaurant"
+                    (500, 145), (340, 340)], 0, self, "restaurant"
             )
         if self.image_main_photo_desktop:
-            self.thumbnails_cache["thumbnails_main_desktop"] = make_thumbnail(
+            self.thumbnails_cache["main_desktop"] = make_thumbnail(
                 self.image_main_photo_desktop, [
                     (1920, 834)], 1, self, "restaurant"
             )
         if self.image_main_photo_mobile:
-            self.thumbnails_cache["thumbnails_main_mobile"] = make_thumbnail(
+            self.thumbnails_cache["main_mobile"] = make_thumbnail(
                 self.image_main_photo_mobile, [
                     (360, 378)], 12, self, "restaurant"
             )
@@ -205,51 +206,51 @@ class Restaurant(models.Model):
         return "{}".format(self.name)
 
     @property
-    def images_listing_jpg(self):
-        if self.thumbnails_cache["thumbnails_listing"].get("jpeg"):
-            return self.thumbnails_cache["thumbnails_listing"]["jpeg"]
+    def listing_jpg(self):
+        if self.thumbnails_cache["listing"].get("jpeg"):
+            return self.thumbnails_cache["listing"]["jpeg"]
         return None
 
     @property
-    def images_listing_webp(self):
-        if self.thumbnails_cache["thumbnails_listing"].get("webp"):
-            return self.thumbnails_cache["thumbnails_listing"]["webp"]
+    def listing_webp(self):
+        if self.thumbnails_cache["listing"].get("webp"):
+            return self.thumbnails_cache["listing"]["webp"]
         return True
 
     @property
-    def images_main_jpg_desktop(self):
-        if self.thumbnails_cache["thumbnails_main_desktop"].get("jpeg"):
-            return self.thumbnails_cache["thumbnails_main_desktop"]["jpeg"]
+    def main_jpg_desktop(self):
+        if self.thumbnails_cache["main_desktop"].get("jpeg"):
+            return self.thumbnails_cache["main_desktop"]["jpeg"]
         return None
 
     @property
-    def images_main_webp_desktop(self):
-        if self.thumbnails_cache["thumbnails_main_desktop"].get("webp"):
-            return self.thumbnails_cache["thumbnails_main_desktop"]["webp"]
+    def main_webp_desktop(self):
+        if self.thumbnails_cache["main_desktop"].get("webp"):
+            return self.thumbnails_cache["main_desktop"]["webp"]
         return True
 
     @property
-    def images_main_jpg_mobile(self):
-        if self.thumbnails_cache["thumbnails_main_mobile"].get("jpeg"):
-            return self.thumbnails_cache["thumbnails_main_mobile"]["jpeg"]
+    def main_jpg_mobile(self):
+        if self.thumbnails_cache["main_mobile"].get("jpeg"):
+            return self.thumbnails_cache["main_mobile"]["jpeg"]
         return None
 
     @property
-    def images_main_webp_mobile(self):
-        if self.thumbnails_cache["thumbnails_main_mobile"].get("webp"):
-            return self.thumbnails_cache["thumbnails_main_mobile"]["webp"]
+    def main_webp_mobile(self):
+        if self.thumbnails_cache["main_mobile"].get("webp"):
+            return self.thumbnails_cache["main_mobile"]["webp"]
         return True
 
     @property
-    def images_logo_jpg(self):
-        if self.thumbnails_cache["thumbnails_logo"].get("jpeg"):
-            return self.thumbnails_cache["thumbnails_logo"]["jpeg"]
+    def logo_jpg(self):
+        if self.thumbnails_cache["logo"].get("jpeg"):
+            return self.thumbnails_cache["logo"]["jpeg"]
         return None
 
     @property
-    def images_logo_webp(self):
-        if self.thumbnails_cache["thumbnails_logo"].get("webp"):
-            return self.thumbnails_cache["thumbnails_logo"]["webp"]
+    def logo_webp(self):
+        if self.thumbnails_cache["logo"].get("webp"):
+            return self.thumbnails_cache["logo"]["webp"]
         return True
 
     @property

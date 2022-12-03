@@ -1,81 +1,37 @@
 {% extends "base_desktop.html" %}
 
+{% load query_transform %}
+{% load image_tags %}
+
 {% block content %}
 <div class="in-layout-content flex wrap j-center a-center">
-    <div class="filters__container bg-red w-100 flex j-center a-center wrap margin-b-20 p-relative">
-        <div class="text-container w-100 flex wrap j-left a-center">
-            <div class="flex no-wrap j-center a-center margin-r-10 pointer">
-                <img src="/media/svg/map.svg" alt="Ikonka mapy" width="25" height="28">
-                <span class="text-white text-container">Mapa</span>
-            </div>
-            <div class="flex no-wrap j-center a-center pointer">
-                <img src="/media/svg/recenzenci.svg" alt="Ikonka recenzentów" width="25" height="28">
-                <span class="text-white text-container">Recenzenci</span>
-            </div>
-        </div>
-        <div class="text-container filters w-100 flex j-between a-center no-wrap margin-r-20">
-            <div class="filter_box bg-green flex j-center a-center pointer"  onclick="openFilters()">
-                <div class="flex j-between a-center w-80">
-                    <span class="text-white text-bold">Filtry</span>
-                    <img src="/media/svg/filtr.svg" alt="Ikonka filtrów" width="30" height="18">
-                </div>
-            </div>
-            <div class="filter_box bg-white  flex j-center a-center pointer">
-                <div class="flex j-center a-center w-100">
-                    <div class="w-20 flex j-center a-center">
-                        <img src="/media/svg/lok.svg" alt="Ikonka lokalizacji" width="18" height="23">
-                    </div>
-                    <div class="w-80">
-                        <span class="w-100">Podaj lokalizację</span>
-                    </div>
-                </div>
-            </div>
-            <div class="filter_box bg-white flex j-center a-center pointer">
-                <div class="flex j-center a-center w-100">
-                    <div class="w-20 flex j-center a-center">
-                        <img src="/media/svg/lupa.svg" alt="Ikonka lokalizacji" width="18" height="23">
-                    </div>
-                    <div class="w-80">
-                        <span class="w-100 ">Szukaj, lokalu, kuchni, dań</span>
-                    </div>
-                </div>
-            </div>
-            <div class="filter_box bg-white flex j-center a-center pointer">
-                <div class="flex j-center a-center w-100">
-                    <div class="w-80 flex j-center a-center">
-                        <span class="w-100 text-center">Odbiór - jak najszybciej</span>
-                    </div>
-                    <div class="w-20 flex j-center a-center">
-                        <span class="w-100 text-center text-bold rotate-90">></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        {% include "restaurants/desktop/includes/filters.html" %}
-    </div>
+    {% include "restaurants/desktop/includes/filters.html" %}
     <div class="w-100 flex j-between a-top wrap">
         <div class="restaurants__container flex j-between a-top wrap">
+            {% for restaurant in restaurants %}
             <div href="#" class="restaurant_box bg-white w-100 flex a-center j-center margin-b-20">
                 <a href="" class="flex j-center a-top">
                     <picture class="">
-                        <source class="" srcset="{{ MEDIA_URL }}main/desktop/zamawiaj-jedz-komentuj-na-tordo.webp" type="image/webp"/>
-                        <img class="restaurant_image_listing" src="{{ MEDIA_URL }}main/desktop/zamawiaj-jedz-komentuj-na-tordo.jpg" >
+                        <source class="" srcset="{{ MEDIA_URL }}{% get_src_expected restaurant.listing_webp.items '277x187' %}" type="image/webp"/>
+                        <img class="restaurant_image_listing" src="{{ MEDIA_URL }}{% get_src_expected restaurant.listing_jpg.items '277x187' %}" alt="" width="277" height="187">
                     </picture>
                 </a>    
                 <div class="flex text-container j-between a-top w-100">
                     <div class="flex j-left a-center wrap">
                         <a href="" class="flex w-100 j-center a-top">
-                            <p class="w-100 text-left text-bold text-dark">Nazwa Restauracji</p>
+                            <p class="w-100 text-left text-bold text-dark">{{ restaurant.name }}</p>
                         </a>
-                        <span class="w-100 text-left text-dark">Kuchnia: polska, międzynarodowa, włoska</span>
+                        <div class="flex w-100 j-left a-center margin-t-5">
+                            <span class="text-left text-dark text-bold">Kuchnia:&nbsp</span><span>{% for tag in restaurant.tags %}{{ tag.name }}{% if not forloop.last %}, {% endif %}{% endfor %}<span>                        </div>
                         <div class="flex j-left a-center w-100">
                             <div class="flex j-left a-center">
                                 <img class="margin-r-10" src="/media/svg/lok.svg" alt="Ikonka lokalizacji" width="13" height="16">
-                                <span class="text-dark">Warszawa</span>
+                                <span class="text-dark">{{ restaurant.city }}</span>
                             </div>
                             <div class="flex j-left a-center margin-l-20 margin-t-10 margin-b-10">
                                 <img class="margin-r-10" src="/media/svg/time.svg" alt="Ikonka lokalizacji">
-                                <span class="text-dark">10:00 - 22:00</span>
+                                <span class="text-dark">{% if restaurant.weekday %}{{ restaurant.from_hour }} do {{ restaurant.to_hour }}{% else %}<span
+                                    class="text-red text-bold">Nieczynne</span>{% endif %}</span>
                             </div>
                         </div>
                         <div class="flex j-left a-center w-100 margin-t-10">
@@ -110,116 +66,7 @@
                     </div>
                 </div>
             </div>
-            <div href="#" class="restaurant_box bg-white w-100 flex a-center j-center margin-b-20">
-                <a href="" class="flex j-center a-top">
-                    <picture class="">
-                        <source class="" srcset="{{ MEDIA_URL }}main/desktop/zamawiaj-jedz-komentuj-na-tordo.webp" type="image/webp"/>
-                        <img class="restaurant_image_listing" src="{{ MEDIA_URL }}main/desktop/zamawiaj-jedz-komentuj-na-tordo.jpg" >
-                    </picture>
-                </a>    
-                <div class="flex text-container j-between a-top w-100">
-                    <div class="flex j-left a-center wrap">
-                        <a href="" class="flex w-100 j-center a-top">
-                            <p class="w-100 text-left text-bold text-dark">Nazwa Restauracji</p>
-                        </a>
-                        <span class="w-100 text-left text-dark">Kuchnia: polska, międzynarodowa, włoska</span>
-                        <div class="flex j-left a-center w-100">
-                            <div class="flex j-left a-center">
-                                <img class="margin-r-10" src="/media/svg/lok.svg" alt="Ikonka lokalizacji" width="13" height="16">
-                                <span class="text-dark">Warszawa</span>
-                            </div>
-                            <div class="flex j-left a-center margin-l-20 margin-t-10 margin-b-10">
-                                <img class="margin-r-10" src="/media/svg/time.svg" alt="Ikonka lokalizacji">
-                                <span class="text-dark">10:00 - 22:00</span>
-                            </div>
-                        </div>
-                        <div class="flex j-left a-center w-100 margin-t-10">
-                            <div class="promo_box bg-red flex a-center j-center">
-                                <small class="w-100 text-center text-white text-bold">-30% na całe menu </small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex j-center a-center wrap">
-                        <div class="flex j-right a-top w-50 wrap padding-r-10">
-                            <span class="w-100 text-right margin-t-10">jedzenie</span>
-                            <span class="w-100 text-right margin-t-10">wystrój</span>
-                            <span class="w-100 text-right margin-t-10">obsługa</span>
-                        </div>
-                        <div class="flex j-left a-center w-50 wrap padding-l-10">
-                            <div class="flex j-left a-center w-100 margin-t-10">
-                                <img src="/media/svg/Star.svg" alt="Ikonka gwiazdki" width="19" height="19">
-                                <span class="w-100 text-bold margin-l-5">4.8</span>
-                            </div>
-                            <div class="flex j-left a-center w-100 margin-t-10">
-                                <img src="/media/svg/Star.svg" alt="Ikonka gwiazdki" width="19" height="19">
-                                <span class="w-100 text-bold margin-l-5">4.8</span>
-                            </div>
-                            <div class="flex j-left a-center w-100 margin-t-10">
-                                <img src="/media/svg/Star.svg" alt="Ikonka gwiazdki" width="19" height="19">
-                                <span class="w-100 text-bold margin-l-5">4.8</span>
-                            </div>
-                        </div>
-                        <div class="w-100 margin-t-20 text-center">
-                            <a class="underline" href="">recenzje (4)</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div href="#" class="restaurant_box bg-white w-100 flex a-center j-center margin-b-20">
-                <a href="" class="flex j-center a-top">
-                    <picture class="">
-                        <source class="" srcset="{{ MEDIA_URL }}main/desktop/zamawiaj-jedz-komentuj-na-tordo.webp" type="image/webp"/>
-                        <img class="restaurant_image_listing" src="{{ MEDIA_URL }}main/desktop/zamawiaj-jedz-komentuj-na-tordo.jpg" >
-                    </picture>
-                </a>    
-                <div class="flex text-container j-between a-top w-100">
-                    <div class="flex j-left a-center wrap">
-                        <a href="" class="flex w-100 j-center a-top">
-                            <p class="w-100 text-left text-bold text-dark">Nazwa Restauracji</p>
-                        </a>
-                        <span class="w-100 text-left text-dark">Kuchnia: polska, międzynarodowa, włoska</span>
-                        <div class="flex j-left a-center w-100">
-                            <div class="flex j-left a-center">
-                                <img class="margin-r-10" src="/media/svg/lok.svg" alt="Ikonka lokalizacji" width="13" height="16">
-                                <span class="text-dark">Warszawa</span>
-                            </div>
-                            <div class="flex j-left a-center margin-l-20 margin-t-10 margin-b-10">
-                                <img class="margin-r-10" src="/media/svg/time.svg" alt="Ikonka lokalizacji">
-                                <span class="text-dark">10:00 - 22:00</span>
-                            </div>
-                        </div>
-                        <div class="flex j-left a-center w-100 margin-t-10">
-                            <div class="promo_box bg-red flex a-center j-center">
-                                <small class="w-100 text-center text-white text-bold">-30% na całe menu </small>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="flex j-center a-center wrap">
-                        <div class="flex j-right a-top w-50 wrap padding-r-10">
-                            <span class="w-100 text-right margin-t-10">jedzenie</span>
-                            <span class="w-100 text-right margin-t-10">wystrój</span>
-                            <span class="w-100 text-right margin-t-10">obsługa</span>
-                        </div>
-                        <div class="flex j-left a-center w-50 wrap padding-l-10">
-                            <div class="flex j-left a-center w-100 margin-t-10">
-                                <img src="/media/svg/Star.svg" alt="Ikonka gwiazdki" width="19" height="19">
-                                <span class="w-100 text-bold margin-l-5">4.8</span>
-                            </div>
-                            <div class="flex j-left a-center w-100 margin-t-10">
-                                <img src="/media/svg/Star.svg" alt="Ikonka gwiazdki" width="19" height="19">
-                                <span class="w-100 text-bold margin-l-5">4.8</span>
-                            </div>
-                            <div class="flex j-left a-center w-100 margin-t-10">
-                                <img src="/media/svg/Star.svg" alt="Ikonka gwiazdki" width="19" height="19">
-                                <span class="w-100 text-bold margin-l-5">4.8</span>
-                            </div>
-                        </div>
-                        <div class="w-100 margin-t-20 text-center">
-                            <a class="underline" href="">recenzje (4)</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            {% endfor %}
         </div>
         <div class="advertisement__container flex j-center a-top wrap">
             <span class="w-100 text-right">Reklama</span>

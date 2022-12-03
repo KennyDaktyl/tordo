@@ -18,8 +18,8 @@ class OpenHoursSerializer(serializers.ModelSerializer):
 
 class RestaurantSerializer(serializers.ModelSerializer):
     id_restaurant = serializers.IntegerField(source="pk")
-    from_hour = serializers.TimeField()
-    to_hour = serializers.TimeField()
+    from_hour = serializers.DateTimeField(format="%H:%M")
+    to_hour = serializers.DateTimeField(format="%H:%M")
     tags = TagSerializer(read_only=True, many=True)
 
     class Meta:
@@ -28,20 +28,21 @@ class RestaurantSerializer(serializers.ModelSerializer):
             "name",
             "street",
             "house",
+            "city",
             "post_code",
             "slug",
             "home_page",
             "description",
             "id_restaurant",
             "thumbnails_cache",
-            "images_listing_webp",
-            "images_listing_jpg",
-            "images_main_webp_desktop",
-            "images_main_jpg_desktop",
-            "images_main_webp_mobile",
-            "images_main_jpg_mobile",
-            "images_logo_webp",
-            "images_logo_jpg",
+            "listing_webp",
+            "listing_jpg",
+            "main_webp_desktop",
+            "main_jpg_desktop",
+            "main_webp_mobile",
+            "main_jpg_mobile",
+            "logo_webp",
+            "logo_jpg",
             "from_hour",
             "to_hour",
             "weekday",
@@ -53,8 +54,8 @@ class RestaurantSerializer(serializers.ModelSerializer):
 
 class RestaurantWithProductsSerializer(serializers.HyperlinkedModelSerializer):
     id_restaurant = serializers.IntegerField(source="pk")
-    from_hour = serializers.TimeField()
-    to_hour = serializers.TimeField()
+    from_hour = serializers.DateTimeField(format="%H:%M")
+    to_hour = serializers.DateTimeField(format="%H:%M")
     tags = TagSerializer(read_only=True, many=True)
     categories = CategoryWithProductsSerializer(
         read_only=True, many=True, default=[])
@@ -65,19 +66,20 @@ class RestaurantWithProductsSerializer(serializers.HyperlinkedModelSerializer):
             "name",
             "street",
             "house",
+            "city",
             "post_code",
             "slug",
             "home_page",
             "description",
             "id_restaurant",
-            "images_listing_webp",
-            "images_listing_jpg",
-            "images_main_webp_desktop",
-            "images_main_jpg_desktop",
-            "images_main_webp_mobile",
-            "images_main_jpg_mobile",
-            "images_logo_webp",
-            "images_logo_jpg",
+            "listing_webp",
+            "listing_jpg",
+            "main_webp_desktop",
+            "main_jpg_desktop",
+            "main_webp_mobile",
+            "main_jpg_mobile",
+            "logo_webp",
+            "logo_jpg",
             "from_hour",
             "to_hour",
             "weekday",

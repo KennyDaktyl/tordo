@@ -169,5 +169,6 @@ TIME_ZONE = "Europe/Warsaw"
 USE_I18N = True
 USE_L10N = True
 USE_TZ = False
-DATETIME_FORMAT = "Y-m-d H:M:S"
+DATETIME_FORMAT = "Y-m-d H:M"
 DATE_INPUT_FORMATS = "Y-m-d H:M:S"
+TIME_INPUT_FORMATS = ('%I:%M',)
