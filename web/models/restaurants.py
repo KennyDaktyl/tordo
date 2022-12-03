@@ -167,7 +167,7 @@ class Restaurant(models.Model):
         if self.image_listing_photo:
             self.thumbnails_cache["listing"] = make_thumbnail(
                 self.image_listing_photo,
-                [(200, 170), (277, 187)],
+                [(500, 145), (277, 187)],
                 2,
                 self,
                 "restaurant",
@@ -343,11 +343,6 @@ def auto_delete_file_on_delete(sender, instance, **kwargs):
 
 @receiver(models.signals.pre_save, sender=Restaurant)
 def auto_delete_file_on_change(sender, instance, **kwargs):
-    """
-    Deletes old file from filesystem
-    when corresponding `MediaFile` object is updated
-    with new file.
-    """
     if not instance.pk:
         return False
 

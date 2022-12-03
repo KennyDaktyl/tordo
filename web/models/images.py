@@ -5,8 +5,6 @@ from django.core.files.base import ContentFile
 from django.contrib.gis.db import models
 from django.dispatch import receiver
 
-# from django.utils.translation import ugettext_lazy as _
-
 from web.constants import PHOTO_STATUS
 
 
@@ -85,10 +83,6 @@ def make_thumbnail(photo, sizes, status, relation_object, relation_object_type):
 
 @receiver(models.signals.post_delete, sender=Thumbnail)
 def auto_delete_file_on_delete(sender, instance, **kwargs):
-    """
-    Deletes file from filesystem
-    when corresponding `MediaFile` object is deleted.
-    """
     if instance.photo:
         if os.path.isfile(instance.photo.path):
             os.remove(instance.photo.path)
@@ -96,11 +90,6 @@ def auto_delete_file_on_delete(sender, instance, **kwargs):
 
 @receiver(models.signals.pre_save, sender=Thumbnail)
 def auto_delete_file_on_change(sender, instance, **kwargs):
-    """
-    Deletes old file from filesystem
-    when corresponding `MediaFile` object is updated
-    with new file.
-    """
     if not instance.pk:
         return False
 

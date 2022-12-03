@@ -1,5 +1,8 @@
 {% extends "base_mobile.html" %}
 
+{% load query_transform %}
+{% load image_tags %}
+
 {% block filters %}
     {% include "restaurants/mobile/includes/filters.html" %}
 {% endblock %}
@@ -11,8 +14,8 @@
         {% for restaurant in restaurants %}
         <a href="" class="restaurant_box flex j-center a-top wrap w-100 margin-b-20">
             <picture class="w-100">
-                <source class="" srcset="{{ MEDIA_URL }}main/mobile/restaurants/restaurant_1.webp" type="image/webp"/>
-                <img class="restaurant_image_listing" src="{{ MEDIA_URL }}main/mobile/restaurants/restaurant_1.jpg" height="145">
+                <source class="" srcset="{{ MEDIA_URL }}{% get_src_expected restaurant.listing_webp.items '500x145' %}" type="image/webp"/>
+                <img class="restaurant_image_listing" src="{{ MEDIA_URL }}{% get_src_expected restaurant.listing_jpg.items '500x145' %}" height="145">
             </picture>
             <div class="restaurant_info_box w-100 text-container bg-white flex j-center a-top wrap padding-b-20">
                 <p class="w-100 text-left text-bold">{{ restaurant.name }}</p>
