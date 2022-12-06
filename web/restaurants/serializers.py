@@ -26,6 +26,7 @@ class RestaurantSerializer(serializers.ModelSerializer):
         model = Restaurant
         fields = [
             "name",
+            "motto",
             "street",
             "house",
             "city",
@@ -47,6 +48,7 @@ class RestaurantSerializer(serializers.ModelSerializer):
             "to_hour",
             "weekday",
             "tags",
+            "food_supplier",
             "likes_counter",
             "is_open",
         ]
@@ -64,6 +66,7 @@ class RestaurantWithProductsSerializer(serializers.HyperlinkedModelSerializer):
         model = Restaurant
         fields = [
             "name",
+            "motto",
             "street",
             "house",
             "city",
@@ -84,6 +87,7 @@ class RestaurantWithProductsSerializer(serializers.HyperlinkedModelSerializer):
             "to_hour",
             "weekday",
             "tags",
+            "food_supplier",
             "likes_counter",
             "categories",
             "is_open"

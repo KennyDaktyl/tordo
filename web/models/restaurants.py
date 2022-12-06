@@ -12,6 +12,7 @@ from web.models.images import make_thumbnail, ALLOWED_IMAGE_EXTENSIONS
 from datetime import datetime
 
 from web.models.products import RestaurantMenu, Category, Product
+from web.models.images import Photo
 
 
 def file_size(value):
@@ -75,6 +76,27 @@ class Tag(models.Model):
         return "{}".format(self.name)
 
 
+class FoodSupplier(models.Model):
+    name = models.CharField(max_length=100)
+    image = models.ImageField(
+        verbose_name="Logo firmy świadczącej dostawy",
+        upload_to="others",
+        validators=[
+            FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS)
+        ],
+        null=True,
+        blank=True,
+    )
+    order = models.IntegerField(verbose_name="Kolejność", default=99)
+
+    class Meta:
+        ordering = ("order", "name",)
+        verbose_name_plural = "Dostawcy jedzenia"
+
+    def __str__(self):
+        return "{}".format(self.name)
+
+
 class Restaurant(models.Model):
     created_time = models.DateTimeField(default=timezone.now, db_index=True)
     modified_time = models.DateTimeField(auto_now=True, db_index=True)
@@ -85,6 +107,7 @@ class Restaurant(models.Model):
         null=True,
     )
     name = models.CharField(verbose_name="Nazwa restauracji", max_length=100)
+    motto = models.CharField(verbose_name="Motto restauracji", max_length=100)
     slug = models.SlugField(verbose_name="Slug",
                             blank=True, null=True, max_length=128)
     location = models.PointField()
@@ -153,6 +176,12 @@ class Restaurant(models.Model):
         related_name="restaurant_tags",
         blank=True,
     )
+    food_supplier = models.ManyToManyField(
+        "FoodSupplier",
+        verbose_name="Dostawcy jedzenia: (many)",
+        related_name="restaurant_food_supplier",
+        blank=True,
+    )
 
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -175,7 +204,7 @@ class Restaurant(models.Model):
         if self.image_logo_photo:
             self.thumbnails_cache["logo"] = make_thumbnail(
                 self.image_logo_photo, [
-                    (500, 145), (340, 340)], 0, self, "restaurant"
+                    (200, 95), (340, 340)], 0, self, "restaurant"
             )
         if self.image_main_photo_desktop:
             self.thumbnails_cache["main_desktop"] = make_thumbnail(
@@ -204,6 +233,11 @@ class Restaurant(models.Model):
 
     def __str__(self):
         return "{}".format(self.name)
+    
+    @property
+    def gallery(self):
+        gallery = Photo.objects.filter(restaurant_id=self)
+        return [x.thumbnails_cache["gallery"] for x in gallery]
 
     @property
     def listing_jpg(self):
@@ -277,7 +311,7 @@ class Restaurant(models.Model):
         fh = OpeningHours.objects.filter(
             restaurant=self, weekday=weekday).first()
         if fh:
-            return fh.weekday
+            return fh.weekday_name
         return None
 
     @property
@@ -323,10 +357,6 @@ class Restaurant(models.Model):
 
 @receiver(models.signals.post_delete, sender=Restaurant)
 def auto_delete_file_on_delete(sender, instance, **kwargs):
-    """
-    Deletes file from filesystem
-    when corresponding `MediaFile` object is deleted.
-    """
     if instance.image_listing_photo:
         if os.path.isfile(instance.image_listing_photo.path):
             os.remove(instance.image_listing_photo.path)

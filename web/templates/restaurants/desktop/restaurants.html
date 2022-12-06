@@ -9,18 +9,16 @@
     <div class="w-100 flex j-between a-top wrap">
         <div class="restaurants__container flex j-between a-top wrap">
             {% for restaurant in restaurants %}
-            <div href="#" class="restaurant_box bg-white w-100 flex a-center j-center margin-b-20">
-                <a href="" class="flex j-center a-top">
-                    <picture class="">
+            <a href="{% url 'restaurant_details' slug=restaurant.slug pk=restaurant.id_restaurant %}" class="restaurant_box bg-white w-100 flex a-center j-center margin-b-20">
+                <div class="flex j-center a-center">
+                    <picture class="flex j-center a-center wrap">
                         <source class="" srcset="{{ MEDIA_URL }}{% get_src_expected restaurant.listing_webp.items '277x187' %}" type="image/webp"/>
                         <img class="restaurant_image_listing" src="{{ MEDIA_URL }}{% get_src_expected restaurant.listing_jpg.items '277x187' %}" alt="" width="277" height="187">
                     </picture>
-                </a>    
+                </div>    
                 <div class="flex text-container j-between a-top w-100">
                     <div class="flex j-left a-center wrap">
-                        <a href="" class="flex w-100 j-center a-top">
-                            <p class="w-100 text-left text-bold text-dark">{{ restaurant.name }}</p>
-                        </a>
+                        <p class="w-100 text-left text-bold text-dark">{{ restaurant.name }}</p>
                         <div class="flex w-100 j-left a-center margin-t-5">
                             <span class="text-left text-dark text-bold">Kuchnia:&nbsp</span><span>{% for tag in restaurant.tags %}{{ tag.name }}{% if not forloop.last %}, {% endif %}{% endfor %}<span>                        </div>
                         <div class="flex j-left a-center w-100">
@@ -61,11 +59,11 @@
                             </div>
                         </div>
                         <div class="w-100 margin-t-20 text-center">
-                            <a class="underline" href="">recenzje (4)</a>
+                            <p class="underline" href="">recenzje (4)</p>
                         </div>
                     </div>
                 </div>
-            </div>
+            </a>
             {% endfor %}
         </div>
         <div class="advertisement__container flex j-center a-top wrap">
@@ -109,13 +107,17 @@
 <script>
     function openFilters() {
         var filters = document.getElementById('filters');
-            filters.style.display = 'flex';
-        }
+        filters.style.display = 'flex';
+        var main = document.getElementById('main');
+        main.style.backgroundColor = "#E3E3E3";
+    }
 
     function closeFilters() {
         var filters = document.getElementById('filters');
-            filters.style.display = 'none';
-        };
+        filters.style.display = 'none';
+        var main = document.getElementById('main');
+        main.style.backgroundColor = "#FFFFFF";
+    };
     
     function clearFilters(clear_button) {
         var all_inputs = document.querySelectorAll('input.filter_sorted:checked');

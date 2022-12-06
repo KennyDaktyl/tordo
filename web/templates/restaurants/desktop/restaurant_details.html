@@ -1,0 +1,112 @@
+{% extends "base_desktop.html" %}
+
+{% load image_tags %}
+
+{% block content %}
+<div class="in-layout-content flex wrap j-center a-center restaurant__container">
+    <div class="flex w-100 j-center a-center bg-red border-r box-shadow h-100">
+        <div class="flex w-100 j-center a-center margin-l-20 margin-r-20">
+            <div class="w-50 flex j-left a-center wrap">
+                <h1 class="text-bold text-white w-100 text-left">{{ restaurant.name }}</h1>
+                <h2 class="text-white w-100 text-left">{{ restaurant.motto }}</h2>
+            </div>
+            <div class="w-50 flex j-right a-center wrap">
+                <div class="filter_box bg-white flex j-center a-center pointer">
+                    <div class="flex j-center a-center w-100">
+                        <div class="w-80 flex j-center a-center">
+                            <span class="w-100 text-center">Odbiór - jak najszybciej</span>
+                        </div>
+                        <div class="w-20 flex j-center a-center">
+                            <span class="w-100 text-center text-bold rotate-90">></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div> 
+    <div class="flex bg-white w-100 j-center a-top border-r padding-l-20 padding-r-20 padding-t-20 margin-t-20">
+        <div class="w-25 flex j-center a-top wrap">
+            <picture class="flex j-center a-center wrap">
+                <source class="" srcset="{{ MEDIA_URL }}{% get_src_expected restaurant.logo_webp.items '200x95' %}" type="image/webp"/>
+                <img class="restaurant_image_listing" src="{{ MEDIA_URL }}{% get_src_expected restaurant.logo_jpg.items '200x95' %}" alt="" width="200" height="195">
+            </picture>
+            <div class="comments_box flex j-center a-center wrap margin-t-20">
+                <div class="flex j-right a-top w-50 wrap padding-r-10">
+                    <span class="w-100 text-right margin-t-10">jedzenie</span>
+                    <span class="w-100 text-right margin-t-10">wystrój</span>
+                    <span class="w-100 text-right margin-t-10">obsługa</span>
+                </div>
+                <div class="flex j-left a-center w-50 wrap padding-l-10">
+                    <div class="flex j-left a-center w-100 margin-t-10">
+                        <img src="/media/svg/Star.svg" alt="Ikonka gwiazdki" width="19" height="19">
+                        <span class="w-100 text-bold margin-l-5">4.8</span>
+                    </div>
+                    <div class="flex j-left a-center w-100 margin-t-10">
+                        <img src="/media/svg/Star.svg" alt="Ikonka gwiazdki" width="19" height="19">
+                        <span class="w-100 text-bold margin-l-5">4.8</span>
+                    </div>
+                    <div class="flex j-left a-center w-100 margin-t-10">
+                        <img src="/media/svg/Star.svg" alt="Ikonka gwiazdki" width="19" height="19">
+                        <span class="w-100 text-bold margin-l-5">4.8</span>
+                    </div>
+                </div>
+                <div class="w-100 margin-t-20 text-center">
+                    <a href="" class="underline" href="">recenzje (4)</a>
+                </div>
+            </div>
+            <div class="flex j-left a-center wrap w-100 margin-t-20">
+                <div class="flex j-left a-center w-100">
+                    <img class="margin-r-10" src="/media/svg/lok.svg" alt="Ikonka lokalizacji" width="18" height="16">
+                    <p class="text-bold">Adres</p>
+                </div>
+                <div class="margin-l-20 flex j-left a-center w-100 wrap margin-t-10">
+                    <p class="w-100">{{ restaurant.street }}&nbsp;{{ restaurant.house }}{% if restaurant.door %}/{{ restaurant.door }}{% endif %}</p>
+                    <p class="w-100 margin-t-10">{{ restaurant.city }}</p>
+                </div>
+            </div>
+            <div class="flex j-left a-center wrap margin-t-20 w-100">
+                <img class="margin-r-10" src="/media/svg/time.svg" alt="Ikonka lokalizacji" width="18" height="18">
+                <p class="text-bold">Dziś</p>
+                <p class="margin-l-10">({{ restaurant.weekday }})</p>
+                <span class="w-100 margin-l-20 margin-t-10">{% if restaurant.weekday %}{{ restaurant.from_hour }} do {{ restaurant.to_hour }}{% else %}<span
+                    class="text-red text-bold">Nieczynne</span>{% endif %}</span>
+            </div>
+            <div class="flex j-left a-center wrap margin-t-20 w-100">
+                <img class="margin-r-10" src="/media/svg/human.svg" alt="Ikonka usera" width="18" height="18">
+                <p class="text-bold">Ilość miejsc</p>
+                <span class="w-100 margin-l-20 margin-t-10">Sala:&nbsp;100&nbsp;miejsc</span>
+                <span class="w-100 margin-l-20 margin-t-10">Ogródek:&nbsp;50&nbsp;miejsc</span>
+            </div>
+            <div class="flex j-left a-center wrap margin-t-20 w-100 padding-b-20">
+                <img class="margin-r-10" src="/media/svg/dostawa.svg" alt="Ikonka dostawy" width="18" height="18">
+                <p class="text-bold">Dostawy</p>
+                <div class="flex j-left a-center wrap margin-t-10 w-100 margin-l-20">
+                    {% for delivery in restaurant.food_supplier.all %}
+                        <img class="margin-r-10 margin-t-10" src="{{ MEDIA_URL }}{{ delivery.image }}" alt="" width="59" height="59">
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="w-75 flex j-center a-top wrap">
+            <div class="w-100 flex j-left a-top wrap">
+                <a href="" class="margin-r-5"><img class="" src="/media/svg/fb.svg" alt="Logo facebook" width="28" height="28"></a>
+                <a href="" class="margin-r-5"><img class="" src="/media/svg/inst.svg" alt="Logo Instagram" width="28" height="28"></a>
+                <a href="" class="margin-r-5"><img class="" src="/media/svg/tw.svg" alt="Logo Twitter" width="28" height="28"></a>
+            </div>
+            <div class="w-100 flex j-left a-top wrap margin-t-20">
+                <span class="w-100">{{ restaurant.description }}</span>
+            </div>
+            <div class="w-100 flex j-between a-top wrap margin-t-20 ">
+                {% for image in restaurant.gallery %}
+                <picture class="flex j-center a-center wrap">
+                    <source class="" srcset="{{ MEDIA_URL }}{% get_thumbnails_by_type image.items '289x223' 'webp' %}" type="image/webp"/>
+                    <img class="border-r margin-r-10" src="{{ MEDIA_URL }}{% get_thumbnails_by_type image.items '289x223' 'jpeg' %}" alt="" width="289" height="223">
+                </picture>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+

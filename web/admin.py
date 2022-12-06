@@ -11,9 +11,9 @@ from web.models.addresses import (
     SubDistrictWarsaw,
     UserAddress,
 )
-from web.models.restaurants import Restaurant, OpeningHours, Tag
+from web.models.restaurants import Restaurant, OpeningHours, Tag, FoodSupplier
 from web.models.products import Category, Product, RestaurantMenu
-from web.models.images import Thumbnail
+from web.models.images import Thumbnail, Photo
 
 
 @admin.register(Restaurant)
@@ -174,3 +174,24 @@ class ThumbnailAdmin(admin.ModelAdmin):
     list_filter = [
         "status"
     ]
+
+@admin.register(Photo)
+class PhotoAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in Photo._meta.fields]
+    search_fields = ("id", "image", )
+    list_display_links = (
+        "id",
+    )
+    list_filter = [
+        "restaurant_id",
+        "product_id",
+    ]
+
+@admin.register(FoodSupplier)
+class FoodSupplierAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in FoodSupplier._meta.fields]
+    search_fields = ("id", "name", "image", )
+    list_display_links = (
+        "id",
+    )
+    

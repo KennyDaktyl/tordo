@@ -4,11 +4,54 @@ from io import BytesIO
 from django.core.files.base import ContentFile
 from django.contrib.gis.db import models
 from django.dispatch import receiver
+from django.core.validators import FileExtensionValidator
+
 
 from web.constants import PHOTO_STATUS
 
 
 ALLOWED_IMAGE_EXTENSIONS = ['jpg', 'png']
+IMAGE_TYPE = [
+    (1, "Galeria zdjęć"),
+    (2, "Galeria produktu"),
+]
+
+
+class Photo(models.Model):
+    id = models.AutoField(primary_key=True)
+    restaurant_id = models.ForeignKey(
+        "Restaurant", db_index=True, verbose_name="Restauracja", on_delete=models.CASCADE, null=True, blank=True)
+    product_id = models.ForeignKey(
+        "Product", db_index=True, verbose_name="Produkt", on_delete=models.CASCADE, null=True, blank=True)
+    image = models.ImageField(upload_to='images')
+    image_type = models.IntegerField(verbose_name="Faktura", choices=IMAGE_TYPE)
+    thumbnails_cache = models.JSONField(default=dict, null=True, blank=True)
+
+    class Meta:
+        ordering = (
+            "-id",
+        )
+        verbose_name_plural = "Zdjęcia"
+
+    def __str__(self):
+        return self.image.path
+
+    def save(self, *args, **kwargs):
+        if self.image_type == IMAGE_TYPE[0][0]:
+            self.thumbnails_cache = {
+            "gallery": {},
+        }
+        super(Photo, self).save()
+        #TODO Zrobić dla mobile
+        self.thumbnails_cache["gallery"] = make_thumbnail(
+            self.image,
+            [(289, 223)],
+            3,
+            self.restaurant_id,
+            "restaurant",
+            overwrite=False
+        )
+        super(Photo, self).save()
 
 
 class Thumbnail(models.Model):
@@ -35,16 +78,16 @@ class Thumbnail(models.Model):
         return self.photo.path
 
 
-def make_thumbnail(photo, sizes, status, relation_object, relation_object_type):
+def make_thumbnail(photo, sizes, status, relation_object, relation_object_type, overwrite=True):
     FTYPE = ['WEBP', 'JPEG']
     thumb_name, thumb_extension = os.path.splitext(photo.name)
     if thumb_extension == ".png":
         FTYPE = ['WEBP', 'PNG']
-    if relation_object_type == "restaurant":
+    if relation_object_type == "restaurant" and overwrite:
         thumbnail_to_delete = Thumbnail.objects.filter(
             restaurant_id=relation_object, status=status)
         thumbnail_to_delete.delete()
-    if relation_object_type == "product":
+    if relation_object_type == "product" and overwrite:
         thumbnail_to_delete = Thumbnail.objects.filter(
             product_id=relation_object, status=status)
         thumbnail_to_delete.delete()

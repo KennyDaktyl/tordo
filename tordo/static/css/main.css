@@ -131,6 +131,10 @@ input {
     width: 80%;
 }
 
+.w-75 {
+    width: 75%;
+}
+
 .w-66 {
     width: 66%;
 }
@@ -478,10 +482,17 @@ input {
     padding-left: 10px;
 }
 
+.padding-l-20 {
+    padding-left: 20px;
+}
+
 .padding-r-10 {
     padding-right: 10px;
 }
 
+.padding-r-10 {
+    padding-right: 20px;
+}
 
 /* background */
 .bg-white {
@@ -546,7 +557,7 @@ input {
 }
 
 .border-r {
-    border-radius: 10px 10px;
+    border-radius: 30px;
 }
 
 .border-t-r {
@@ -562,8 +573,8 @@ input {
     border-radius: 50%;
 }
 
-.box-sh {
-    box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+.box-shadow {
+    box-shadow: 0px 10px 40px rgba(0, 0, 0, 0.03);
 }
 
 /* Other */

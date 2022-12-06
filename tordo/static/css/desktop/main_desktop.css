@@ -143,6 +143,11 @@
     width: 890px;
     height: 187px;
     border-radius: 30px;
+    border: 1px solid transparent;
+}
+
+.restaurant_box:hover {
+    border: 1px solid green;
 }
 
 .restaurant_box p {
@@ -269,4 +274,25 @@ a.underline {
     -webkit-transform: rotate(45deg);
     -ms-transform: rotate(45deg);
     transform: rotate(45deg);
+}
+
+.restaurant__container h1 {
+    font-size: 30px;
+}
+
+.restaurant__container h2 {
+    font-size: 16px;
+    font-weight: 400;
+}
+
+.restaurant__container span {
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.comments_box span {
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 17px;
 }
