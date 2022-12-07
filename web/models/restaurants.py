@@ -171,6 +171,9 @@ class Restaurant(models.Model):
     post_code = models.CharField(
         verbose_name="Kod pocztowy", max_length=6, null=True, blank=True
     )
+    phone_number = models.CharField(
+        verbose_name="Numer telefonu", max_length=12
+    )
     is_located = models.BooleanField(
         verbose_name="Lokalizacja Geo API", default=False)
     is_active = models.BooleanField(verbose_name="Czy aktywna?", default=True)

@@ -64,6 +64,7 @@
                         <p class="w-100 margin-t-10">{{ restaurant.street }}&nbsp;{{ restaurant.house }}{% if restaurant.door %}/{{ restaurant.door }}{% endif %}</p>
                         <p class="w-100 margin-t-10">{{ restaurant.city }}</p>
                         <a href="{% url 'restaurant_map' slug=restaurant.slug pk=restaurant.id %}" class="w-100 text-left text-green margin-t-10">Zobacz mapę</a>
+                        <p class="w-100 margin-t-10">tel:&nbsp;{{ restaurant.phone_number }}</p>
                     </div>
                 </div>
             </div>
