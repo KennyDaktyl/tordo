@@ -11,7 +11,7 @@ from web.models.addresses import (
     SubDistrictWarsaw,
     UserAddress,
 )
-from web.models.restaurants import Restaurant, OpeningHours, Tag, FoodSupplier
+from web.models.restaurants import Restaurant, OpeningHours, Tag, FoodSupplier, Room, Advantage
 from web.models.products import Category, Product, RestaurantMenu
 from web.models.images import Thumbnail, Photo
 
@@ -195,3 +195,20 @@ class FoodSupplierAdmin(admin.ModelAdmin):
         "id",
     )
     
+
+@admin.register(Room)
+class RoomAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in Room._meta.fields]
+    search_fields = ("id", "name",)
+    list_display_links = (
+        "id",
+    )
+
+
+@admin.register(Advantage)
+class AdvantageAdmin(admin.ModelAdmin):
+    list_display = [f.name for f in Advantage._meta.fields]
+    search_fields = ("id", "name",)
+    list_display_links = (
+        "id",
+    )

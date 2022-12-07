@@ -97,6 +97,43 @@ class FoodSupplier(models.Model):
         return "{}".format(self.name)
 
 
+class Advantage(models.Model):
+    name = models.CharField(max_length=100)
+    image = models.ImageField(
+        verbose_name="Logo atutu",
+        upload_to="others",
+        validators=[
+            FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS)
+        ],
+        null=True,
+        blank=True,
+    )
+    description = models.CharField(verbose_name="Opis atutu", max_length=100)
+    order = models.IntegerField(verbose_name="Kolejność", default=1)
+
+    class Meta:
+        ordering = ("order", "name",)
+        verbose_name_plural = "Dodatkowe atuty"
+
+    def __str__(self):
+        return "{}".format(self.name)
+
+
+class Room(models.Model):
+    name = models.CharField(verbose_name="Nazwa pomieszczenia", max_length=64)
+    qty = models.IntegerField(
+        verbose_name="Ilość miejsc",
+    )
+    order = models.IntegerField(verbose_name="Kolejność", default=1)
+
+    class Meta:
+        ordering = ("order", "name",)
+        verbose_name_plural = "Pomieszczenia"
+
+    def __str__(self):
+        return "{}".format(self.name)
+
+
 class Restaurant(models.Model):
     created_time = models.DateTimeField(default=timezone.now, db_index=True)
     modified_time = models.DateTimeField(auto_now=True, db_index=True)
@@ -176,13 +213,32 @@ class Restaurant(models.Model):
         related_name="restaurant_tags",
         blank=True,
     )
-    food_supplier = models.ManyToManyField(
+    food_suppliers = models.ManyToManyField(
         "FoodSupplier",
         verbose_name="Dostawcy jedzenia: (many)",
         related_name="restaurant_food_supplier",
         blank=True,
     )
-
+    rooms = models.ManyToManyField(
+        "Room",
+        verbose_name="Pomieszczenia: (many)",
+        related_name="restaurant_rooms",
+        blank=True,
+    )
+    advantages = models.ManyToManyField(
+        "Advantage",
+        verbose_name="Dodatkowe atuty: (many)",
+        related_name="restaurant_advantages",
+        blank=True,
+    )
+    link_facebook = models.URLField(verbose_name="Link do facebook", max_length=256, null=True, blank=True)
+    link_instagram = models.URLField(verbose_name="Link do Instagram", max_length=256, null=True, blank=True)
+    link_tiktok = models.URLField(
+        verbose_name="Link do TikTok", max_length=256, null=True, blank=True)
+    link_youtube = models.URLField(
+        verbose_name="Link do Youtube", max_length=256, null=True, blank=True)
+    
+    
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name.replace("ł", "l"))

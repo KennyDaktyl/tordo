@@ -54,44 +54,72 @@
                     <a href="" class="underline" href="">recenzje (4)</a>
                 </div>
             </div>
-            <div class="flex j-left a-center wrap w-100 margin-t-20">
-                <div class="flex j-left a-center w-100">
-                    <img class="margin-r-10" src="/media/svg/lok.svg" alt="Ikonka lokalizacji" width="18" height="16">
-                    <p class="text-bold">Adres</p>
+            <div class="flex j-left a-top wrap w-100 margin-t-20">
+                <div class="flex j-left a-top w-100">
+                    <div class="flex j-left a-center w-10">
+                        <img class="margin-r-10" src="/media/svg/lok.svg" alt="Ikonka lokalizacji" width="18" height="16">
+                    </div>
+                    <div class="flex j-left a-center w-90 wrap">
+                        <p class="text-bold w-100">Adres</p>
+                        <p class="w-100 margin-t-10">{{ restaurant.street }}&nbsp;{{ restaurant.house }}{% if restaurant.door %}/{{ restaurant.door }}{% endif %}</p>
+                        <p class="w-100 margin-t-10">{{ restaurant.city }}</p>
+                    </div>
                 </div>
-                <div class="margin-l-20 flex j-left a-center w-100 wrap margin-t-10">
-                    <p class="w-100">{{ restaurant.street }}&nbsp;{{ restaurant.house }}{% if restaurant.door %}/{{ restaurant.door }}{% endif %}</p>
-                    <p class="w-100 margin-t-10">{{ restaurant.city }}</p>
+            </div>
+            <div class="flex j-left a-top wrap margin-t-20 w-100">
+                <div class="flex j-left a-center w-10">
+                    <img class="margin-r-10" src="/media/svg/time.svg" alt="Ikonka lokalizacji" width="18" height="18">
+                </div>
+                <div class="flex j-left a-center w-90 wrap">
+                    <div class="flex j-left a-center w-100">
+                        <p class="text-bold">Dziś</p>
+                        <p class="margin-l-10">({% now "l" %})</p>
+                    </div>
+                    <span class="w-100 margin-t-10">{% if restaurant.weekday %}{{ restaurant.from_hour }} do {{
+                        restaurant.to_hour }}{% else %}<span class="text-red text-bold">Nieczynne</span>{% endif %}</span>
                 </div>
             </div>
-            <div class="flex j-left a-center wrap margin-t-20 w-100">
-                <img class="margin-r-10" src="/media/svg/time.svg" alt="Ikonka lokalizacji" width="18" height="18">
-                <p class="text-bold">Dziś</p>
-                <p class="margin-l-10">({{ restaurant.weekday }})</p>
-                <span class="w-100 margin-l-20 margin-t-10">{% if restaurant.weekday %}{{ restaurant.from_hour }} do {{ restaurant.to_hour }}{% else %}<span
-                    class="text-red text-bold">Nieczynne</span>{% endif %}</span>
+            <div class="flex j-left a-top wrap margin-t-20 w-100">
+                <div class="flex j-left a-center w-10">
+                    <img class="margin-r-10" src="/media/svg/human.svg" alt="Ikonka usera" width="18" height="18">
+
+                </div>
+                <div class="flex j-left a-center w-90 wrap">
+                    <p class="text-bold">Ilość miejsc</p>
+                    {% for room in restaurant.rooms.all %}
+                    <span class="w-100 margin-t-10">{{ room.name }}:&nbsp;{{ room.qty}}&nbsp;miejsc</span>
+                    {% endfor %}
+                </div>
             </div>
-            <div class="flex j-left a-center wrap margin-t-20 w-100">
-                <img class="margin-r-10" src="/media/svg/human.svg" alt="Ikonka usera" width="18" height="18">
-                <p class="text-bold">Ilość miejsc</p>
-                <span class="w-100 margin-l-20 margin-t-10">Sala:&nbsp;100&nbsp;miejsc</span>
-                <span class="w-100 margin-l-20 margin-t-10">Ogródek:&nbsp;50&nbsp;miejsc</span>
-            </div>
-            <div class="flex j-left a-center wrap margin-t-20 w-100 padding-b-20">
-                <img class="margin-r-10" src="/media/svg/dostawa.svg" alt="Ikonka dostawy" width="18" height="18">
-                <p class="text-bold">Dostawy</p>
-                <div class="flex j-left a-center wrap margin-t-10 w-100 margin-l-20">
-                    {% for delivery in restaurant.food_supplier.all %}
-                        <img class="margin-r-10 margin-t-10" src="{{ MEDIA_URL }}{{ delivery.image }}" alt="" width="59" height="59">
+            <div class="flex j-left a-top wrap margin-t-20 w-100 padding-b-20">
+                <div class="flex j-left a-center w-10">
+                    <img class="margin-r-10" src="/media/svg/dostawa.svg" alt="Ikonka dostawy" width="18" height="18">
+                </div>
+                <div class="flex j-left a-center w-90 wrap">
+                    <p class="text-bold w-100">Dostawy</p>
+                    {% for delivery in restaurant.food_suppliers.all %}
+                    <img class="margin-r-10 margin-t-10" src="{{ MEDIA_URL }}{{ delivery.image }}" alt="" width="59" height="59">
                     {% endfor %}
                 </div>
             </div>
         </div>
         <div class="w-75 flex j-center a-top wrap">
             <div class="w-100 flex j-left a-top wrap">
-                <a href="" class="margin-r-5"><img class="" src="/media/svg/fb.svg" alt="Logo facebook" width="28" height="28"></a>
-                <a href="" class="margin-r-5"><img class="" src="/media/svg/inst.svg" alt="Logo Instagram" width="28" height="28"></a>
-                <a href="" class="margin-r-5"><img class="" src="/media/svg/tw.svg" alt="Logo Twitter" width="28" height="28"></a>
+                {% if restaurant.link_facebook %}
+                    <a href="{{ restaurant.link_facebook }}" class="margin-r-5"><img class="" src="/media/svg/fb.svg" alt="Logo facebook" width="28" height="28"></a>
+                {% endif %}
+                {% if restaurant.link_instagram %}
+                    <a href="{{ restaurant.link_instagram }}" class="margin-r-5"><img class="" src="/media/svg/inst.svg" alt="Logo instagram" width="28" height="28"></a>
+                {% endif %}
+                {% if restaurant.link_tiktok %}
+                    <a href="{{ restaurant.link_tiktok }}" class="margin-r-5"><img class="" src="/media/svg/tw.svg" alt="Logo twiktok" width="28" height="28"></a>
+                {% endif %}
+                {% if restaurant.link_twiter %}
+                    <a href="{{ restaurant.link_twiter }}" class="margin-r-5"><img class="" src="/media/svg/twiter.svg" alt="Logo twiter" width="28" height="28"></a>
+                {% endif %}
+                {% if restaurant.link_youtube %}
+                    <a href="{{ restaurant.link_youtube }}" class="margin-r-5"><img class="" src="/media/svg/youtube.svg" alt="Logo youtube" width="28" height="28"></a>
+                {% endif %}
             </div>
             <div class="w-100 flex j-left a-top wrap margin-t-20">
                 <span class="w-100">{{ restaurant.description }}</span>
@@ -102,6 +130,19 @@
                     <source class="" srcset="{{ MEDIA_URL }}{% get_thumbnails_by_type image.items '289x223' 'webp' %}" type="image/webp"/>
                     <img class="border-r margin-r-10" src="{{ MEDIA_URL }}{% get_thumbnails_by_type image.items '289x223' 'jpeg' %}" alt="" width="289" height="223">
                 </picture>
+                {% endfor %}
+            </div>
+            <div class="w-100 flex j-left a-top wrap margin-t-20 wrap">
+                {% for advantage in restaurant.advantages.all %}
+                <div class="flex j-center a-top wrap margin-t-10 margin-r-10 w-33">
+                    <div class="flex j-center a-center w-20">
+                        <img class="" src="{{ MEDIA_URL }}{{ advantage.image }}" alt="Logo {{ advantage.name }}" width="50" height="50">
+                    </div>
+                    <div class="flex j-left a-center w-80 wrap">
+                        <p class="w-100 text-left text-bold">{{ advantage.name }}</p>
+                        <span class="margin-t-10">{{ advantage.description }}</span>
+                    </div>
+                </div>
                 {% endfor %}
             </div>
         </div>
