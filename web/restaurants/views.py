@@ -1,5 +1,5 @@
+import folium
 from datetime import datetime
-from django.views.generic import TemplateView
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 
@@ -19,6 +19,7 @@ User = get_user_model()
 
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
+from django.views.generic import TemplateView
 
 
 class RestaurantListView(ListView):
@@ -152,6 +153,46 @@ class RestaurantListView(ListView):
         return queryset
 
 
+class RestaurantMapView(TemplateView):
+    template_name = "restaurants/desktop/restaurant_map.html"
+
+    def get_template_names(self):
+        if mobile(self.request):
+            self.template_name = self.template_name.replace("desktop", "mobile")
+        return self.template_name
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        restaurant = Restaurant.objects.get(pk=self.kwargs["pk"])
+        context["restaurant"] = restaurant
+        context["map"] = self.__create_folium_map(restaurant.location, restaurant.name)
+        return context
+
+    def __create_folium_map(self, loc, name):
+        map = folium.Map(
+            location=[loc[1], loc[0]],
+            width="100%",
+            position="relative",
+        )
+        tooltip = name
+        if (
+            "bootstrap_css",
+            "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css",
+        ) in map.default_css:
+            map.default_css.remove(
+                (
+                    "bootstrap_css",
+                    "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css",
+                )
+            )
+        folium.Marker(
+            [loc[1], loc[0]],
+            popup=f"<i>{name}</i>",
+            tooltip=tooltip,
+        ).add_to(map)
+        return map.get_root().render()
+
+
 class RestaurantDetailsView(DetailView):
     template_name = "restaurants/desktop/restaurant_details.html"
     model = Restaurant
@@ -232,3 +273,4 @@ def get_unique_elements(elements, key):
 
 restaurants = RestaurantListView.as_view()
 restaurant_details = RestaurantDetailsView.as_view()
+restaurant_map = RestaurantMapView.as_view()

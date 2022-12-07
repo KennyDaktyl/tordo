@@ -296,3 +296,43 @@ a.underline {
     font-size: 14px;
     line-height: 17px;
 }
+
+.foods_container {
+    width: 836px;
+}
+
+div.food_container {
+    border: 1px solid transparent;
+}
+
+div.food_container:hover {
+    border: 1px solid green;
+}
+
+.basket_container {
+    width: 408px;
+}
+
+.basket_container p{
+    font-size: 14px;
+}
+
+.basket_container small{
+    font-size: 10px;
+    font-weight: 400;
+}
+
+.product_image {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+    border-top-right-radius: 30px;
+    border-bottom-right-radius: 30px;
+}
+
+#map_render {
+    width: 100%;
+    height: 300px;
+    box-shadow: rgb(0 0 0 / 35%) 0px 5px 15px;
+    z-index: 1;
+}

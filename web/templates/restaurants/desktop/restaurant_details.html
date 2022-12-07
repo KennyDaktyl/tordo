@@ -63,6 +63,7 @@
                         <p class="text-bold w-100">Adres</p>
                         <p class="w-100 margin-t-10">{{ restaurant.street }}&nbsp;{{ restaurant.house }}{% if restaurant.door %}/{{ restaurant.door }}{% endif %}</p>
                         <p class="w-100 margin-t-10">{{ restaurant.city }}</p>
+                        <a href="{% url 'restaurant_map' slug=restaurant.slug pk=restaurant.id %}" class="w-100 text-left text-green margin-t-10">Zobacz mapę</a>
                     </div>
                 </div>
             </div>
@@ -133,7 +134,7 @@
                 {% endfor %}
             </div>
             <div class="w-100 flex j-left a-top wrap margin-t-20 wrap">
-                {% for advantage in restaurant.advantages.all %}
+                {% for advantage in restaurant.our_advantages %}
                 <div class="flex j-center a-top wrap margin-t-10 margin-r-10 w-33">
                     <div class="flex j-center a-center w-20">
                         <img class="" src="{{ MEDIA_URL }}{{ advantage.image }}" alt="Logo {{ advantage.name }}" width="50" height="50">
@@ -144,6 +145,142 @@
                     </div>
                 </div>
                 {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="offer__container flex w-100 j-between a-top wrap margin-t-20">
+        <div class="foods_container flex w-100 j-top a-center wrap">
+            <div class="w-100 border-r bg-white flex j-center a-center wrap h-60 margin-b-10">
+                <div class="w-10 flex j-center a-center">
+                    <img src="/media/svg/lupa.svg" alt="Ikonka lokalizacji" width="18" height="23">
+                </div>
+                <div class="w-90">
+                    <input class="t-left w-100" type="text" placeholder="Szukaj, lokalu, kuchni, dań" name="search_dish">
+                </div>
+            </div>
+            {% for category in categories_with_products %}
+                {% if category.products %}
+                    <h2 class="text-bold w-100 text-left margin-t-10">{{ category.name }}</h2>
+                {% endif %}
+                {% for product in category.products %}
+                    <input id="srcset_basket_{{ product.id }}" type="hidden" value="{{ MEDIA_URL }}{% get_src_expected product.images_basket_webp.items '430x173' %}">
+                    <input id="src_basket_{{ product.id }}" type="hidden" value="{{ MEDIA_URL }}{% get_src_expected product.images_basket_jpg.items '430x173' %}">
+                    <input id="product_name_{{ product.id }}" type="hidden" value="{{ product.name }}">
+                    <input id="product_price_{{ product.id }}" type="hidden" value="{{ product.price}}">
+                    <div id="product_id_{{ product.id }}" class="food_container w-100 flex wrap j-center a-center bg-white border-r margin-t-10 margin-b-10" onclick="addToBasket(this)">
+                        <div class="flex wrap j-center a-center w-80 padding-10">
+                            <div class="flex wrap w-80 a-center j-left margin-t-10">
+                                <span class="text-green w-100 text-left">A122</span>
+                                <div class="flex w-100 a-center j-left margin-t-10">
+                                    <p class="text-bold margin-r-10">{{ product.name }}</p>
+                                    <img class="margin-r-10" src="{{ MEDIA_URL }}media/svg/chilli.svg" alt="" width="20" height="17">
+                                    <img class="margin-r-10" src="{{ MEDIA_URL }}media/svg/squarestar.svg" alt="" width="20" height="17">
+                                </div>
+                                <small class="text-grey w-100 text-left margin-t-10">{{ product.description }}</small>
+                            </div>
+                            <div class="w-20 flex wrap j-right a-center h-80">
+                                <div class="flex w-100 j-right a-center h-50">
+                                    <small class="margin-r-10">12</small>
+                                    <img class="svg-red" src="/media/svg/heart.svg" alt="" width="22" height="20">
+                                </div>
+                                <div class="flex w-100 wrap j-center a-center h-50">
+                                    <span class="text-green w-100 text-right">{{ product.price }}zł</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flex wrap j-center a-center w-20 p-relative border-r">
+                            <picture class="flex j-center a-center wrap w-100">
+                                <source srcset="{{ MEDIA_URL }}{% get_src_expected product.images_listing_webp.items '200x130' %}" 170w type="image/webp"/>
+                                <img class="product_image" src="{{ MEDIA_URL }}{% get_src_expected product.images_listing_jpg.items '200x130' %}" alt="" width="200" height="130">
+                            </picture>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+        <div class="basket_container flex w-100 j-top a-center wrap">
+            <div class="order_details flex wrap j-left a-top w-100 bg-white border-r">
+                <div class="flex wrap w-100 j-center a-top margin-t-20 container-text">
+                    <p class="w-80 text-left text-bold">Twoje zamówienie</p>
+                    <div class="flex wrap w-20 j-center a-center">
+                        <img src="/media/svg/fast-food.svg" alt="" width="33" height="30">
+                    </div>
+                </div>
+                <div class="flex no-wrap w-100 j-center a-center margin-t-20 container-text">
+                    <p class="w-66 text-left text-bold">MAZE by Teo Vafidis & Sons</p>
+                    <div class="w-33 border-red-line">
+                    </div>
+                </div>
+                <div class="flex wrap j-center a-top margin-t-20 container-text margin-b-20">
+                    <div class="w-100 flex a-center j-left wrap border-r border-grey margin-t-15">
+                        <div class="flex no-wrap w-100 j-center a-center padding-b-20">
+                            <div class="w-70 flex wrap j-center a-center text-left container-text">
+                                <p class="w-100 margin-t-10 text-bold">Kotlet schabowy z frytkami bez pieprzu i sosem sojowym</p>
+                                <small class="w-100 t-left margin-t-10">(Bez pieprzu oraz bez panierki na połowie
+                                    porscji)</small>
+                            </div>
+                            <span class="w-100 text_center">2 x 34.00zł</span>
+                            <div class="w-10 flex wrap j-center a-center text-left container-text">
+                                <img class="trash pointer" src="/media/svg/recycle-bin.svg" alt="" width="18"
+                                    height="18">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-100 flex a-center j-left wrap border-r border-grey margin-t-15">
+                        <div class="flex no-wrap w-100 j-center a-center padding-b-20">
+                            <div class="w-70 flex wrap j-center a-center text-left container-text">
+                                <p class="w-100 margin-t-10 text-bold">Kotlet schabowy z frytkami bez pieprzu i sosem sojowym</p>
+                                <small class="w-100 t-left margin-t-10">(Bez pieprzu oraz bez panierki na połowie
+                                    porscji)</small>
+                            </div>
+                            <span class="w-100 text_center">2 x 34.00zł</span>
+                            <div class="w-10 flex wrap j-center a-center text-left container-text">
+                                <img class="trash pointer" src="/media/svg/recycle-bin.svg" alt="" width="18"
+                                    height="18">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="w-100 flex a-center j-left wrap border-r border-grey margin-t-15">
+                        <div class="flex no-wrap w-100 j-center a-center padding-b-20">
+                            <div class="w-70 flex wrap j-center a-center text-left container-text">
+                                <p class="w-100 margin-t-10 text-bold">Kotlet schabowy z frytkami bez pieprzu i sosem sojowym</p>
+                                <small class="w-100 t-left margin-t-10">(Bez pieprzu oraz bez panierki na połowie
+                                    porscji)</small>
+                            </div>
+                            <span class="w-100 text-center ">2 x 34.00zł</span>
+                            <div class="w-10 flex wrap j-center a-center text-left container-text">
+                                <img class="" src="/media/svg/recycle-bin.svg" alt="" width="18"
+                                    height="18">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex wrap j-center a-top margin-t-20 container-text margin-b-20">
+                    <div class="flex w-100 no-wrap j-center a-center margin-b-15">
+                        <p class="w-50 text-left text-bold">Suma za dania</p>
+                        <p class="w-50 text-right text-bold">250,00 zł</p>
+                    </div>
+        
+                    <div class="flex w-100 no-wrap j-center a-center margin-b-15">
+                        <div class="w-50 flex j-left a-center no-wrap">
+                            <p class="text-left">Dostawa dla I - stefy</p>
+                            <img class="margin-l-10 trash svg-green pointer" src="/media/svg/information-button.svg"
+                                alt="" width="16" height="16">
+                        </div>
+                        <p class="w-50 text-right">25,00 zł</p>
+                    </div>
+        
+                    <div class="flex w-100 no-wrap j-center a-center margin-b-15">
+                        <p class="text-left w-100">Punkty za zamówienie</p>
+                        <p class="text-right w-100">1,17</p>
+                    </div>
+        
+                    <a href="" class="flex w-100 no-wrap j-center a-center">
+                        <button class="w-100 bg-red h-50 border-r pointer">
+                            <span class="text-white text-bold">Zamawiam</span>
+                        </button>
+                    </a>
+                </div>
             </div>
         </div>
     </div>

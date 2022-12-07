@@ -98,6 +98,13 @@ class FoodSupplier(models.Model):
 
 
 class Advantage(models.Model):
+    restaurant = models.ForeignKey(
+        "Restaurant",
+        verbose_name="Dodatkowe atuty restauracji",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
     name = models.CharField(max_length=100)
     image = models.ImageField(
         verbose_name="Logo atutu",
@@ -294,6 +301,10 @@ class Restaurant(models.Model):
     def gallery(self):
         gallery = Photo.objects.filter(restaurant_id=self)
         return [x.thumbnails_cache["gallery"] for x in gallery]
+    
+    @property
+    def our_advantages(self):
+        return Advantage.objects.filter(restaurant=self)
 
     @property
     def listing_jpg(self):

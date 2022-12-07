@@ -48,7 +48,7 @@ class RestaurantSerializer(serializers.ModelSerializer):
             "to_hour",
             "weekday",
             "tags",
-            "food_supplier",
+            "food_suppliers",
             "likes_counter",
             "is_open",
         ]
@@ -87,7 +87,7 @@ class RestaurantWithProductsSerializer(serializers.HyperlinkedModelSerializer):
             "to_hour",
             "weekday",
             "tags",
-            "food_supplier",
+            "food_suppliers",
             "likes_counter",
             "categories",
             "is_open"

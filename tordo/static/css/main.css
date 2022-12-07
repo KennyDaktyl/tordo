@@ -84,7 +84,7 @@ input:hover {
 
 input {
     font-size: 16px;
-    text-align: center;
+    text-align: left;
     outline: none;
     border: none;
     outline-width: 0;
@@ -119,6 +119,11 @@ input {
 }
 
 /* Szerokość obiektów */
+.w-200 {
+    min-width: 200px;
+    padding: 5px 10px;
+}
+
 .w-100 {
     width: 100%;
 }
@@ -177,6 +182,10 @@ input {
 
 .w-5 {
     width: 5%;
+}
+
+.h-60 {
+    height: 60px;
 }
 
 .h-80 {
@@ -536,7 +545,7 @@ input {
 }
 
 .svg-red {
-    filter: invert(48%) sepia(79%) saturate(2476%) hue-rotate(-46deg) brightness(118%) contrast(119%);
+    filter: invert(25%) sepia(79%) saturate(2476%) hue-rotate(-46deg) brightness(75%) contrast(133%);
 }
 
 .border-red-line {

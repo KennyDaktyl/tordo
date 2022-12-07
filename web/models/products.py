@@ -76,7 +76,7 @@ class Product(models.Model):
     description = models.TextField(
         verbose_name="Opis produktu", blank=True, null=True)
     image_listing_jpg = models.ImageField(
-        verbose_name="Zdjęcie na listing 170x113",
+        verbose_name="Zdjęcie na listing 200x130",
         upload_to="products",
         blank=True, null=True,
         validators=[FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS)])
@@ -97,11 +97,12 @@ class Product(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name.replace("ł", "l"))
+        super(Product, self).save()
         self.thumbnails_cache = {
             "thumbnails_listing": [], "thumbnails_basket": []}
         if self.image_listing_jpg:
             self.thumbnails_cache["thumbnails_listing"] = make_thumbnail(
-                self.image_listing_jpg, [(120, 85), (170, 113), (240, 170), (340, 226)], 5, self, "product")
+                self.image_listing_jpg, [(200, 130),], 5, self, "product")
         if self.image_basket_jpg:
             self.thumbnails_cache["thumbnails_basket"] = make_thumbnail(self.image_basket_jpg, [
                 (340, 183), (430, 173), (680, 366), (860, 346)], 6, self, "product")
