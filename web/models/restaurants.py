@@ -8,7 +8,7 @@ from django.conf import settings
 from django.contrib.gis.db import models
 from django.core.exceptions import ValidationError
 from django.utils.text import slugify
-from web.models.images import make_thumbnail, ALLOWED_IMAGE_EXTENSIONS
+from web.models.images import make_thumbnail, ALLOWED_IMAGE_EXTENSIONS, ALLOWED_ICON_EXTENSIONS
 from datetime import datetime
 
 from web.models.products import RestaurantMenu, Category, Product
@@ -78,11 +78,11 @@ class Tag(models.Model):
 
 class FoodSupplier(models.Model):
     name = models.CharField(max_length=100)
-    image = models.ImageField(
+    image = models.FileField(
         verbose_name="Logo firmy świadczącej dostawy",
         upload_to="others",
         validators=[
-            FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS)
+            FileExtensionValidator(allowed_extensions=ALLOWED_ICON_EXTENSIONS)
         ],
         null=True,
         blank=True,
@@ -106,16 +106,16 @@ class Advantage(models.Model):
         null=True,
     )
     name = models.CharField(max_length=100)
-    image = models.ImageField(
+    image = models.FileField(
         verbose_name="Logo atutu",
         upload_to="others",
         validators=[
-            FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS)
+            FileExtensionValidator(allowed_extensions=ALLOWED_ICON_EXTENSIONS)
         ],
         null=True,
         blank=True,
     )
-    description = models.CharField(verbose_name="Opis atutu", max_length=100)
+    description = models.CharField(verbose_name="Opis atutu", max_length=100, blank=True, null=True)
     order = models.IntegerField(verbose_name="Kolejność", default=1)
 
     class Meta:
@@ -127,6 +127,13 @@ class Advantage(models.Model):
 
 
 class Room(models.Model):
+    restaurant = models.ForeignKey(
+        "Restaurant",
+        verbose_name="Dodatkowe atuty restauracji",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
     name = models.CharField(verbose_name="Nazwa pomieszczenia", max_length=64)
     qty = models.IntegerField(
         verbose_name="Ilość miejsc",
@@ -305,6 +312,10 @@ class Restaurant(models.Model):
     @property
     def our_advantages(self):
         return Advantage.objects.filter(restaurant=self)
+    
+    @property
+    def our_rooms(self):
+        return Room.objects.filter(restaurant=self)
 
     @property
     def listing_jpg(self):

@@ -87,7 +87,7 @@
                 </div>
                 <div class="flex j-left a-center w-90 wrap">
                     <p class="text-bold">Ilość miejsc</p>
-                    {% for room in restaurant.rooms.all %}
+                    {% for room in restaurant.our_rooms %}
                     <span class="w-100 margin-t-10">{{ room.name }}:&nbsp;{{ room.qty}}&nbsp;miejsc</span>
                     {% endfor %}
                 </div>
@@ -141,7 +141,9 @@
                     </div>
                     <div class="flex j-left a-center w-80 wrap">
                         <p class="w-100 text-left text-bold">{{ advantage.name }}</p>
-                        <span class="margin-t-10">{{ advantage.description }}</span>
+                        {% if advantage.description %}
+                            <span class="margin-t-10">{{ advantage.description }}</span>
+                        {% endif %}
                     </div>
                 </div>
                 {% endfor %}
@@ -160,7 +162,7 @@
             </div>
             {% for category in categories_with_products %}
                 {% if category.products %}
-                    <h2 class="text-bold w-100 text-left margin-t-10">{{ category.name }}</h2>
+                    <p class="text-bold w-100 text-left margin-t-10">{{ category.name }}</p>
                 {% endif %}
                 {% for product in category.products %}
                     <input id="srcset_basket_{{ product.id }}" type="hidden" value="{{ MEDIA_URL }}{% get_src_expected product.images_basket_webp.items '430x173' %}">

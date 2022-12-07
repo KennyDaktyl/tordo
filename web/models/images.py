@@ -11,6 +11,7 @@ from web.constants import PHOTO_STATUS
 
 
 ALLOWED_IMAGE_EXTENSIONS = ['jpg', 'png']
+ALLOWED_ICON_EXTENSIONS = ['jpg', 'png', 'svg']
 IMAGE_TYPE = [
     (1, "Galeria zdjęć"),
     (2, "Galeria produktu"),
