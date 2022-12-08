@@ -70,41 +70,7 @@
                         <h2 class="text-bold w-100 text-left margin-t-15 margin-b-15">{{ category.name }}</h2>
                     {% endif %}
                     {% for product in category.products %}
-                    <a href=""
-                        class="w-100 restaurant flex wrap j-center a-center bg-white border-r margin-t-15 {% if forloop.last %}margin-b-35{% else %}margin-b-15{% endif %} pointer"
-                        onclick="addToBasket(this)">
-                        <div class="flex wrap j-center a-center w-80 padding-10">
-                            <div class="flex wrap w-80 a-center j-left margin-t-10">
-                                <span class="text-green w-100 text-left">A122</span>
-                                <div class="flex w-100 a-center j-left margin-t-10">
-                                    <p class="text-bold margin-r-10">{{ product.name }}</p>
-                                    <img class="margin-r-10" src="/media/icons/mobile/chilli.svg" alt="" width="20" height="17">
-                                    <img class="margin-r-10" src="/media/icons/mobile/squarestar.svg" alt="" width="20" height="17">
-                                </div>
-                                <small class="text-grey w-100 text-left margin-t-10">{{ product.description }}</small>
-                            </div>
-                            <div class="w-20 flex wrap j-right a-top h-80">
-                                <div class="flex w-100 j-right a-top h-50">
-                                    <small class="margin-r-10">12</small>
-                                    <img class="" src="/media/icons/mobile/heart-sharp.svg" alt="" width="22" height="20">
-                                </div>
-                                <div class="flex w-100 wrap j-center a-center h-50">
-                                    <span class="text-green w-100 text-right">{{ product.price }}zł</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex wrap j-center a-center w-20 p-relative border-r">
-                            <figure class="restaurant_image h-100">
-                                <picture>
-                                    <source srcset="{{ MEDIA_URL }}{% get_src_expected product.images_listing_webp.items '170x113' %}" 170w
-                                        type="image/webp" />
-                                    <img class="image_food_main w-100  border-r"
-                                        src="{{ MEDIA_URL }}{% get_src_expected product.images_listing_jpg.items '170x113' %}" alt=""
-                                        width="170" height="113">
-                                </picture>
-                            </figure>
-                        </div>
-                    </a>
+                        {% include "products/desktop/product.html" %}
                     {% endfor %}
                 {% endfor %}
             {% endfor %}
@@ -147,8 +113,15 @@
 </div>
 {% endblock %}
 
+
+{% block basket_add_product %}
+    {% include "orders/desktop/includes/basket_add_product.html" %}
+{% endblock %}
+
 {% block script_link %}
 <script>
+    window.sessionStorage.clear();
+
     function openFilters() {
         var filters = document.getElementById('filters');
         filters.style.display = 'flex';

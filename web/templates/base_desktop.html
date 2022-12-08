@@ -3,7 +3,7 @@
 {% block main_header %}
     {% load compress %}
         {% compress css %}
-            <link rel="stylesheet" href="/static/css/desktop/main_desktop.css?v-13" as="style" onload="this.onload=null;this.rel='stylesheet'">
+            <link rel="stylesheet" href="/static/css/desktop/main_desktop.css?v-16" as="style" onload="this.onload=null;this.rel='stylesheet'">
         {% endcompress %}
         {% block head %}{% endblock %}
         {% block header %}{% endblock %}
@@ -26,6 +26,7 @@
             {% block basket_add_product %}{% endblock %}
         </div>
     </div>
+    <div id="freeze__container"></div>
     <main class="w-100 flex wrap j-center a-top flex-row" id="main">
         <div class="in-layout-content flex wrap j-center a-center ">
             <header class="h-100 w-100 p-relative">

@@ -378,3 +378,18 @@ img.x_close {
     border: 1px solid #E0E0E0;
     height: 95px
 }
+
+#freeze__container {
+   display: none;
+}
+
+#freeze__container.active {
+    z-index: 9;
+    position: fixed;
+    top: 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    background-color: transparent;
+    display: block;
+}

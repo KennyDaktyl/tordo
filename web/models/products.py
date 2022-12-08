@@ -65,7 +65,7 @@ class Product(models.Model):
     id = models.AutoField(primary_key=True)
     restaurant = models.ForeignKey(
         "Restaurant",
-        verbose_name="Godziny otwarcia restauracji",
+        verbose_name="Restauracji",
         on_delete=models.CASCADE,
     )
     category = models.ForeignKey(
