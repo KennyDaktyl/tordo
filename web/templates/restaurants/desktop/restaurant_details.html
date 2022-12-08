@@ -274,5 +274,76 @@
 
     };
 
+    function addToBasket(food) {
+        var main = document.getElementById('main');
+        var freeze__container = document.getElementById('freeze__container');
+        var basket = document.getElementById('basekt_popup');
+        main.classList.add('freeze');
+        freeze__container.classList.add('active');
+        basket.classList.add('active');
+
+        var product_in_basket = document.getElementById("product_in_basket");
+        var product_id = (food.id).replace("product_id_", "");
+
+        product_in_basket.value = product_id;
+
+        var srcset = document.getElementById("srcset_basket");
+        var srcset_input = document.getElementById("srcset_basket_" + product_id);
+        srcset.srcset = srcset_input.value;
+
+        var src = document.getElementById("src_basket");
+        var src_input = document.getElementById("src_basket_" + product_id);
+        src.src = src_input.value;
+
+        var product_name = document.getElementById("product_name");
+        var product_name_input = document.getElementById("product_name_" + product_id);
+        product_name.innerHTML = product_name_input.value;
+
+        var product_price = document.getElementById("product_price");
+        var product_price_input = document.getElementById("product_price_" + product_id);
+        product_price.innerHTML = product_price_input.value;
+    }
+
+    function closeBasket(x_close) {
+        var main = document.getElementById('main');
+        var basket = document.getElementById('basekt_popup');
+        var freeze__container = document.getElementById('freeze__container');
+        main.classList.remove('freeze');
+        basket.classList.remove('active');
+        freeze__container.classList.remove('active');
+
+        var scrollpos = sessionStorage.getItem('scrollpos');
+        if (scrollpos) {
+            window.scrollTo(0, scrollpos);
+            sessionStorage.removeItem('scrollpos');
+        }
+    }
+
+    function addOneQty(plus) {
+    var food_qty = document.getElementById('food_qty');
+        var qty = parseInt(food_qty.value);
+        food_qty.value = qty + 1;
+
+        var product_in_basket = document.getElementById("product_in_basket");
+        var product_price_input = document.getElementById("product_price_" + product_in_basket.value);
+        var product_price = document.getElementById("product_price");
+        product_price.innerHTML = (food_qty.value * product_price_input.value).toFixed(2); 
+    }
+
+    function remOneQty(plus) {
+        var food_qty = document.getElementById('food_qty');
+        var qty = parseInt(food_qty.value);
+        if (qty > 1) {
+            food_qty.value = qty - 1;
+        } else {
+            food_qty.value = 1;
+        }
+
+        var product_in_basket = document.getElementById("product_in_basket");
+        var product_price_input = document.getElementById("product_price_" + product_in_basket.value);
+        var product_price = document.getElementById("product_price");
+        product_price.innerHTML = (food_qty.value * product_price_input.value).toFixed(2);
+    }
+
 </script>
 {% endblock %}
