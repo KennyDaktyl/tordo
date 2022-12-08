@@ -98,3 +98,4 @@ class RestaurantWithProductsSerializer(serializers.ModelSerializer):
             "categories",
             "is_open"
         ]
+        ordering = ['name']
