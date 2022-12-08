@@ -1,25 +1,30 @@
 import os
-from django.urls import reverse
-from django.core.exceptions import ValidationError
-from django.core.validators import FileExtensionValidator
-from django.dispatch import receiver
-from django.utils import timezone
+from datetime import datetime
+
 from django.conf import settings
 from django.contrib.gis.db import models
 from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator
+from django.dispatch import receiver
+from django.urls import reverse
+from django.utils import timezone
 from django.utils.text import slugify
-from web.models.images import make_thumbnail, ALLOWED_IMAGE_EXTENSIONS, ALLOWED_ICON_EXTENSIONS
-from datetime import datetime
 
-from web.models.products import RestaurantMenu, Category, Product
-from web.models.images import Photo
+from web.models.images import (
+    ALLOWED_ICON_EXTENSIONS,
+    ALLOWED_IMAGE_EXTENSIONS,
+    Photo,
+    make_thumbnail,
+)
+from web.models.products import Category, Product, RestaurantMenu
 
 
 def file_size(value):
     limit = 6 * 1024 * 1024
     if value.size > limit:
         raise ValidationError(
-            "Plik który chcesz wrzucić jest większy niż 6MB.")
+            "Plik który chcesz wrzucić jest większy niż 6MB."
+        )
 
 
 WEEKDAYS = [
@@ -90,7 +95,10 @@ class FoodSupplier(models.Model):
     order = models.IntegerField(verbose_name="Kolejność", default=99)
 
     class Meta:
-        ordering = ("order", "name",)
+        ordering = (
+            "order",
+            "name",
+        )
         verbose_name_plural = "Dostawcy jedzenia"
 
     def __str__(self):
@@ -115,11 +123,16 @@ class Advantage(models.Model):
         null=True,
         blank=True,
     )
-    description = models.CharField(verbose_name="Opis atutu", max_length=100, blank=True, null=True)
+    description = models.CharField(
+        verbose_name="Opis atutu", max_length=100, blank=True, null=True
+    )
     order = models.IntegerField(verbose_name="Kolejność", default=1)
 
     class Meta:
-        ordering = ("order", "name",)
+        ordering = (
+            "order",
+            "name",
+        )
         verbose_name_plural = "Dodatkowe atuty"
 
     def __str__(self):
@@ -141,7 +154,10 @@ class Room(models.Model):
     order = models.IntegerField(verbose_name="Kolejność", default=1)
 
     class Meta:
-        ordering = ("order", "name",)
+        ordering = (
+            "order",
+            "name",
+        )
         verbose_name_plural = "Pomieszczenia"
 
     def __str__(self):
@@ -159,8 +175,9 @@ class Restaurant(models.Model):
     )
     name = models.CharField(verbose_name="Nazwa restauracji", max_length=100)
     motto = models.CharField(verbose_name="Motto restauracji", max_length=100)
-    slug = models.SlugField(verbose_name="Slug",
-                            blank=True, null=True, max_length=128)
+    slug = models.SlugField(
+        verbose_name="Slug", blank=True, null=True, max_length=128
+    )
     location = models.PointField()
     street = models.CharField(verbose_name="Ulica", max_length=128)
     house = models.CharField(verbose_name="Nr domu", max_length=8)
@@ -175,18 +192,21 @@ class Restaurant(models.Model):
         verbose_name="Numer telefonu", max_length=12
     )
     is_located = models.BooleanField(
-        verbose_name="Lokalizacja Geo API", default=False)
+        verbose_name="Lokalizacja Geo API", default=False
+    )
     is_active = models.BooleanField(verbose_name="Czy aktywna?", default=True)
     geo_data = models.TextField(
         verbose_name="Dane z geolokalizacji", null=True, blank=True
     )
     home_page = models.URLField(
-        verbose_name="Strona WWW", default="www.brak-strony.pl")
+        verbose_name="Strona WWW", default="www.brak-strony.pl"
+    )
     description = models.TextField(
         verbose_name="Opis restauracji", blank=True, null=True
     )
     likes_counter = models.IntegerField(
-        verbose_name="Licznik lików", default=0)
+        verbose_name="Licznik lików", default=0
+    )
     image_listing_photo = models.ImageField(
         verbose_name="Zdjęcie na listing",
         upload_to="restaurants",
@@ -248,14 +268,19 @@ class Restaurant(models.Model):
         related_name="restaurant_advantages",
         blank=True,
     )
-    link_facebook = models.URLField(verbose_name="Link do facebook", max_length=256, null=True, blank=True)
-    link_instagram = models.URLField(verbose_name="Link do Instagram", max_length=256, null=True, blank=True)
+    link_facebook = models.URLField(
+        verbose_name="Link do facebook", max_length=256, null=True, blank=True
+    )
+    link_instagram = models.URLField(
+        verbose_name="Link do Instagram", max_length=256, null=True, blank=True
+    )
     link_tiktok = models.URLField(
-        verbose_name="Link do TikTok", max_length=256, null=True, blank=True)
+        verbose_name="Link do TikTok", max_length=256, null=True, blank=True
+    )
     link_youtube = models.URLField(
-        verbose_name="Link do Youtube", max_length=256, null=True, blank=True)
-    
-    
+        verbose_name="Link do Youtube", max_length=256, null=True, blank=True
+    )
+
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.name.replace("ł", "l"))
@@ -276,18 +301,27 @@ class Restaurant(models.Model):
             )
         if self.image_logo_photo:
             self.thumbnails_cache["logo"] = make_thumbnail(
-                self.image_logo_photo, [
-                    (200, 95), (340, 340)], 0, self, "restaurant"
+                self.image_logo_photo,
+                [(200, 95), (340, 340)],
+                0,
+                self,
+                "restaurant",
             )
         if self.image_main_photo_desktop:
             self.thumbnails_cache["main_desktop"] = make_thumbnail(
-                self.image_main_photo_desktop, [
-                    (1920, 834)], 1, self, "restaurant"
+                self.image_main_photo_desktop,
+                [(1920, 834)],
+                1,
+                self,
+                "restaurant",
             )
         if self.image_main_photo_mobile:
             self.thumbnails_cache["main_mobile"] = make_thumbnail(
-                self.image_main_photo_mobile, [
-                    (360, 378)], 12, self, "restaurant"
+                self.image_main_photo_mobile,
+                [(360, 378)],
+                12,
+                self,
+                "restaurant",
             )
         super(Restaurant, self).save()
 
@@ -306,16 +340,16 @@ class Restaurant(models.Model):
 
     def __str__(self):
         return "{}".format(self.name)
-    
+
     @property
     def gallery(self):
         gallery = Photo.objects.filter(restaurant_id=self)
         return [x.thumbnails_cache["gallery"] for x in gallery]
-    
+
     @property
     def our_advantages(self):
         return Advantage.objects.filter(restaurant=self)
-    
+
     @property
     def our_rooms(self):
         return Room.objects.filter(restaurant=self)
@@ -372,7 +406,8 @@ class Restaurant(models.Model):
     def from_hour(self):
         weekday = datetime.today().isoweekday()
         fh = OpeningHours.objects.filter(
-            restaurant=self, weekday=weekday).first()
+            restaurant=self, weekday=weekday
+        ).first()
         if fh:
             return fh.from_hour
         return None
@@ -381,7 +416,8 @@ class Restaurant(models.Model):
     def to_hour(self):
         weekday = datetime.today().isoweekday()
         fh = OpeningHours.objects.filter(
-            restaurant=self, weekday=weekday).first()
+            restaurant=self, weekday=weekday
+        ).first()
         if fh:
             return fh.to_hour
         return None
@@ -390,7 +426,8 @@ class Restaurant(models.Model):
     def weekday(self):
         weekday = datetime.today().isoweekday()
         fh = OpeningHours.objects.filter(
-            restaurant=self, weekday=weekday).first()
+            restaurant=self, weekday=weekday
+        ).first()
         if fh:
             return fh.weekday_name
         return None
@@ -432,7 +469,8 @@ class Restaurant(models.Model):
 
     def products_search(self, search):
         products = Product.objects.filter(
-            name__icontains=search, is_active=True)
+            name__icontains=search, is_active=True
+        )
         return products
 
 
@@ -468,7 +506,8 @@ def auto_delete_file_on_change(sender, instance, **kwargs):
 
     try:
         old_file = Restaurant.objects.get(
-            pk=instance.pk).image_main_photo_desktop
+            pk=instance.pk
+        ).image_main_photo_desktop
         new_file = instance.image_main_photo_desktop
         if old_file and not old_file == new_file:
             if os.path.isfile(old_file.path):
@@ -479,7 +518,8 @@ def auto_delete_file_on_change(sender, instance, **kwargs):
 
     try:
         old_file = Restaurant.objects.get(
-            pk=instance.pk).image_main_photo_mobile
+            pk=instance.pk
+        ).image_main_photo_mobile
         new_file = instance.image_main_photo_mobile
         if old_file and not old_file == new_file:
             if os.path.isfile(old_file.path):

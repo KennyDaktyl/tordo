@@ -1,0 +1,26 @@
+<section id="basekt_popup" class="basekt_popup in-layout p-fixed z-index-high border-r ">
+    <input type="hidden" name="product_in_basket" id="product_in_basket" >
+    <div class="basekt_container w-100 p-fixed element_center bg-white flex wrap j-center a-top border-r box-shadow">
+        <figure class="w-100">
+            <source id="srcset_basket" srcset="" 430w type="image/webp" />
+            <img id="src_basket"  class="image_food_main w-100  border-r" src="" alt="" width="430" height="183">
+        </figure>
+        <img class="x_close p-absolute pointer z-index-top" src="/media/svg/x_close.svg" alt="" width="55" height="55" onclick="closeBasket(this)">
+        <div class="flex wrap w-100 j-center a-top margin-t-20 container-text">
+            <span class="text-green w-100 text_center margin-t-20">A122</span>
+            <p id="product_name" class="text-bold margin-t-20"></p>
+            <form class="w-100 flex wrap a-center j-center" action="">
+                <input class="changes_product_info margin-t-20 border-r w-100" id="w3review" name="w3review" rows="4" cols="50" placeholder="Uwagi do zamówienia...">
+                <div class="basket_gty flex w-80 j-center a-center border-r margin-t-20 h-50">
+                    <span class="w-20 bg-grey text-center text-bold h-50 pointer scale-11" onclick="remOneQty(this)">-</span>
+                    <input id="food_qty" type="number" min="1" value="1" class="food_qty bg-white w-60 text-center text-bold h-50">
+                    <span class="w-20 bg-grey text-center text-bold h-50 pointer scale-11" onclick="addOneQty(this)">+</span>
+                </div>
+                <button type="submit" class="flex wrap j-center a-center bg-green border-r h-50 w-80 margin-t-20  margin-b-20 pointer">
+                    <span class="text-white">Dodaj do zamówienia</span>
+                    <span id="product_price" class="text-white margin-l-10 text-bold"></span><span class="text-white text-bold">zł</span>
+                </button>
+            </form>
+        </div>
+    </div>
+</section>

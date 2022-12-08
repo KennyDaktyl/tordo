@@ -336,3 +336,45 @@ div.food_container:hover {
     box-shadow: rgb(0 0 0 / 35%) 0px 5px 15px;
     z-index: 1;
 }
+
+section.basekt_popup {
+    display: none;
+}
+
+section.basekt_popup.active {
+    display: flex;
+}
+
+div.basekt_container {
+    display: flex;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 430px;
+    box-shadow: rgb(0 0 0 / 35%) 0px 5px 15px;
+
+}
+
+img.basket_food_image {
+    width: 100%;
+    height: 183px;
+    object-fit: cover;
+}
+
+.basekt_popup p {
+    font-size: 24px;
+}
+
+img.x_close {
+    right: -27px;
+    top: -27px;
+}
+
+.basket_gty span {
+    line-height: 50px;
+}
+
+.changes_product_info {
+    border: 1px solid #E0E0E0;
+    height: 95px
+}

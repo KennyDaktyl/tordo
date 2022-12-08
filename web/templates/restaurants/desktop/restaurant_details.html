@@ -166,38 +166,7 @@
                     <p class="text-bold w-100 text-left margin-t-10">{{ category.name }}</p>
                 {% endif %}
                 {% for product in category.products %}
-                    <input id="srcset_basket_{{ product.id }}" type="hidden" value="{{ MEDIA_URL }}{% get_src_expected product.images_basket_webp.items '430x173' %}">
-                    <input id="src_basket_{{ product.id }}" type="hidden" value="{{ MEDIA_URL }}{% get_src_expected product.images_basket_jpg.items '430x173' %}">
-                    <input id="product_name_{{ product.id }}" type="hidden" value="{{ product.name }}">
-                    <input id="product_price_{{ product.id }}" type="hidden" value="{{ product.price}}">
-                    <div id="product_id_{{ product.id }}" class="food_container w-100 flex wrap j-center a-center bg-white border-r margin-t-10 margin-b-10" onclick="addToBasket(this)">
-                        <div class="flex wrap j-center a-center w-80 padding-10">
-                            <div class="flex wrap w-80 a-center j-left margin-t-10">
-                                <span class="text-green w-100 text-left">A122</span>
-                                <div class="flex w-100 a-center j-left margin-t-10">
-                                    <p class="text-bold margin-r-10">{{ product.name }}</p>
-                                    <img class="margin-r-10" src="{{ MEDIA_URL }}media/svg/chilli.svg" alt="" width="20" height="17">
-                                    <img class="margin-r-10" src="{{ MEDIA_URL }}media/svg/squarestar.svg" alt="" width="20" height="17">
-                                </div>
-                                <small class="text-grey w-100 text-left margin-t-10">{{ product.description }}</small>
-                            </div>
-                            <div class="w-20 flex wrap j-right a-center h-80">
-                                <div class="flex w-100 j-right a-center h-50">
-                                    <small class="margin-r-10">12</small>
-                                    <img class="svg-red" src="/media/svg/heart.svg" alt="" width="22" height="20">
-                                </div>
-                                <div class="flex w-100 wrap j-center a-center h-50">
-                                    <span class="text-green w-100 text-right">{{ product.price }}zł</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="flex wrap j-center a-center w-20 p-relative border-r">
-                            <picture class="flex j-center a-center wrap w-100">
-                                <source srcset="{{ MEDIA_URL }}{% get_src_expected product.images_listing_webp.items '200x130' %}" 170w type="image/webp"/>
-                                <img class="product_image" src="{{ MEDIA_URL }}{% get_src_expected product.images_listing_jpg.items '200x130' %}" alt="" width="200" height="130">
-                            </picture>
-                        </div>
-                    </div>
+                    {% include "products/desktop/product.html" %}
                 {% endfor %}
             {% endfor %}
         </div>
@@ -290,4 +259,73 @@
 </div>
 {% endblock %}
 
+{% block basket_add_product %}
+    {% include "orders/desktop/includes/basket_add_product.html" %}
+{% endblock %}
 
+{% block script_link %}
+<script type="text/javascript">
+
+    function addToBasket(food) {
+        var main = document.getElementById('main');
+        var basket = document.getElementById('basekt_popup');
+        main.classList.add('freeze');
+        basket.classList.add('active');
+
+        var product_in_basket = document.getElementById("product_in_basket");
+        var product_id = (food.id).replace("product_id_", "");
+
+        product_in_basket.value = product_id;
+        
+        var srcset = document.getElementById("srcset_basket");
+        var srcset_input = document.getElementById("srcset_basket_" + product_id);
+        srcset.srcset = srcset_input.value;
+        
+        var src = document.getElementById("src_basket");
+        var src_input = document.getElementById("src_basket_" + product_id);
+        src.src = src_input.value;
+
+        var product_name = document.getElementById("product_name");
+        var product_name_input = document.getElementById("product_name_" + product_id);
+        product_name.innerHTML = product_name_input.value;
+
+        var product_price = document.getElementById("product_price");
+        var product_price_input = document.getElementById("product_price_" + product_id);
+        product_price.innerHTML = product_price_input.value;
+
+    }
+
+    function closeBasket(x_close) {
+        var main = document.getElementById('main');
+        var basket = document.getElementById('basekt_popup');
+        main.classList.remove('freeze');
+        basket.classList.remove('active');
+    }
+
+    function addOneQty(plus) {
+        var food_qty = document.getElementById('food_qty');
+        var qty = parseInt(food_qty.value);
+        food_qty.value = qty + 1;
+
+        var product_in_basket = document.getElementById("product_in_basket");
+        var product_price_input = document.getElementById("product_price_" + product_in_basket.value);
+        var product_price = document.getElementById("product_price");
+        product_price.innerHTML = (food_qty.value * product_price_input.value).toFixed(2); 
+    }
+
+    function remOneQty(plus) {
+        var food_qty = document.getElementById('food_qty');
+        var qty = parseInt(food_qty.value);
+        if (qty > 1) {
+            food_qty.value = qty - 1;
+        } else {
+            food_qty.value = 1;
+        }
+
+        var product_in_basket = document.getElementById("product_in_basket");
+        var product_price_input = document.getElementById("product_price_" + product_in_basket.value);
+        var product_price = document.getElementById("product_price");
+        product_price.innerHTML = (food_qty.value * product_price_input.value).toFixed(2);
+}
+</script>
+{% endblock %}

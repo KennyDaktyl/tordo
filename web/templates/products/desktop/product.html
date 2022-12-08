@@ -1,0 +1,34 @@
+{% load image_tags %}
+
+<div id="product_id_{{ product.id }}" class="food_container w-100 flex wrap j-center a-center bg-white border-r margin-t-10 margin-b-10 pointer" onclick="addToBasket(this)">
+    <input id="srcset_basket_{{ product.id }}" type="hidden" value="{{ MEDIA_URL }}{% get_src_expected product.images_basket_webp.items '430x173' %}">
+    <input id="src_basket_{{ product.id }}" type="hidden" value="{{ MEDIA_URL }}{% get_src_expected product.images_basket_jpg.items '430x173' %}">
+    <input id="product_name_{{ product.id }}" type="hidden" value="{{ product.name }}">
+    <input id="product_price_{{ product.id }}" type="hidden" value="{{ product.price}}">
+    <div class="flex wrap j-center a-center w-80 padding-10">
+        <div class="flex wrap w-80 a-center j-left margin-t-10">
+            <span class="text-green w-100 text-left">A122</span>
+            <div class="flex w-100 a-center j-left margin-t-10">
+                <p class="text-bold margin-r-10">{{ product.name }}</p>
+                <img class="margin-r-10" src="{{ MEDIA_URL }}media/svg/chilli.svg" alt="" width="20" height="17">
+                <img class="margin-r-10" src="{{ MEDIA_URL }}media/svg/squarestar.svg" alt="" width="20" height="17">
+            </div>
+            <small class="text-grey w-100 text-left margin-t-10">{{ product.description }}</small>
+        </div>
+        <div class="w-20 flex wrap j-right a-center h-80">
+            <div class="flex w-100 j-right a-center h-50">
+                <small class="margin-r-10">12</small>
+                <img class="svg-red" src="/media/svg/heart.svg" alt="" width="22" height="20">
+            </div>
+            <div class="flex w-100 wrap j-center a-center h-50">
+                <span class="text-green w-100 text-right">{{ product.price }}zł</span>
+            </div>
+        </div>
+    </div>
+    <div class="flex wrap j-center a-center w-20 p-relative border-r">
+        <picture class="flex j-center a-center wrap w-100">
+            <source srcset="{{ MEDIA_URL }}{% get_src_expected product.images_listing_webp.items '200x130' %}" 170w type="image/webp"/>
+            <img class="product_image" src="{{ MEDIA_URL }}{% get_src_expected product.images_listing_jpg.items '200x130' %}" alt="" width="200" height="130">
+        </picture>
+    </div>
+</div>

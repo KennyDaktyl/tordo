@@ -1,18 +1,21 @@
 import os.path
-from django.core.exceptions import ValidationError
-from django.core.validators import FileExtensionValidator
 
 from django.contrib.gis.db import models
-from django.utils.text import slugify
+from django.core.exceptions import ValidationError
+from django.core.validators import FileExtensionValidator
 from django.dispatch import receiver
-from web.models.images import make_thumbnail, ALLOWED_IMAGE_EXTENSIONS
+from django.utils.text import slugify
+
+from web.models.images import ALLOWED_IMAGE_EXTENSIONS, make_thumbnail
+from web.models.restaurants import Restaurant
 
 
 def file_size(value):
     limit = 10 * 1024 * 1024
     if value.size > limit:
         raise ValidationError(
-            "Plik który chcesz wrzucić jest większy niż 10MB.")
+            "Plik który chcesz wrzucić jest większy niż 10MB."
+        )
 
 
 TAX = [
@@ -28,10 +31,12 @@ class Category(models.Model):
         verbose_name="Numer kategorii", null=True, blank=True, default=0
     )
     name = models.CharField(verbose_name="Nazwa kategorii", max_length=128)
-    slug = models.SlugField(verbose_name="Slug",
-                            blank=True, null=True, max_length=128)
+    slug = models.SlugField(
+        verbose_name="Slug", blank=True, null=True, max_length=128
+    )
     is_active = models.BooleanField(
-        verbose_name="Czy jest dostępny", default=True)
+        verbose_name="Czy jest dostępny", default=True
+    )
 
     class Meta:
         ordering = (
@@ -52,7 +57,9 @@ class Category(models.Model):
             restaurant=restaurant_id
         ).values("product")
         product_ids = [el["product"] for el in get_products_in_menu]
-        return Product.objects.filter(category=self, pk__in=product_ids, is_active=True)
+        return Product.objects.filter(
+            category=self, pk__in=product_ids, is_active=True
+        )
 
 
 class Product(models.Model):
@@ -64,8 +71,9 @@ class Product(models.Model):
         db_index=True,
     )
     name = models.CharField(verbose_name="Nazwa produktu", max_length=128)
-    slug = models.SlugField(verbose_name="Slug",
-                            blank=True, null=True, max_length=128)
+    slug = models.SlugField(
+        verbose_name="Slug", blank=True, null=True, max_length=128
+    )
     price = models.DecimalField(
         verbose_name="Cena podstawowa brutto",
         default=0,
@@ -74,21 +82,31 @@ class Product(models.Model):
     )
     tax = models.IntegerField(verbose_name="Faktura", choices=TAX)
     description = models.TextField(
-        verbose_name="Opis produktu", blank=True, null=True)
+        verbose_name="Opis produktu", blank=True, null=True
+    )
     image_listing_jpg = models.ImageField(
         verbose_name="Zdjęcie na listing 200x130",
         upload_to="products",
-        blank=True, null=True,
-        validators=[FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS)])
+        blank=True,
+        null=True,
+        validators=[
+            FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS)
+        ],
+    )
     image_basket_jpg = models.ImageField(
         verbose_name="Zdjęcie na koszyk 430x173",
         upload_to="products",
-        blank=True, null=True,
-        validators=[FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS)])
+        blank=True,
+        null=True,
+        validators=[
+            FileExtensionValidator(allowed_extensions=ALLOWED_IMAGE_EXTENSIONS)
+        ],
+    )
     thumbnails_cache = models.JSONField(default=dict, null=True, blank=True)
 
     is_active = models.BooleanField(
-        verbose_name="Czy jest dostępny", default=True)
+        verbose_name="Czy jest dostępny", default=True
+    )
 
     class Meta:
         ordering = ("name",)
@@ -99,17 +117,35 @@ class Product(models.Model):
             self.slug = slugify(self.name.replace("ł", "l"))
         super(Product, self).save()
         self.thumbnails_cache = {
-            "thumbnails_listing": [], "thumbnails_basket": []}
+            "thumbnails_listing": [],
+            "thumbnails_basket": [],
+        }
         if self.image_listing_jpg:
             self.thumbnails_cache["thumbnails_listing"] = make_thumbnail(
-                self.image_listing_jpg, [(200, 130),], 5, self, "product")
+                self.image_listing_jpg,
+                [
+                    (200, 130),
+                ],
+                5,
+                self,
+                "product",
+            )
         if self.image_basket_jpg:
-            self.thumbnails_cache["thumbnails_basket"] = make_thumbnail(self.image_basket_jpg, [
-                (340, 183), (430, 173), (680, 366), (860, 346)], 6, self, "product")
+            self.thumbnails_cache["thumbnails_basket"] = make_thumbnail(
+                self.image_basket_jpg,
+                [
+                    (430, 173),
+                ],
+                6,
+                self,
+                "product",
+            )
         super(Product, self).save()
 
     def __str__(self):
-        return "{}, {}zł, vat{}".format(self.name, self.price, self.get_tax_display())
+        return "{}, {}zł, vat{}".format(
+            self.name, self.price, self.get_tax_display()
+        )
 
     @property
     def images_listing_jpg(self):
@@ -200,7 +236,7 @@ class RestaurantMenu(models.Model):
         restaurants_data = Restaurant.objects.filter(
             name__icontains=search, is_active=True
         ).values("pk")
-        restaurant_ids = [el["pk"] for el in restaurant_data]
+        restaurant_ids = [el["pk"] for el in restaurants_data]
         return self.objects.filter(restaurant__in=restaurant_ids)
 
     def restaurants_with_products(self, restaurant_ids):

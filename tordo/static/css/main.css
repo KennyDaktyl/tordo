@@ -606,3 +606,12 @@ input {
 .underline {
     text-decoration-line: underline;
 }
+
+.freeze {
+    filter: blur(8px);
+    -webkit-filter: blur(8px);
+    overflow: hidden;
+    position: fixed;
+    background-color: black;
+    opacity: 1;
+}
