@@ -146,7 +146,7 @@ class RestaurantListView(ListView):
         queryset = list(products_query) + list(
             restaurants_search_in_name
         )
-        # queryset = sorted(queryset, key=lambda d: d.name) 
+        queryset = sorted(queryset, key=lambda d: d.name) 
         return queryset
 
 

@@ -55,6 +55,7 @@ class RestaurantSerializer(serializers.ModelSerializer):
             "likes_counter",
             "is_open",
         ]
+        ordering = ['name']
 
 
 class RestaurantWithProductsSerializer(serializers.ModelSerializer):
