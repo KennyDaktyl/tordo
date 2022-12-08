@@ -6,8 +6,6 @@ from django.utils.text import slugify
 
 from web.constants import USER_STATUS
 
-from .addresses import UserAddress
-
 
 class ActivateToken(models.Model):
     id = models.AutoField(primary_key=True)

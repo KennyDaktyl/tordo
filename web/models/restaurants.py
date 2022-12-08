@@ -16,7 +16,6 @@ from web.models.images import (
     Photo,
     make_thumbnail,
 )
-from web.models.products import Category, Product, RestaurantMenu
 
 
 def file_size(value):

@@ -7,7 +7,6 @@ from django.dispatch import receiver
 from django.utils.text import slugify
 
 from web.models.images import ALLOWED_IMAGE_EXTENSIONS, make_thumbnail
-from web.models.restaurants import Restaurant
 
 
 def file_size(value):
