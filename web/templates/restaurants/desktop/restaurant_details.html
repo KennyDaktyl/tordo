@@ -267,6 +267,9 @@
 <script type="text/javascript">
 
     function addToBasket(food) {
+
+        sessionStorage.setItem('scrollpos', window.scrollY);
+
         var main = document.getElementById('main');
         var basket = document.getElementById('basekt_popup');
         main.classList.add('freeze');
@@ -292,7 +295,6 @@
         var product_price = document.getElementById("product_price");
         var product_price_input = document.getElementById("product_price_" + product_id);
         product_price.innerHTML = product_price_input.value;
-
     }
 
     function closeBasket(x_close) {
@@ -300,6 +302,12 @@
         var basket = document.getElementById('basekt_popup');
         main.classList.remove('freeze');
         basket.classList.remove('active');
+
+        var scrollpos = sessionStorage.getItem('scrollpos');
+        if (scrollpos) {
+            window.scrollTo(0, scrollpos);
+            sessionStorage.removeItem('scrollpos');
+        }
     }
 
     function addOneQty(plus) {
@@ -326,6 +334,7 @@
         var product_price_input = document.getElementById("product_price_" + product_in_basket.value);
         var product_price = document.getElementById("product_price");
         product_price.innerHTML = (food_qty.value * product_price_input.value).toFixed(2);
-}
+    }
+    
 </script>
 {% endblock %}
