@@ -15,7 +15,7 @@ class Migration(migrations.Migration):
             model_name="product",
             name="restaurant",
             field=models.ForeignKey(
-                default=1,
+                default=3,
                 on_delete=django.db.models.deletion.CASCADE,
                 to="web.restaurant",
                 verbose_name="Godziny otwarcia restauracji",

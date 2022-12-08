@@ -57,7 +57,7 @@ class RestaurantSerializer(serializers.ModelSerializer):
         ]
 
 
-class RestaurantWithProductsSerializer(serializers.HyperlinkedModelSerializer):
+class RestaurantWithProductsSerializer(serializers.ModelSerializer):
     id_restaurant = serializers.IntegerField(source="pk")
     from_hour = serializers.DateTimeField(format="%H:%M")
     to_hour = serializers.DateTimeField(format="%H:%M")

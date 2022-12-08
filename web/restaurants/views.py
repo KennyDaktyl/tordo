@@ -133,21 +133,17 @@ class RestaurantListView(ListView):
         restaurants_search_in_name = Restaurant.objects.filter(
             name__icontains=search, is_active=True
         )
-
-        products_data = Product.objects.filter(
+        products_search = Product.objects.filter(
             name__icontains=search, is_active=True
-        ).values("pk")
-        product_ids = [el["pk"] for el in products_data]
-        restaurants_data = RestaurantMenu.objects.filter(
-            product__in=product_ids
-        ).values("restaurant")
-        restaurant_ids = [el["restaurant"] for el in restaurants_data]
-        restaurants_search_in_product = Restaurant.objects.filter(
-            pk__in=restaurant_ids)
-        for restaurant in restaurants_search_in_product:
+        )
+        restaurants_with_search = products_search.values("restaurant").distinct()
+        products_query = []
+        for restaurant in restaurants_with_search:
+            restaurant = Restaurant.objects.get(id=restaurant["restaurant"])
             restaurant.categories = restaurant.categories_with_products_search(
                 search)
-        queryset = list(restaurants_search_in_product) + list(
+            products_query.append(restaurant)
+        queryset = list(products_query) + list(
             restaurants_search_in_name
         )
         return queryset

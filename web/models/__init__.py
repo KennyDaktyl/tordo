@@ -9,4 +9,4 @@ from .addresses import (
 )
 from .restaurants import Restaurant
 from .products import RestaurantMenu, Product, Category
-from .images import Thumbnail
+from .images import Thumbnail, Photo

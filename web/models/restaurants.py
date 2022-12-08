@@ -16,7 +16,7 @@ from web.models.images import (
     Photo,
     make_thumbnail,
 )
-
+from web.models.products import Category, Product
 
 def file_size(value):
     limit = 6 * 1024 * 1024
@@ -341,6 +341,10 @@ class Restaurant(models.Model):
         return "{}".format(self.name)
 
     @property
+    def products(self):
+        return Product.objects.filter(restaurant_id=self, is_active=True)
+
+    @property
     def gallery(self):
         gallery = Photo.objects.filter(restaurant_id=self)
         return [x.thumbnails_cache["gallery"] for x in gallery]
@@ -452,22 +456,17 @@ class Restaurant(models.Model):
         return False
 
     def categories_with_products_search(self, search):
-        products_in_restaurant_data = RestaurantMenu.objects.filter(
-            restaurant=self
-        ).values("product")
-        product_ids = [el["product"] for el in products_in_restaurant_data]
-        products = Product.objects.filter(
-            pk__in=product_ids, name__icontains=search, is_active=True
-        )
-        categories_in_products_data = products.values("category").distinct()
-        category_ids = [el["category"] for el in categories_in_products_data]
-        categories = Category.objects.filter(pk__in=category_ids)
-        for category in categories:
+        products = self.products.filter(name__icontains=search)
+        categories = products.values("category").distinct()
+        query = []
+        for category_id in categories:
+            category = Category.objects.get(id=category_id["category"])
             category.products = products.filter(category=category)
-        return categories
+            query.append(category)
+        return query
 
     def products_search(self, search):
-        products = Product.objects.filter(
+        products = self.products.objects.filter(
             name__icontains=search, is_active=True
         )
         return products
