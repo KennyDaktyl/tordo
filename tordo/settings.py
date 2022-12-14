@@ -14,6 +14,7 @@ if socket.gethostname() in [
     "michal-optiplex9010",
 ]:
     DEBUG = True
+    ATOMIC_REQUESTS = True
     CSRF_COOKIE_SECURE = False
     DOMAIN = "127.0.0.1:8000"
     DOMAIN_URL = "http://" + DOMAIN
@@ -108,7 +109,7 @@ WSGI_APPLICATION = 'tordo.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
+ATOMIC_REQUESTS = True
 DATABASES = {
     "default": {
         "NAME": DATABASE_NAME,
@@ -117,7 +118,7 @@ DATABASES = {
         "USER": os.environ.get("DB_USER"),
         "PASSWORD": os.environ.get("DB_PASSWORD"),
         "HOST": DATABASE_HOST,
-    }
+    },
 }
 
 
@@ -167,7 +168,6 @@ COMPRESS_PARSER = "compressor.parser.AutoSelectParser"
 LANGUAGE_CODE = "pl"
 TIME_ZONE = "Europe/Warsaw"
 USE_I18N = True
-USE_L10N = True
 USE_TZ = False
 DATETIME_FORMAT = "Y-m-d H:M"
 DATE_INPUT_FORMATS = "Y-m-d H:M:S"

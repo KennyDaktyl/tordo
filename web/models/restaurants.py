@@ -17,6 +17,8 @@ from web.models.images import (
     make_thumbnail,
 )
 from web.models.products import Category, Product
+from web.products.serializers import CategoryWithProductsSerializer, ProductSerializer
+
 
 def file_size(value):
     limit = 6 * 1024 * 1024
@@ -341,8 +343,9 @@ class Restaurant(models.Model):
         return "{}".format(self.name)
 
     @property
-    def products(self):
-        return Product.objects.filter(restaurant_id=self, is_active=True)
+    def categories(self):
+        return Category.objects.filter(restaurant=self, is_active=True)
+
 
     @property
     def gallery(self):
@@ -455,15 +458,13 @@ class Restaurant(models.Model):
                 return True
         return False
 
-    def categories_with_products_search(self, search):
-        products = self.products.filter(name__icontains=search)
-        categories = products.values("category").distinct()
-        query = []
-        for category_id in categories:
-            category = Category.objects.get(id=category_id["category"])
-            category.products = products.filter(category=category)
-            query.append(category)
-        return query
+    # def categories_with_products_search(self, search):
+    #     categories = self.categories.values("category").distinct()
+    #     categories = Category.objects.filter(id__in=categories)
+    #     for category in categories:
+    #         products = products.filter(category=category)
+    #         category.products = ProductSerializer(products, many=True).data
+    #     return CategoryWithProductsSerializer(categories, many=True).data
 
     def products_search(self, search):
         products = self.products.objects.filter(

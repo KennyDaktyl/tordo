@@ -26,6 +26,11 @@ TAX = [
 
 class Category(models.Model):
     id = models.AutoField(primary_key=True)
+    restaurant = models.ForeignKey(
+        "Restaurant",
+        verbose_name="Restauracji",
+        on_delete=models.CASCADE,
+    )
     number = models.IntegerField(
         verbose_name="Numer kategorii", null=True, blank=True, default=0
     )
@@ -49,25 +54,15 @@ class Category(models.Model):
         super(Category, self).save()
 
     def __str__(self):
-        return self.name
+        return self.name + " - " + self.restaurant.name
 
-    def products(self, restaurant_id):
-        get_products_in_menu = RestaurantMenu.objects.filter(
-            restaurant=restaurant_id
-        ).values("product")
-        product_ids = [el["product"] for el in get_products_in_menu]
-        return Product.objects.filter(
-            category=self, pk__in=product_ids, is_active=True
-        )
+    @property
+    def products(self):
+        return Product.objects.filter(category=self, is_active=True)
 
 
 class Product(models.Model):
     id = models.AutoField(primary_key=True)
-    restaurant = models.ForeignKey(
-        "Restaurant",
-        verbose_name="Restauracji",
-        on_delete=models.CASCADE,
-    )
     category = models.ForeignKey(
         "Category",
         verbose_name="Typ produktu",
@@ -152,28 +147,28 @@ class Product(models.Model):
         )
 
     @property
-    def images_listing_jpg(self):
-        if self.thumbnails_cache["thumbnails_listing"].get("jpeg"):
+    def images_listing_jpg(self) -> dict:
+        if self.thumbnails_cache["thumbnails_listing"]:
             return self.thumbnails_cache["thumbnails_listing"]["jpeg"]
-        return None
+        return {}
 
     @property
-    def images_listing_webp(self):
-        if self.thumbnails_cache["thumbnails_listing"].get("webp"):
+    def images_listing_webp(self) -> dict:
+        if self.thumbnails_cache["thumbnails_listing"]:
             return self.thumbnails_cache["thumbnails_listing"]["webp"]
-        return True
+        return {}
 
     @property
-    def images_basket_jpg(self):
-        if self.thumbnails_cache["thumbnails_basket"].get("jpeg"):
+    def images_basket_jpg(self) -> dict:
+        if self.thumbnails_cache["thumbnails_basket"]:
             return self.thumbnails_cache["thumbnails_basket"]["jpeg"]
-        return None
+        return {}
 
     @property
-    def images_basket_webp(self):
-        if self.thumbnails_cache["thumbnails_basket"].get("webp"):
+    def images_basket_webp(self) -> dict:
+        if self.thumbnails_cache["thumbnails_basket"]:
             return self.thumbnails_cache["thumbnails_basket"]["webp"]
-        return True
+        return {}
 
 
 @receiver(models.signals.post_delete, sender=Product)

@@ -1,6 +1,6 @@
 {% load image_tags %}
 
-<div id="product_id_{{ product.id }}" class="food_container w-100 flex wrap j-center a-center bg-white border-r margin-t-10 margin-b-10 pointer" onclick="addToBasket(this)">
+<div id="product_id_{{ product.id }}" class="food_container w-100 flex wrap j-center a-center bg-white border-r margin-t-10 {% if forloop.last %}margin-b-40{% else %}margin-b-5{% endif %} pointer" onclick="addToBasket(this)">
     <input id="srcset_basket_{{ product.id }}" type="hidden" value="{{ MEDIA_URL }}{% get_src_expected product.images_basket_webp.items '430x173' %}">
     <input id="src_basket_{{ product.id }}" type="hidden" value="{{ MEDIA_URL }}{% get_src_expected product.images_basket_jpg.items '430x173' %}">
     <input id="product_name_{{ product.id }}" type="hidden" value="{{ product.name }}">

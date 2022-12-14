@@ -1,9 +1,7 @@
-import imp
 import re
 
 
 def mobile(request):
-
     MOBILE_AGENT_RE = re.compile(
         r".*(iphone|mobile|androidtouch|ipad|tablet|android|blackberry|opera|mini|windows\sce|palm|smartphone|iemobile)",
         re.IGNORECASE,

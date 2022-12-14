@@ -161,14 +161,25 @@
                     <input class="t-left w-100" type="text" placeholder="Szukaj, lokalu, kuchni, dań" name="search_dish">
                 </div>
             </div>
-            {% for category in categories_with_products %}
-                {% if category.products %}
-                    <p class="text-bold w-100 text-left margin-t-10">{{ category.name }}</p>
-                {% endif %}
-                {% for product in category.products %}
-                    {% include "products/desktop/product.html" %}
+            {% if restaurant.categories_filtered %}
+                {% for category in restaurant.categories_filtered %}
+                    {% if category.products_filtered %}
+                        <p class="text-bold w-100 text-left margin-t-10">{{ category.name }}</p>
+                    {% endif %}
+                    {% for product in category.products_filtered %}
+                        {% include "products/desktop/product.html" %}
+                    {% endfor %}
                 {% endfor %}
-            {% endfor %}
+            {% else %}
+                {% for category in restaurant.categories %}
+                    {% if category.products %}
+                        <p class="text-bold w-100 text-left margin-t-10">{{ category.name }}</p>
+                    {% endif %}
+                    {% for product in category.products %}
+                        {% include "products/desktop/product.html" %}
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
         </div>
         <div class="basket_container flex w-100 j-top a-center wrap">
             <div class="order_details flex wrap j-left a-top w-100 bg-white border-r">
@@ -232,7 +243,7 @@
                         <p class="w-50 text-left text-bold">Suma za dania</p>
                         <p class="w-50 text-right text-bold">250,00 zł</p>
                     </div>
-        
+
                     <div class="flex w-100 no-wrap j-center a-center margin-b-15">
                         <div class="w-50 flex j-left a-center no-wrap">
                             <p class="text-left">Dostawa dla I - stefy</p>
@@ -241,12 +252,12 @@
                         </div>
                         <p class="w-50 text-right">25,00 zł</p>
                     </div>
-        
+
                     <div class="flex w-100 no-wrap j-center a-center margin-b-15">
                         <p class="text-left w-100">Punkty za zamówienie</p>
                         <p class="text-right w-100">1,17</p>
                     </div>
-        
+
                     <a href="" class="flex w-100 no-wrap j-center a-center">
                         <button class="w-100 bg-red h-50 border-r pointer">
                             <span class="text-white text-bold">Zamawiam</span>
@@ -265,7 +276,7 @@
 
 {% block script_link %}
 <script>
-    
+
     var scrollpos = localStorage.getItem('scrollpos');
     if (scrollpos) window.scrollTo(0, scrollpos);
 
@@ -327,7 +338,7 @@
         var product_in_basket = document.getElementById("product_in_basket");
         var product_price_input = document.getElementById("product_price_" + product_in_basket.value);
         var product_price = document.getElementById("product_price");
-        product_price.innerHTML = (food_qty.value * product_price_input.value).toFixed(2); 
+        product_price.innerHTML = (food_qty.value * product_price_input.value).toFixed(2);
     }
 
     function remOneQty(plus) {

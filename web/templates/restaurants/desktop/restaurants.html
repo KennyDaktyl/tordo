@@ -9,7 +9,7 @@
     <div class="w-100 flex j-between a-top wrap">
         <div class="restaurants__container flex j-between a-top wrap">
             {% for restaurant in restaurants %}
-            <a href="{% url 'restaurant_details' slug=restaurant.slug pk=restaurant.id_restaurant %}" class="restaurant_box bg-white w-100 flex a-center j-center margin-b-20">
+            <a href="{% url 'restaurant_details' slug=restaurant.slug pk=restaurant.id %}" class="restaurant_box bg-white w-100 flex a-center j-center margin-t-20">
                 <div class="flex j-center a-center">
                     <picture class="flex j-center a-center wrap">
                         <source class="" srcset="{{ MEDIA_URL }}{% get_src_expected restaurant.listing_webp.items '277x187' %}" type="image/webp"/>
@@ -64,15 +64,14 @@
                     </div>
                 </div>
             </a>
-
-                {% for category in restaurant.categories %}
-                    {% if category.products %}
-                        <h2 class="text-bold w-100 text-left margin-t-15 margin-b-15">{{ category.name }}</h2>
+                {% for category in restaurant.categories_filtered %}
+                    {% if category.products_filtered %}
+                        <h2 class="text-bold w-100 text-left margin-t-5 margin-b-5">{{ category.name }}</h2>
                     {% endif %}
-                    {% for product in category.products %}
+                    {% for product in category.products_filtered %}
                         {% include "products/desktop/product.html" %}
                     {% endfor %}
-                {% endfor %}
+               {% endfor %}
             {% endfor %}
         </div>
 

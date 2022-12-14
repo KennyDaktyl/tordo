@@ -1,30 +1,27 @@
 import folium
+
 from datetime import datetime
+from typing import List
+
 from django.contrib import messages
 from django.contrib.auth import get_user_model
+from django.views.generic import TemplateView
+from django.views.generic.detail import DetailView
+from django.views.generic.list import ListView
 
 from web.front.functions import mobile
-from web.models.addresses import PostCodeWarsaw
-from web.models.products import RestaurantMenu, Product, Category
 from web.models.restaurants import Restaurant, Tag
 from web.restaurants.serializers import (
-    RestaurantSerializer,
-    RestaurantWithProductsSerializer,
-)
-from web.products.serializers import (
-    CategoryWithProductsSerializer,
+    RestaurantDetailsSerializer,
+    RestaurantsListSerializer,
 )
 
 User = get_user_model()
 
-from django.views.generic.list import ListView
-from django.views.generic.detail import DetailView
-from django.views.generic import TemplateView
-
 
 class RestaurantListView(ListView):
     model = Restaurant
-    serializer_class = RestaurantSerializer
+    serializer_class = RestaurantsListSerializer
     distance_max = False
     paginate_by = 25
     template_name = "restaurants/desktop/restaurants.html"
@@ -32,7 +29,8 @@ class RestaurantListView(ListView):
     def get_template_names(self):
         if mobile(self.request):
             self.template_name = self.template_name.replace(
-                "desktop", "mobile")
+                "desktop", "mobile"
+            )
         return self.template_name
 
     def get_context_object_name(self, model):
@@ -44,7 +42,7 @@ class RestaurantListView(ListView):
             search = self.request.GET.get("search")
             self.distance_max = False
             queryset = self.__restaurants_search(search)
-            return RestaurantWithProductsSerializer(queryset, many=True).data
+            return RestaurantsListSerializer(queryset, many=True).data
 
         if self.request.GET.getlist("tags"):
             tags = self.request.GET.getlist("tags")
@@ -53,7 +51,7 @@ class RestaurantListView(ListView):
             queryset = Restaurant.objects.filter(
                 tags__in=tags, is_active=True
             ).distinct()
-            serializer = RestaurantSerializer(queryset, many=True)
+            serializer = RestaurantsListSerializer(queryset, many=True)
             return serializer.data
 
         if self.request.GET.get("sorted"):
@@ -64,16 +62,21 @@ class RestaurantListView(ListView):
                 if self.request.session.get("location_form"):
                     if self.request.session["location_form"]["distance"]:
                         messages.success(
-                            self.request, f"Dane dla podanej lokalizacji.")
+                            self.request, "Dane dla podanej lokalizacji."
+                        )
                     else:
-                        messages.error(self.request, f"Zbyt duża odległość.")
-                    return self.__get_restaurants_sorted_by_distance_by_location(
-                        self.request.session.get("location_form")
+                        messages.error(self.request, "Zbyt duża odległość.")
+                    return (
+                        self.__get_restaurants_sorted_by_distance_by_location(
+                            self.request.session.get("location_form")
+                        )
                     )
                 else:
                     if self.request.user.is_authenticated:
                         if self.request.user.profile.has_main_address:
-                            address = self.request.user.profile.has_main_address
+                            address = (
+                                self.request.user.profile.has_main_address
+                            )
                             messages.success(
                                 self.request,
                                 f"Lokalizacja dla adresu: {address}",
@@ -86,40 +89,42 @@ class RestaurantListView(ListView):
                         else:
                             messages.error(
                                 self.request,
-                                f"Nie posiadasz adresu głównego. Dodaj adres do swojego konta.",
+                                "Nie posiadasz adresu głównego. Dodaj adres do swojego konta.",
                             )
                     else:
                         messages.error(
-                            self.request, f"Nie posiadamy Twojej lokalizacji."
+                            self.request, "Nie posiadamy Twojej lokalizacji."
                         )
 
             if sort_parametr == "name":
                 self.request.session["sorted"] = "name"
-                return RestaurantSerializer(queryset, many=True).data
+                return RestaurantsListSerializer(queryset, many=True).data
 
             if sort_parametr == "start-time":
                 self.request.session["sorted"] = "start-time"
-                return RestaurantSerializer(queryset, many=True).data
+                return RestaurantsListSerializer(queryset, many=True).data
 
             if sort_parametr == "end-time":
                 self.request.session["sorted"] = "end-time"
-                return RestaurantSerializer(queryset, many=True).data
+                return RestaurantsListSerializer(queryset, many=True).data
 
             if sort_parametr == "favorite-dishes":
                 self.request.session["sorted"] = "favorite-dishes"
-                return RestaurantSerializer(queryset, many=True).data
+                return RestaurantsListSerializer(queryset, many=True).data
 
         self.distance_max = False
         self.request.session["sorted"] = "name"
         queryset = Restaurant.objects.filter(is_active=True)
-        return RestaurantSerializer(queryset, many=True).data
+        return RestaurantsListSerializer(queryset, many=True).data
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.GET.get("sorted") == "distance":
             if self.request.session.get("location_form") or self.distance_max:
-                print(self.request.session.get(
-                    "location_form"), self.distance_max)
+                print(
+                    self.request.session.get("location_form"),
+                    self.distance_max,
+                )
                 context["map"] = self.__create_folium_map()
             # else:
             #     context["address_form"] = AddressForm()
@@ -129,25 +134,25 @@ class RestaurantListView(ListView):
         context["tags"] = Tag.objects.all()
         return context
 
-    def __restaurants_search(self, search):
-        restaurants_search_in_name = Restaurant.objects.filter(
-            name__icontains=search, is_active=True
-        )
-        products_search = Product.objects.filter(
-            name__icontains=search, is_active=True
-        )
-        restaurants_with_search = products_search.values("restaurant").distinct()
-        products_query = []
-        for restaurant in restaurants_with_search:
-            restaurant = Restaurant.objects.get(id=restaurant["restaurant"])
-            restaurant.categories = restaurant.categories_with_products_search(
-                search)
-            products_query.append(restaurant)
-        queryset = list(products_query) + list(
-            restaurants_search_in_name
-        )
-        queryset = sorted(queryset, key=lambda d: d.name) 
-        return queryset
+    def __restaurants_search(self, search: str) -> List[Restaurant]:
+        restaurants = Restaurant.objects.filter(is_active=True)
+        restaurants_search = restaurants.filter(name__icontains=search)
+        products_search = []
+        for restaurant in restaurants:
+            categories = []
+            for category in restaurant.categories:
+                products_filtered = category.products.filter(
+                    name__icontains=search
+                )
+                if products_filtered:
+                    category.products_filtered = products_filtered
+                    categories.append(category)
+            if categories:
+                restaurant.categories_filtered = categories
+                products_search.append(restaurant)
+        queryset = set(products_search) | set(restaurants_search)
+        queryset_sorted = sorted(queryset, key=lambda d: d.name)
+        return queryset_sorted
 
 
 class RestaurantMapView(TemplateView):
@@ -155,14 +160,18 @@ class RestaurantMapView(TemplateView):
 
     def get_template_names(self):
         if mobile(self.request):
-            self.template_name = self.template_name.replace("desktop", "mobile")
+            self.template_name = self.template_name.replace(
+                "desktop", "mobile"
+            )
         return self.template_name
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         restaurant = Restaurant.objects.get(pk=self.kwargs["pk"])
         context["restaurant"] = restaurant
-        context["map"] = self.__create_folium_map(restaurant.location, restaurant.name)
+        context["map"] = self.__create_folium_map(
+            restaurant.location, restaurant.name
+        )
         return context
 
     def __create_folium_map(self, loc, name):
@@ -193,11 +202,13 @@ class RestaurantMapView(TemplateView):
 class RestaurantDetailsView(DetailView):
     template_name = "restaurants/desktop/restaurant_details.html"
     model = Restaurant
-    serializer_class = RestaurantSerializer
+    serializer_class = RestaurantDetailsSerializer
 
     def get_template_names(self):
         if mobile(self.request):
-            self.template_name = self.template_name.replace("desktop", "mobile")
+            self.template_name = self.template_name.replace(
+                "desktop", "mobile"
+            )
         return self.template_name
 
     def get_context_object_name(self, model):
@@ -208,55 +219,23 @@ class RestaurantDetailsView(DetailView):
         context["header_white"] = True
         context["current_weekday_number"] = datetime.today().isoweekday()
 
-        search = self.request.GET.get("search_dish")
+        search = self.request.GET.get("search")
         menu_category = self.request.GET.get("menu_category")
 
-        # All products in restaurant
-        products_from_assotiation = RestaurantMenu.objects.filter(
-            restaurant=self.object.pk, restaurant__is_active=True
-        ).values("product")
-        product_ids = []
-        for el in products_from_assotiation:
-            product_ids.append(el["product"])
-        products = Product.objects.filter(pk__in=product_ids, is_active=True)
-
-        # All category in menu
-        categories_data = products.values("category").distinct()
-        category_ids = get_unique_elements(categories_data, "category")
-        categories = Category.objects.filter(pk__in=category_ids).order_by("number")
-        context["categories"] = categories
-
         if search:
-            products = products.filter(
-                name__icontains=search, pk__in=product_ids, is_active=True
-            )
-
-            for category in categories:
-                category.products = products.filter(
-                    category=category, name__icontains=search
+            categories = []
+            for category in self.object.categories:
+                filtered_products = category.products.filter(
+                    name__icontains=search
                 )
-
-            context["categories_with_products"] = CategoryWithProductsSerializer(
-                categories, many=True
-            ).data
-            return context
-
-        if menu_category and menu_category != "wszystkie":
-            category = Category.objects.get(slug=menu_category)
-            category.products = products.filter(category=category)
-            context["categories_with_products"] = CategoryWithProductsSerializer(
-                [
-                    category,
-                ],
-                many=True,
-            ).data
-            return context
-
-        for category in categories:
-            category.products = category.products(self.object.pk)
-        context["categories_with_products"] = CategoryWithProductsSerializer(
-            categories, many=True
-        ).data
+                if filtered_products:
+                    category.products_filtered = filtered_products
+                    categories.append(category)
+            if categories:
+                self.object.categories_filtered = categories
+                context["restaurant"] = RestaurantDetailsSerializer(
+                    self.object
+                ).data
         return context
 
 

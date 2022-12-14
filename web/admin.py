@@ -1,5 +1,6 @@
 from django.contrib import admin
-from django.contrib.gis.admin import OSMGeoAdmin
+from django.contrib.admin import ModelAdmin
+from django.contrib.gis.admin import GISModelAdmin
 
 from web.models.accounts import Profile, UserPhoneNumber
 from web.models.addresses import (
@@ -17,7 +18,7 @@ from web.models.images import Thumbnail, Photo
 
 
 @admin.register(Restaurant)
-class RestaurantAdmin(OSMGeoAdmin):
+class RestaurantAdmin(GISModelAdmin):
     list_display = ("name", "location", "is_located", "geo_data")
     search_fields = ("name",)
     list_display_links = ("name",)
@@ -25,7 +26,7 @@ class RestaurantAdmin(OSMGeoAdmin):
 
 
 @admin.register(RestaurantMenu)
-class RestaurantMenuAdmin(admin.ModelAdmin):
+class RestaurantMenuAdmin(ModelAdmin):
     list_display = ("restaurant", "product")
     search_fields = (
         "restaurant",
@@ -36,7 +37,7 @@ class RestaurantMenuAdmin(admin.ModelAdmin):
 
 
 @admin.register(Product)
-class ProductAdmin(admin.ModelAdmin):
+class ProductAdmin(ModelAdmin):
     list_display = ("name", "price")
     search_fields = ("name",)
     list_display_links = ("name",)
@@ -44,7 +45,7 @@ class ProductAdmin(admin.ModelAdmin):
 
 
 @admin.register(Category)
-class CategoryAdmin(admin.ModelAdmin):
+class CategoryAdmin(ModelAdmin):
     list_display = ("name",)
     search_fields = ("name",)
     list_display_links = ("name",)
@@ -52,7 +53,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 @admin.register(OpeningHours)
-class OpeningHoursAdmin(admin.ModelAdmin):
+class OpeningHoursAdmin(ModelAdmin):
     list_display = [f.name for f in OpeningHours._meta.fields]
     search_fields = ("restaurant",)
     list_display_links = (
@@ -62,7 +63,7 @@ class OpeningHoursAdmin(admin.ModelAdmin):
 
 
 @admin.register(Tag)
-class TagAdmin(admin.ModelAdmin):
+class TagAdmin(ModelAdmin):
     list_display = [f.name for f in Tag._meta.fields]
     search_fields = ("name",)
     list_display_links = (
@@ -72,7 +73,7 @@ class TagAdmin(admin.ModelAdmin):
 
 
 @admin.register(Profile)
-class ProfileAdmin(admin.ModelAdmin):
+class ProfileAdmin(ModelAdmin):
     list_display = [f.name for f in Profile._meta.fields]
     search_fields = ("user__username",)
     list_display_links = (
@@ -82,7 +83,7 @@ class ProfileAdmin(admin.ModelAdmin):
 
 
 @admin.register(UserAddress)
-class UserAddressAdmin(OSMGeoAdmin):
+class UserAddressAdmin(GISModelAdmin):
     list_display = [f.name for f in UserAddress._meta.fields]
     search_fields = ("user__username",)
     list_display_links = (
@@ -92,14 +93,14 @@ class UserAddressAdmin(OSMGeoAdmin):
 
 
 @admin.register(CompanyData)
-class CompanyDataAdmin(OSMGeoAdmin):
+class CompanyDataAdmin(GISModelAdmin):
     list_display = [f.name for f in CompanyData._meta.fields]
     search_fields = ("user__username", "compane_name")
     list_display_links = ("id", "user", "company_name")
 
 
 @admin.register(UserPhoneNumber)
-class UserPhoneNumberAdmin(admin.ModelAdmin):
+class UserPhoneNumberAdmin(ModelAdmin):
     list_display = [f.name for f in UserPhoneNumber._meta.fields]
     search_fields = ("phone_number",)
     list_display_links = (
@@ -109,7 +110,7 @@ class UserPhoneNumberAdmin(admin.ModelAdmin):
 
 
 @admin.register(DistrictWarsaw)
-class DistrictWarsawAdmin(admin.ModelAdmin):
+class DistrictWarsawAdmin(ModelAdmin):
     list_display = [f.name for f in DistrictWarsaw._meta.fields]
     search_fields = ("name",)
     list_display_links = (
@@ -119,7 +120,7 @@ class DistrictWarsawAdmin(admin.ModelAdmin):
 
 
 @admin.register(SubDistrictWarsaw)
-class SubDistrictWarsawAdmin(admin.ModelAdmin):
+class SubDistrictWarsawAdmin(ModelAdmin):
     list_display = [f.name for f in SubDistrictWarsaw._meta.fields]
     search_fields = ("name",)
     list_display_links = (
@@ -132,7 +133,7 @@ class SubDistrictWarsawAdmin(admin.ModelAdmin):
 
 
 @admin.register(PostCodeWarsaw)
-class PostCodeWarsawAdmin(OSMGeoAdmin):
+class PostCodeWarsawAdmin(GISModelAdmin):
     list_display = [f.name for f in PostCodeWarsaw._meta.fields]
     search_fields = ("name",)
     list_display_links = (
@@ -145,7 +146,7 @@ class PostCodeWarsawAdmin(OSMGeoAdmin):
 
 
 @admin.register(City)
-class CityAdmin(admin.ModelAdmin):
+class CityAdmin(ModelAdmin):
     list_display = [f.name for f in City._meta.fields]
     search_fields = ("name",)
     list_display_links = (
@@ -155,7 +156,7 @@ class CityAdmin(admin.ModelAdmin):
 
 
 @admin.register(StreetWarsaw)
-class StreetWarsawAdmin(admin.ModelAdmin):
+class StreetWarsawAdmin(ModelAdmin):
     list_display = [f.name for f in StreetWarsaw._meta.fields]
     search_fields = ("name",)
     list_display_links = (
@@ -165,7 +166,7 @@ class StreetWarsawAdmin(admin.ModelAdmin):
 
 
 @admin.register(Thumbnail)
-class ThumbnailAdmin(admin.ModelAdmin):
+class ThumbnailAdmin(ModelAdmin):
     list_display = [f.name for f in Thumbnail._meta.fields]
     search_fields = ("id", "photo", )
     list_display_links = (
@@ -176,7 +177,7 @@ class ThumbnailAdmin(admin.ModelAdmin):
     ]
 
 @admin.register(Photo)
-class PhotoAdmin(admin.ModelAdmin):
+class PhotoAdmin(ModelAdmin):
     list_display = [f.name for f in Photo._meta.fields]
     search_fields = ("id", "image", )
     list_display_links = (
@@ -188,7 +189,7 @@ class PhotoAdmin(admin.ModelAdmin):
     ]
 
 @admin.register(FoodSupplier)
-class FoodSupplierAdmin(admin.ModelAdmin):
+class FoodSupplierAdmin(ModelAdmin):
     list_display = [f.name for f in FoodSupplier._meta.fields]
     search_fields = ("id", "name", "image", )
     list_display_links = (
@@ -197,7 +198,7 @@ class FoodSupplierAdmin(admin.ModelAdmin):
     
 
 @admin.register(Room)
-class RoomAdmin(admin.ModelAdmin):
+class RoomAdmin(ModelAdmin):
     list_display = [f.name for f in Room._meta.fields]
     search_fields = ("id", "name",)
     list_display_links = (
@@ -206,7 +207,7 @@ class RoomAdmin(admin.ModelAdmin):
 
 
 @admin.register(Advantage)
-class AdvantageAdmin(admin.ModelAdmin):
+class AdvantageAdmin(ModelAdmin):
     list_display = [f.name for f in Advantage._meta.fields]
     search_fields = ("id", "name",)
     list_display_links = (

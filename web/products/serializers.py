@@ -1,16 +1,10 @@
 from rest_framework import serializers
+from rest_framework.fields import ListField
 
 from web.models.products import Category, Product
 
 
-class CategorySerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Category
-        fields = ["name"]
-
-
 class ProductSerializer(serializers.ModelSerializer):
-    category = CategorySerializer(many=False)
 
     class Meta:
         model = Product
@@ -32,17 +26,27 @@ class ProductSerializer(serializers.ModelSerializer):
 
 
 class CategoryWithProductsSerializer(serializers.ModelSerializer):
-
-    products = ProductSerializer(read_only=True, many=True)
+    products_filtered = ListField(
+        child=ProductSerializer(),
+        required=False,
+        allow_empty=True
+    )
 
     class Meta:
         model = Category
-        fields = ["name", "products"]
+        fields = ["restaurant", "name", "products_filtered"]
+
+
+class CategorySerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Category
+        fields = ["restaurant", "name", "products"]
 
 
 class RestaurantMenuSerializer(serializers.ModelSerializer):
     id_product = serializers.IntegerField(source="product.pk")
-    category = CategorySerializer(source="product.category")
+    category = CategoryWithProductsSerializer(source="product.category")
     name = serializers.CharField(source="product.name")
     slug = serializers.SlugField(source="product.slug")
     price = serializers.DecimalField(
