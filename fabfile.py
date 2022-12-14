@@ -21,4 +21,4 @@ def push(message=""):
     local('git status')
     local('git add .')
     local('git commit -m "' + message + '"')
-    # local('git push')
+    local('git push')
