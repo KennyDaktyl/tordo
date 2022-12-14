@@ -18,6 +18,8 @@ def deploy():
 
 
 def push(message=""):
+    username = prompt("KennyDaktyl")
+    password = prompt("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")
     local('git status')
     local('git add .')
     local('git commit -m "' + message + '"')
