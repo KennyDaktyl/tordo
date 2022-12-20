@@ -60,8 +60,8 @@ class RestaurantListView(ListView):
             sort_parametr = self.request.GET["sorted"]
             if sort_parametr == "distance":
                 # TODO Testujemy DIstance
-                longitude = 19.640795
-                latitude = 50.041841
+                longitude = float(self.request.GET.get("lon"))
+                latitude = float(self.request.GET.get("lat"))
                 user_location = Point(longitude, latitude, srid=4326)
 
                 restaurants = Restaurant.objects.annotate(
@@ -94,17 +94,14 @@ class RestaurantListView(ListView):
         context = super().get_context_data(**kwargs)
         if self.request.GET.get("sorted") == "distance":
             if self.request.session.get("location_form") or self.distance_max:
-                print(
-                    self.request.session.get("location_form"),
-                    self.distance_max,
-                )
                 context["map"] = self.__create_folium_map()
             # else:
             #     context["address_form"] = AddressForm()
-
+        context["place_name"] = self.request.GET.get("place_name")
         context["header_white"] = True
         context["distance_max"] = self.distance_max
         context["tags"] = Tag.objects.all()
+        print(context["place_name"])
         return context
 
     def __restaurants_search(self, search: str) -> List[Restaurant]:

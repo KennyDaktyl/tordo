@@ -18,20 +18,20 @@
         </div>
         <div class="filter_box bg-white  flex j-center a-center pointer">
             <div class="flex j-center a-center w-100">
-                <div class="w-20 flex j-center a-center">
+                <div class="w-10 flex j-center a-center margin-l-5 margin-r-5">
                     <img src="/media/svg/lok.svg" alt="Ikonka lokalizacji" width="18" height="23">
                 </div>
-                <div class="w-80">
-                    <input id="address-input" class="w-100" type="text" id="location-input" placeholder="Podaj lokalizację">
+                <div class="w-90">
+                    <input id="address-input" class="w-100" type="text" id="location-input" placeholder="{% if place_name %}{{ place_name }}{% else %}Podaj lokalizację{% endif %}">
                 </div>
             </div>
         </div>
         <div class="filter_box bg-white flex j-center a-center pointer">
             <div class="flex j-center a-center w-100">
-                <div class="w-20 flex j-center a-center">
+                <div class="w-10 flex j-center a-center margin-l-5 margin-r-5">
                     <img src="/media/svg/lupa.svg" alt="Ikonka lokalizacji" width="18" height="23">
                 </div>
-                <div class="w-80">
+                <div class="w-90">
                     <input class="t-left w-100" type="text" placeholder="Szukaj, lokalu, kuchni, dań" name="search_dish">
                 </div>
             </div>
