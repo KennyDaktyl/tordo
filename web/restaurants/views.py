@@ -1,5 +1,8 @@
 import folium
 
+from django.contrib.gis.db.models.functions import Distance
+from django.contrib.gis.geos import Point
+
 from datetime import datetime
 from typing import List
 
@@ -28,9 +31,7 @@ class RestaurantListView(ListView):
 
     def get_template_names(self):
         if mobile(self.request):
-            self.template_name = self.template_name.replace(
-                "desktop", "mobile"
-            )
+            self.template_name = self.template_name.replace("desktop", "mobile")
         return self.template_name
 
     def get_context_object_name(self, model):
@@ -58,43 +59,15 @@ class RestaurantListView(ListView):
             queryset = Restaurant.objects.filter(is_active=True)
             sort_parametr = self.request.GET["sorted"]
             if sort_parametr == "distance":
-                self.request.session["sorted"] = "distance"
-                if self.request.session.get("location_form"):
-                    if self.request.session["location_form"]["distance"]:
-                        messages.success(
-                            self.request, "Dane dla podanej lokalizacji."
-                        )
-                    else:
-                        messages.error(self.request, "Zbyt duża odległość.")
-                    return (
-                        self.__get_restaurants_sorted_by_distance_by_location(
-                            self.request.session.get("location_form")
-                        )
-                    )
-                else:
-                    if self.request.user.is_authenticated:
-                        if self.request.user.profile.has_main_address:
-                            address = (
-                                self.request.user.profile.has_main_address
-                            )
-                            messages.success(
-                                self.request,
-                                f"Lokalizacja dla adresu: {address}",
-                            )
-                            return self.__get_restaurants_sorted_by_distance_by_user_address(
-                                address.location,
-                                address.distance_allowed,
-                                address.nearest_point,
-                            )
-                        else:
-                            messages.error(
-                                self.request,
-                                "Nie posiadasz adresu głównego. Dodaj adres do swojego konta.",
-                            )
-                    else:
-                        messages.error(
-                            self.request, "Nie posiadamy Twojej lokalizacji."
-                        )
+                # TODO Testujemy DIstance
+                longitude = 19.640795
+                latitude = 50.041841
+                user_location = Point(longitude, latitude, srid=4326)
+
+                restaurants = Restaurant.objects.annotate(
+                    distance=Distance("location", user_location)
+                ).order_by("distance")
+                return RestaurantsListSerializer(restaurants, many=True).data
 
             if sort_parametr == "name":
                 self.request.session["sorted"] = "name"
@@ -141,9 +114,7 @@ class RestaurantListView(ListView):
         for restaurant in restaurants:
             categories = []
             for category in restaurant.categories:
-                products_filtered = category.products.filter(
-                    name__icontains=search
-                )
+                products_filtered = category.products.filter(name__icontains=search)
                 if products_filtered:
                     category.products_filtered = products_filtered
                     categories.append(category)
@@ -160,18 +131,14 @@ class RestaurantMapView(TemplateView):
 
     def get_template_names(self):
         if mobile(self.request):
-            self.template_name = self.template_name.replace(
-                "desktop", "mobile"
-            )
+            self.template_name = self.template_name.replace("desktop", "mobile")
         return self.template_name
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         restaurant = Restaurant.objects.get(pk=self.kwargs["pk"])
         context["restaurant"] = restaurant
-        context["map"] = self.__create_folium_map(
-            restaurant.location, restaurant.name
-        )
+        context["map"] = self.__create_folium_map(restaurant.location, restaurant.name)
         return context
 
     def __create_folium_map(self, loc, name):
@@ -206,9 +173,7 @@ class RestaurantDetailsView(DetailView):
 
     def get_template_names(self):
         if mobile(self.request):
-            self.template_name = self.template_name.replace(
-                "desktop", "mobile"
-            )
+            self.template_name = self.template_name.replace("desktop", "mobile")
         return self.template_name
 
     def get_context_object_name(self, model):
@@ -225,17 +190,13 @@ class RestaurantDetailsView(DetailView):
         if search:
             categories = []
             for category in self.object.categories:
-                filtered_products = category.products.filter(
-                    name__icontains=search
-                )
+                filtered_products = category.products.filter(name__icontains=search)
                 if filtered_products:
                     category.products_filtered = filtered_products
                     categories.append(category)
             if categories:
                 self.object.categories_filtered = categories
-                context["restaurant"] = RestaurantDetailsSerializer(
-                    self.object
-                ).data
+                context["restaurant"] = RestaurantDetailsSerializer(self.object).data
         return context
 
 

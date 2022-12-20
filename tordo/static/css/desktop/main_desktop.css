@@ -99,6 +99,16 @@
     width: 271px;
 }
 
+#results-box {
+    top: 110%;
+    border: 1px solid gray;
+}
+
+.result-item:hover {
+    background-color: lightslategray;
+    color: white;
+}
+
 .sort_box {
     width: 324px;
     height: 500px;

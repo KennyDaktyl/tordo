@@ -119,6 +119,43 @@
 
 {% block script_link %}
 <script>
+
+    const inputField = document.getElementById('address-input');
+    const resultsBox = document.getElementById('results-box');
+    const resultsList = document.getElementById('results-list');
+
+    inputField.addEventListener('input', () => {
+        const address = inputField.value;
+        const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&countrycodes=pl&limit=10&format=json&sort=asc`;
+
+        console.log(address);
+        const address_arr = address.split(' ');
+
+        if (address_arr.length >= 2) {
+            fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data.length);
+                    if (data.length >= 1) {
+                        resultsBox.style.display = 'Flex';
+                        resultsList.innerHTML = '';
+                        data.forEach(item => {
+                            const addressElement = document.createElement('li');
+                            addressElement.classList.add("text-left", "text-grey", "w-100", "flex", "no-wrap", "j-left", "a-center", "container-text", "h-50", "pointer", "result-item", "border-r");
+                            addressElement.textContent = item.display_name;
+                            resultsList.appendChild(addressElement);
+                        });
+                    } else {
+                        resultsBox.style.display = 'None';
+                        resultsList.innerHTML = '';
+                    }
+            });
+        } else {
+            resultsBox.style.display = 'None';
+            resultsList.innerHTML = '';
+        }
+    });
+
     window.sessionStorage.clear();
 
     function openFilters() {

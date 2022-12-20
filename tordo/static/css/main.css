@@ -13,6 +13,10 @@
     user-select: none;
 }
 
+.d-none {
+    display: none;
+}
+
 body {
     font-family: 'Montserrat';
     background: #F5F5F5;
@@ -92,28 +96,28 @@ input {
 
 ::-webkit-input-placeholder {
     text-align: left;
-    padding-left: 30px; 
+    padding-left: 10px; 
     font-size: 16px;
     color: gray;
  }
  
  :-moz-placeholder { /* Firefox 18- */
     text-align: left;  
-    padding-left: 30px; 
+    padding-left: 10px; 
     font-size: 16px;
     color: gray;
  }
  
  ::-moz-placeholder {  /* Firefox 19+ */
     text-align: left;  
-    padding-left: 30px; 
+    padding-left: 10px; 
     font-size: 16px;
     color: gray;
  }
  
 :-ms-input-placeholder {  
     text-align: left;
-    padding-left: 30px; 
+    padding-left: 10px; 
     font-size: 16px;
     color: gray;
 }

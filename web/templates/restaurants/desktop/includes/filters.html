@@ -9,7 +9,7 @@
             <span class="text-white text-container">Recenzenci</span>
         </div>
     </div>
-    <div class="text-container filters w-100 flex j-between a-center no-wrap margin-r-20">
+    <div class="text-container filters w-100 flex j-between a-center no-wrap margin-r-20 p-relative">
         <div class="filter_box bg-green flex j-center a-center pointer" onclick="openFilters()">
             <div class="flex j-between a-center w-80">
                 <span class="text-white text-bold">Filtry</span>
@@ -22,7 +22,7 @@
                     <img src="/media/svg/lok.svg" alt="Ikonka lokalizacji" width="18" height="23">
                 </div>
                 <div class="w-80">
-                    <span class="w-100">Podaj lokalizację</span>
+                    <input id="address-input" class="w-100" type="text" id="location-input" placeholder="Podaj lokalizację">
                 </div>
             </div>
         </div>
@@ -45,6 +45,11 @@
                     <span class="w-100 text-center text-bold rotate-90">></span>
                 </div>
             </div>
+        </div>
+
+        <div id="results-box" class="d-none wrap a-center j-center bg-white p-absolute element-center border border-r w-100 z-index-top box-shadow">
+            <ul id="results-list" class="flex wrap w-100 bg-white border-r j-left a-center box-shadow">
+            </ul>
         </div>
     </div>
     <form method="get" action="" id="filters" class="filters_box bg-white p-absolute element-center flex wrap j-center a-top z-index-top">
