@@ -12,7 +12,7 @@
     {% include "restaurants/mobile/includes/filters_box.html" %}    
     <div class="restaurants__container w-100 flex j-center a-top wrap padding-b-20 margin-b-20">
         {% for restaurant in restaurants %}
-        <a href="" class="restaurant_box flex j-center a-top wrap w-100 margin-b-20">
+        <a href="{% url 'restaurant_details' slug=restaurant.slug pk=restaurant.id %}" class="restaurant_box flex j-center a-top wrap w-100 margin-b-20">
             <picture class="w-100">
                 <source class="" srcset="{{ MEDIA_URL }}{% get_src_expected restaurant.listing_webp.items '500x145' %}" type="image/webp"/>
                 <img class="restaurant_image_listing" src="{{ MEDIA_URL }}{% get_src_expected restaurant.listing_jpg.items '500x145' %}" height="145">
@@ -67,6 +67,14 @@
                 <small class="w-100 text-left text-dark margin-t-10">Odległość ok: {% if not restaurant.distance %}Podaj swoją lokalizację.{% else %}{{ restaurant.distance }}km{% endif %}</small>
             </div>
         </a>
+        {% for category in restaurant.categories_filtered %}
+            {% if category.products_filtered %}
+                <p class="text-bold w-100 text-left margin-t-5 margin-b-5">{{ category.name }}</p>
+            {% endif %}
+            {% for product in category.products_filtered %}
+                {% include "products/mobile/product.html" %}
+            {% endfor %}
+        {% endfor %}
         
         {% if forloop.first %}
         <div class="advertisement__container w-100 flex a-center j-left wrap margin-b-20">
@@ -219,5 +227,17 @@
             }
         });
     }
+
+    const inputSearchField = document.getElementById('inputSearchField');
+    const submitButton = document.getElementById('submitButton');
+
+    inputSearchField.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            submitButton.click();
+        } else {
+            console.log(event.key)
+        }
+    });
 </script>
 {% endblock %}

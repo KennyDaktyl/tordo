@@ -123,7 +123,7 @@ class Product(models.Model):
             self.thumbnails_cache["thumbnails_listing"] = make_thumbnail(
                 self.image_listing_jpg,
                 [
-                    (200, 130),
+                    (200, 130), (120, 85)
                 ],
                 5,
                 self,

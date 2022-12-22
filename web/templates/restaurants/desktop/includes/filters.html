@@ -39,9 +39,10 @@
                 <div class="w-10 flex j-center a-center margin-l-5 margin-r-5">
                     <img src="/media/svg/lupa.svg" alt="Ikonka lokalizacji" width="18" height="23">
                 </div>
-                <div class="w-90">
-                    <input class="t-left w-100" type="text" placeholder="Szukaj, lokalu, kuchni, dań" name="search_dish">
-                </div>
+                <form method="get" class="w-90">
+                    <input id="inputSearchField" name="search" class="t-left w-100" type="text" placeholder="{% if search %}{{ search }}{% else %}Szukaj lokalu lub potraw...{% endif %}">
+                    <button type="submit" id="submitButton" class="d-none">Wyślij</button>
+                </form>
             </div>
         </div>
         <div class="filter_box bg-white flex j-center a-center pointer">

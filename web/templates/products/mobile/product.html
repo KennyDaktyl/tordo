@@ -1,0 +1,33 @@
+{% load image_tags %}
+
+<div id="product_id_{{ product.id }}" class="food_container w-100 flex wrap j-center a-center bg-white border-r margin-t-10 {% if forloop.last %}margin-b-40{% else %}margin-b-5{% endif %} pointer" onclick="addToBasket(this)">
+    <input id="srcset_basket_{{ product.id }}" type="hidden" value="{{ MEDIA_URL }}{% get_src_expected product.images_basket_webp.items '430x173' %}">
+    <input id="src_basket_{{ product.id }}" type="hidden" value="{{ MEDIA_URL }}{% get_src_expected product.images_basket_jpg.items '430x173' %}">
+    <input id="product_name_{{ product.id }}" type="hidden" value="{{ product.name }}">
+    <input id="product_price_{{ product.id }}" type="hidden" value="{{ product.price}}">
+    <div class="flex wrap j-center a-center w-60 padding-10">
+        <div class="flex wrap w-100 a-center j-left margin-t-10">
+            <span class="text-green w-100 text-left">A122</span>
+            <div class="flex w-100 a-center j-left margin-t-10">
+                <p class="text-bold ">{{ product.name }}</p>
+            </div>
+            <small class="text-grey w-100 text-left margin-t-10">{{ product.description }}</small>
+        </div>
+        
+    </div>
+    <div class="flex wrap j-center a-center w-40 p-relative border-top-r">
+        <picture class="flex j-center a-center wrap w-100">
+            <source srcset="{{ MEDIA_URL }}{% get_src_expected product.images_listing_webp.items '120x85' %}" 120w type="image/webp"/>
+            <img class="product_image" src="{{ MEDIA_URL }}{% get_src_expected product.images_listing_jpg.items '120x85' %}" alt="" width="120" height="85">
+        </picture>
+    </div>
+    <div class="w-100 flex wrap j-center a-center container-text margin-b-10">
+        <div class="flex w-100 wrap j-left a-center">
+            <span class="text-green w-100 text-right">{{ product.price }}zł</span>
+        </div>
+        <!-- <div class="flex w-20 j-right a-center">
+            <small class="margin-r-10">12</small>
+            <img class="svg-red" src="/media/svg/heart.svg" alt="" width="22" height="20">
+        </div> -->
+    </div>
+</div>

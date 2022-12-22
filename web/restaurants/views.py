@@ -71,6 +71,7 @@ class RestaurantListView(ListView):
                 else:
                     user_location = Point(float(longitude), float(latitude), srid=4326)
                     self.request.session["user_location"] = (longitude, latitude, place_name)
+                    self.request.session["place_name"] = place_name
                     restaurants = Restaurant.objects.annotate(
                         distance=Distance("location", user_location)
                     ).order_by("distance")
@@ -95,6 +96,12 @@ class RestaurantListView(ListView):
         self.distance_max = False
         self.request.session["sorted"] = "name"
         queryset = Restaurant.objects.filter(is_active=True)
+        if self.request.session.get("user_location"):
+            longitude, latitude, place_name = self.request.session["user_location"]
+            user_location = Point(float(longitude), float(latitude), srid=4326)
+            queryset = Restaurant.objects.filter(is_active=True).annotate(
+                    distance=Distance("location", user_location)
+                ).order_by("distance")
         return RestaurantsListSerializer(queryset, many=True).data
 
     def get_context_data(self, **kwargs):
@@ -104,14 +111,22 @@ class RestaurantListView(ListView):
                 context["map"] = self.__create_folium_map()
             # else:
             #     context["address_form"] = AddressForm()
-        context["place_name"] = self.request.GET.get("place_name")
+        context["place_name"] = self.request.GET.get("place_name") if self.request.GET.get("place_name") else self.request.session.get("place_name")
+        context["search"] = self.request.GET.get("search")
         context["header_white"] = True
         context["distance_max"] = self.distance_max
         context["tags"] = Tag.objects.all()
         return context
 
     def __restaurants_search(self, search: str) -> List[Restaurant]:
-        restaurants = Restaurant.objects.filter(is_active=True)
+        if self.request.session.get("user_location"):
+                longitude, latitude, place_name = self.request.session["user_location"]
+                user_location = Point(float(longitude), float(latitude), srid=4326)
+                restaurants = Restaurant.objects.filter(is_active=True).annotate(
+                        distance=Distance("location", user_location)
+                    ).order_by("distance")
+        else:
+            restaurants = Restaurant.objects.filter(is_active=True)
         restaurants_search = restaurants.filter(name__icontains=search)
         products_search = []
         for restaurant in restaurants:
@@ -276,6 +291,7 @@ class DeleteLocation(View):
 
     def get(self, request):
         del self.request.session["user_location"]
+        del self.request.session["place_name"]
         return redirect('restaurants')
 
 

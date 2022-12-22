@@ -285,5 +285,16 @@
         product_price.innerHTML = (food_qty.value * product_price_input.value).toFixed(2);
     }
 
+    const inputSearchField = document.getElementById('inputSearchField');
+    const submitButton = document.getElementById('submitButton');
+
+    inputSearchField.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            submitButton.click();
+        } else {
+            console.log(event.key)
+        }
+    });
 </script>
 {% endblock %}

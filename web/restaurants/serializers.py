@@ -70,6 +70,7 @@ class RestaurantDetailsSerializer(serializers.ModelSerializer):
     categories_filtered = CategoryWithProductsSerializer(
         read_only=True, many=True, default=[]
     )
+    distance = DistanceField(allow_null=True)
 
     class Meta:
         model = Restaurant
@@ -105,5 +106,6 @@ class RestaurantDetailsSerializer(serializers.ModelSerializer):
             "likes_counter",
             "categories_filtered",
             "is_open",
+            "distance"
         ]
         ordering = ["name"]
