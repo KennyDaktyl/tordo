@@ -1,9 +1,9 @@
 <div class="filters__container bg-red w-100 flex j-center a-top wrap margin-b-20">
     <div class="text-container w-100 flex wrap j-left a-center">
-        <div class="flex no-wrap j-center a-center margin-r-10">
+        <a href="{% url 'restaurants_map' %}" class="flex no-wrap j-center a-center margin-r-10">
             <img src="/media/svg/map.svg" alt="Ikonka mapy" width="25" height="28">
             <span class="text-white text-bold text-container">Mapa</span>
-        </div>
+        </a>
         <div class="flex no-wrap j-center a-center">
             <img src="/media/svg/recenzenci.svg" alt="Ikonka recenzentów" width="25" height="28">
             <span class="text-white text-bold text-container">Recenzenci</span>
@@ -15,14 +15,26 @@
             <img src="/media/svg/filtr.svg" alt="Ikonka filtrów" width="30" height="18">
         </div>
     </div>
-    <div class="filter_box bg-white  flex j-center a-center">
+    <div class="filter_box bg-white  flex j-center a-center p-relative">
         <div class="flex j-center a-center w-100">
-            <div class="w-20 flex j-center a-center">
-                <img src="/media/svg/lok.svg" alt="Ikonka lokalizacji" width="18" height="23">
+            <div class="w-10 flex j-center a-center margin-l-5 margin-r-5">
+                {% if not place_name %}
+                    <img src="/media/svg/lok.svg" alt="Ikonka lokalizacji" width="18" height="23">
+                {% else %}
+                    <a href="{% url 'delete location' %}"><img src="/media/svg/close.svg" alt="Ikonka kasowania lokalizacji" width="18" height="23"></a>
+                {% endif %}
             </div>
-            <div class="w-80">
-                <span class="w-100">Podaj lokalizację</span>
+            <div class="w-90 flex no-wrap"> 
+                {% if not place_name %}
+                    <input id="address-input" class="w-100 padding-r-10" type="text" id="location-input" placeholder="Podaj lokalizację">
+                {% else %}
+                    <span id="address-input" class="w-100 padding-r-10" type="text">{{ place_name|truncatechars:50 }}</span>
+                {% endif %}
             </div>
+        </div>
+        <div id="results-box" class="d-none wrap a-center j-center bg-white p-absolute element-center border border-r w-100 z-index-top box-shadow">
+            <ul id="results-list" class="flex wrap w-100 bg-white border-r j-left a-center box-shadow">
+            </ul>
         </div>
     </div>
     <div class="filter_box bg-white  flex j-center a-center">
@@ -45,4 +57,5 @@
             </div>
         </div>
     </div>
+    
 </div>

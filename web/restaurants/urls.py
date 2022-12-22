@@ -1,6 +1,6 @@
 from django.urls import path
 
-from .views import restaurants, restaurants_map, restaurant_details, restaurant_map
+from .views import restaurants, restaurants_map, restaurant_details, restaurant_map, delete_location
 
 urlpatterns = [
     path("", restaurants, name="restaurants"),
@@ -15,4 +15,5 @@ urlpatterns = [
         restaurant_map,
         name="restaurant_map",
     ),
+    path("kasowanie_lokalizacji/", delete_location, name="delete location")
 ]

@@ -1,0 +1,16 @@
+{% extends "base_mobile.html" %}
+
+
+{% block content %}
+<div class="flex in-layout-content no-wrap j-right a-center w-100 margin-t-20">
+    <h1 class="w-100 text-left">Mapa listy restauracji.</h1>
+</div>
+<div class="flex wrap in-layout-content j-center a-top margin-t-20 container-text">
+    <div id="map_list_render" class="w-100 margin-b-20 flex">{{ map |safe }}</div>
+</div>
+<a href="{% url 'restaurants' %}{% if longitude and latitude and place_name %}?sorted=distance&lon={{ longitude }}&lat={{ latitude }}&place_name={{ place_name }}{% endif %}" class="flex wrap in-layout-content j-center a-top margin-t-20 container-text">
+    <button class="button_box margin-l-10 margin-b-10 bg-red border-r flex no-wrap j-center a-center pointer w-200">
+        <span class="text-white">Powrót</span>
+    </button>
+</a>
+{% endblock %}

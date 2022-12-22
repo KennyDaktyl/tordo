@@ -64,6 +64,7 @@
                         </div>
                     </div>
                 </div>
+                <small class="w-100 text-left text-dark margin-t-10">Odległość ok: {% if not restaurant.distance %}Podaj swoją lokalizację.{% else %}{{ restaurant.distance }}km{% endif %}</small>
             </div>
         </a>
         {% if forloop.first %}
@@ -110,6 +111,44 @@
 
 {% block script_link %}
 <script>
+    const inputField = document.getElementById('address-input');
+    const resultsBox = document.getElementById('results-box');
+    const resultsList = document.getElementById('results-list');
+
+    inputField.addEventListener('keyup', function(event) {
+        if (event.key === ' ' || event.key === 'Enter') {
+            const address = inputField.value;
+            const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&countrycodes=pl&limit=10&format=json&sort=asc&addressdetails=1`;
+
+            const address_arr = address.split(' ');
+
+            if (address_arr.length >= 2) {
+                fetch(url)
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data);
+                        if (data.length >= 1) {
+                            resultsBox.style.display = 'Flex';
+                            resultsList.innerHTML = '';
+                            data.forEach(item => {
+                                const addressElement = document.createElement('a');
+                                addressElement.classList.add("text-left", "text-grey", "w-100", "margin-t-10", "flex", "no-wrap", "j-left", "a-center", "container-text", "pointer", "result-item", "border-r");
+                                addressElement.textContent = item.display_name;
+                                addressElement.href = '?sorted=distance&lon=' + item.lon + '&lat=' + item.lat + '&place_name=' + item.display_name;
+                                resultsList.appendChild(addressElement);
+                            });
+                        } else {
+                            resultsBox.style.display = 'None';
+                            resultsList.innerHTML = '';
+                        }
+                });
+            } else {
+                resultsBox.style.display = 'None';
+                resultsList.innerHTML = '';
+            }
+        }
+    });
+
     function openFilters() {
         var filters = document.getElementById('filters');
         filters.style.display = 'flex';

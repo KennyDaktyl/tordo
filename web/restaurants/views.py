@@ -13,6 +13,8 @@ from django.contrib.auth import get_user_model
 from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
 from django.views.generic.list import ListView
+from django.views import View
+from django.shortcuts import redirect
 
 from web.front.functions import mobile
 from web.models.restaurants import Restaurant, Tag
@@ -270,6 +272,13 @@ class RestaurantDetailsView(DetailView):
         return context
 
 
+class DeleteLocation(View):
+
+    def get(self, request):
+        del self.request.session["user_location"]
+        return redirect('restaurants')
+
+
 def get_unique_elements(elements, key):
     unique_elements = []
     for el in elements:
@@ -282,3 +291,4 @@ restaurants = RestaurantListView.as_view()
 restaurants_map = RestaurantsListMapView.as_view()
 restaurant_details = RestaurantDetailsView.as_view()
 restaurant_map = RestaurantMapView.as_view()
+delete_location = DeleteLocation.as_view()
