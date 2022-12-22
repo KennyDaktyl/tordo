@@ -3,6 +3,7 @@ import json
 
 from django.core.exceptions import ValidationError
 from django.contrib.gis.db.models.functions import Distance
+from django.contrib.gis.measure import D
 from django.contrib.gis.geos import Point
 
 from datetime import datetime
@@ -24,6 +25,8 @@ from web.restaurants.serializers import (
 )
 
 User = get_user_model()
+
+MAX_DISTANCE = 5000
 
 
 class RestaurantListView(ListView):
@@ -72,8 +75,11 @@ class RestaurantListView(ListView):
                     user_location = Point(float(longitude), float(latitude), srid=4326)
                     self.request.session["user_location"] = (longitude, latitude, place_name)
                     self.request.session["place_name"] = place_name
+                    
                     restaurants = Restaurant.objects.annotate(
                         distance=Distance("location", user_location)
+                    ).filter(
+                        location__distance_lte=(user_location, D(km=MAX_DISTANCE))
                     ).order_by("distance")
                     return RestaurantsListSerializer(restaurants, many=True).data
 
