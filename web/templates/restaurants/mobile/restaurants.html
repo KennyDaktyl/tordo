@@ -67,6 +67,7 @@
                 <small class="w-100 text-left text-dark margin-t-10">Odległość ok: {% if not restaurant.distance %}Podaj swoją lokalizację.{% else %}{{ restaurant.distance }}km{% endif %}</small>
             </div>
         </a>
+        
         {% if forloop.first %}
         <div class="advertisement__container w-100 flex a-center j-left wrap margin-b-20">
             <span class="w-100 text-left">Reklama</span>
@@ -105,6 +106,27 @@
         </div>
         {% endif %}
         {% endfor %}
+        {% if is_paginated %}
+        <ul class="pagination w-100 flex j-center a-center no-wrap">
+            {% if page_obj.has_previous %}
+                <li class="padding-5"><a href="?{% query_transform page=page_obj.previous_page_number %}">&laquo;</a></li>
+            {% else %}
+                <li class="disabled padding-5"><span>&laquo;</span></li>
+            {% endif %}
+            {% for i in paginator.page_range %}
+            {% if page_obj.number == i %}
+                <li class="active padding-5"><span>{{ i }} <span class="sr-only">(aktualna)</span></span></li>
+            {% else %}
+                <li class="padding-5"><a href="?{% query_transform page=i %}">{{ i }}</a></li>
+            {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+                <li class="padding-5"><a href="?{% query_transform page=page_obj.next_page_number %}">&raquo;</a></li>
+            {% else %}
+                <li class="disabled padding-5"><span>&raquo;</span></li>
+            {% endif %}
+        </ul>
+        {% endif %}
     </div>
 </div>
 {% endblock %}

@@ -30,7 +30,7 @@ class RestaurantListView(ListView):
     model = Restaurant
     serializer_class = RestaurantsListSerializer
     distance_max = False
-    paginate_by = 5
+    paginate_by = 2
     template_name = "restaurants/desktop/restaurants.html"
 
     def get_template_names(self):
