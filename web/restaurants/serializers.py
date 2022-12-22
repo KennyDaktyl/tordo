@@ -4,6 +4,20 @@ from web.models.restaurants import Restaurant, Tag, OpeningHours
 from web.products.serializers import (
     CategoryWithProductsSerializer,
 )
+from django.contrib.gis.measure import Distance
+
+
+class DistanceField(serializers.Field):
+    def to_representation(self, obj):
+        if obj is None:
+            return None
+        distance_float = obj.km
+        return str(round(distance_float, 2))
+
+    def to_internal_value(self, data):
+        if data is None:
+            return None
+        return Distance(data)
 
 
 class TagSerializer(serializers.ModelSerializer):
@@ -25,6 +39,7 @@ class RestaurantsListSerializer(serializers.ModelSerializer):
     categories_filtered = CategoryWithProductsSerializer(
         read_only=True, many=True, default=[]
     )
+    distance = DistanceField(allow_null=True)
 
     class Meta:
         model = Restaurant
@@ -43,6 +58,7 @@ class RestaurantsListSerializer(serializers.ModelSerializer):
             "likes_counter",
             "categories_filtered",
             "is_open",
+            "distance"
         ]
         ordering = ["name"]
 

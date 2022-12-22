@@ -122,6 +122,10 @@ input {
     color: gray;
 }
 
+::-webkit-input.active-placeholder {
+    color: black;
+ }
+
 /* Szerokość obiektów */
 .w-200 {
     min-width: 200px;

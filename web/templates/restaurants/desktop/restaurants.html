@@ -34,9 +34,10 @@
                         </div>
                         <div class="flex j-left a-center w-100 margin-t-10">
                             <div class="promo_box bg-red flex a-center j-center">
-                                <small class="w-100 text-center text-white text-bold">-30% na całe menu </small>
+                                <small class="w-100 text-center text-white text-bold">-30% na całe menu</small>
                             </div>
                         </div>
+                        <small class="w-100 text-left text-dark margin-t-10">Odległość ok: {% if not restaurant.distance %}Podaj swoją lokalizację.{% else %}{{ restaurant.distance }}km{% endif %}</small>
                     </div>
                     <div class="flex j-center a-center wrap">
                         <div class="flex j-right a-top w-50 wrap padding-r-10">

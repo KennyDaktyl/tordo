@@ -1,5 +1,7 @@
 import folium
+import json
 
+from django.core.exceptions import ValidationError
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.geos import Point
 
@@ -47,7 +49,6 @@ class RestaurantListView(ListView):
 
         if self.request.GET.getlist("tags"):
             tags = self.request.GET.getlist("tags")
-            print(tags)
             tags = [int(x) for x in tags]
             queryset = Restaurant.objects.filter(
                 tags__in=tags, is_active=True
@@ -60,14 +61,18 @@ class RestaurantListView(ListView):
             sort_parametr = self.request.GET["sorted"]
             if sort_parametr == "distance":
                 # TODO Testujemy DIstance
-                longitude = float(self.request.GET.get("lon"))
-                latitude = float(self.request.GET.get("lat"))
-                user_location = Point(longitude, latitude, srid=4326)
-
-                restaurants = Restaurant.objects.annotate(
-                    distance=Distance("location", user_location)
-                ).order_by("distance")
-                return RestaurantsListSerializer(restaurants, many=True).data
+                longitude = self.request.GET.get("lon")
+                latitude = self.request.GET.get("lat")
+                place_name = self.request.GET.get("place_name")
+                if not longitude or not latitude:
+                    messages.error(self.request, f"Błąd lokalizacji")
+                else:
+                    user_location = Point(float(longitude), float(latitude), srid=4326)
+                    self.request.session["user_location"] = (longitude, latitude, place_name)
+                    restaurants = Restaurant.objects.annotate(
+                        distance=Distance("location", user_location)
+                    ).order_by("distance")
+                    return RestaurantsListSerializer(restaurants, many=True).data
 
             if sort_parametr == "name":
                 self.request.session["sorted"] = "name"
@@ -101,7 +106,6 @@ class RestaurantListView(ListView):
         context["header_white"] = True
         context["distance_max"] = self.distance_max
         context["tags"] = Tag.objects.all()
-        print(context["place_name"])
         return context
 
     def __restaurants_search(self, search: str) -> List[Restaurant]:
@@ -121,6 +125,75 @@ class RestaurantListView(ListView):
         queryset = set(products_search) | set(restaurants_search)
         queryset_sorted = sorted(queryset, key=lambda d: d.name)
         return queryset_sorted
+
+
+class RestaurantsListMapView(TemplateView):
+    template_name = "restaurants/desktop/restaurants_map_list.html"
+
+    def get_template_names(self):
+        if mobile(self.request):
+            self.template_name = self.template_name.replace("desktop", "mobile")
+        return self.template_name
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.session.get("user_location"):
+            longitude, latitude, place_name = self.request.session["user_location"]
+            user_location = Point(float(latitude), float(longitude), srid=4326)
+            zoom = 12
+            context["longitude"] = longitude
+            context["latitude"] = latitude
+            context["place_name"] = place_name
+        else:
+            user_location = None
+            zoom = 6
+
+        restaurants = Restaurant.objects.all()
+        context["restaurants"] = restaurants
+        context["map"] = self.__create_folium_map(user_location, restaurants, zoom)
+        return context
+
+    def __create_folium_map(self, user_location, restaurants, zoom):
+        if not user_location:
+            user_location = Point(52.237049, 21.017532, srid=4326)
+        map = folium.Map(
+            location=[user_location[0], user_location[1]],
+            width="100%",
+            position="relative",
+            zoom_start=zoom,
+        )
+
+        if (
+            "bootstrap_css",
+            "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css",
+        ) in map.default_css:
+            map.default_css.remove(
+                (
+                    "bootstrap_css",
+                    "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css",
+                )
+            )
+        # if ('leaflet_css', 'https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css') in map.default_css:
+        #     map.default_css.remove(('leaflet_css', 'https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css'))
+        tooltip = "Lokalizacja adresu"
+        marker = folium.Marker(
+            [user_location[0], user_location[1]],
+            popup="<i>Twoja lokalizacja</i>",
+            tooltip=tooltip,
+            icon=folium.Icon(color="red", icon="info-sign"),
+        )
+        marker.add_to(map)
+
+        for restaurant in restaurants:
+            tooltip = restaurant.name
+            marker = folium.Marker(
+                [restaurant.location[1], restaurant.location[0]],
+                popup=f"<a href='{restaurant.get_absolute_url()}'>" + restaurant.name + "</a>",
+                tooltip=tooltip,
+            )
+            marker.add_to(map)
+
+        return map.get_root().render()
 
 
 class RestaurantMapView(TemplateView):
@@ -206,5 +279,6 @@ def get_unique_elements(elements, key):
 
 
 restaurants = RestaurantListView.as_view()
+restaurants_map = RestaurantsListMapView.as_view()
 restaurant_details = RestaurantDetailsView.as_view()
 restaurant_map = RestaurantMapView.as_view()
