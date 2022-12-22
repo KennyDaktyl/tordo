@@ -8,7 +8,7 @@
     {% include "restaurants/desktop/includes/filters.html" %}
     <div class="w-100 flex j-between a-top wrap">
         <div class="restaurants__container flex j-between a-top wrap">
-            {% for restaurant in restaurants %}
+            {% for restaurant in object_list %}
             <a href="{% url 'restaurant_details' slug=restaurant.slug pk=restaurant.id %}" class="restaurant_box bg-white w-100 flex a-center j-center margin-t-20">
                 <div class="flex j-center a-center">
                     <picture class="flex j-center a-center wrap">
@@ -74,6 +74,28 @@
                     {% endfor %}
                {% endfor %}
             {% endfor %}
+            
+            {% if is_paginated %}
+            <ul class="pagination w-100 flex j-center a-center no-wrap">
+                {% if page_obj.has_previous %}
+                    <li class="padding-5"><a href="?{% query_transform page=page_obj.previous_page_number %}">&laquo;</a></li>
+                {% else %}
+                    <li class="disabled padding-5"><span>&laquo;</span></li>
+                {% endif %}
+                {% for i in paginator.page_range %}
+                {% if page_obj.number == i %}
+                    <li class="active padding-5"><span>{{ i }} <span class="sr-only">(aktualna)</span></span></li>
+                {% else %}
+                    <li class="padding-5"><a href="?{% query_transform page=i %}">{{ i }}</a></li>
+                {% endif %}
+                {% endfor %}
+                {% if page_obj.has_next %}
+                    <li class="padding-5"><a href="?{% query_transform page=page_obj.next_page_number %}">&raquo;</a></li>
+                {% else %}
+                    <li class="disabled padding-5"><span>&raquo;</span></li>
+                {% endif %}
+            </ul>
+            {% endif %}
         </div>
 
         <div class="advertisement__container flex j-center a-top wrap">
