@@ -1,7 +1,5 @@
 import folium
-import json
 
-from django.core.exceptions import ValidationError
 from django.contrib.gis.db.models.functions import Distance
 from django.contrib.gis.measure import D
 from django.contrib.gis.geos import Point
@@ -45,9 +43,10 @@ class RestaurantListView(ListView):
         return "restaurants"
 
     def get_queryset(self):
-        if self.request.GET.get("search"):
+        if self.request.GET.get("search") or self.request.session.get("search"):
             self.request.session["sorted"] = "name"
-            search = self.request.GET.get("search")
+            search = self.request.GET.get("search") if self.request.GET.get("search") else self.request.session.get("search")
+            self.request.session["search"] = search
             self.distance_max = False
             queryset = self.__restaurants_search(search)
             return RestaurantsListSerializer(queryset, many=True).data
@@ -118,7 +117,7 @@ class RestaurantListView(ListView):
             # else:
             #     context["address_form"] = AddressForm()
         context["place_name"] = self.request.GET.get("place_name") if self.request.GET.get("place_name") else self.request.session.get("place_name")
-        context["search"] = self.request.GET.get("search")
+        context["search"] = self.request.GET.get("search") if self.request.GET.get("search") else self.request.session.get("search")
         context["header_white"] = True
         context["distance_max"] = self.distance_max
         context["tags"] = Tag.objects.all()
@@ -301,6 +300,13 @@ class DeleteLocation(View):
         return redirect('restaurants')
 
 
+class DeleteSearch(View):
+
+    def get(self, request):
+        del self.request.session["search"]
+        return redirect('restaurants')
+
+
 def get_unique_elements(elements, key):
     unique_elements = []
     for el in elements:
@@ -314,3 +320,4 @@ restaurants_map = RestaurantsListMapView.as_view()
 restaurant_details = RestaurantDetailsView.as_view()
 restaurant_map = RestaurantMapView.as_view()
 delete_location = DeleteLocation.as_view()
+delete_search = DeleteSearch.as_view()
