@@ -82,6 +82,38 @@ class Tag(models.Model):
         return "{}".format(self.name)
 
 
+class FilterAdvantage(models.Model):
+    name = models.CharField(max_length=100)
+    order = models.IntegerField(verbose_name="Kolejność", default=1)
+    is_active = models.BooleanField(default=True)
+    
+    class Meta:
+        ordering = (
+            "order",
+            "name",
+        )
+        verbose_name_plural = "Dodatkowe atuty - (filtry)"
+
+    def __str__(self):
+        return "{}".format(self.name)
+
+
+class FilterFood(models.Model):
+    name = models.CharField(max_length=100)
+    order = models.IntegerField(verbose_name="Kolejność", default=1)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = (
+            "order",
+            "name",
+        )
+        verbose_name_plural = "Potrawy - (filtry)"
+
+    def __str__(self):
+        return "{}".format(self.name)
+
+
 class FoodSupplier(models.Model):
     name = models.CharField(max_length=100)
     image = models.FileField(
@@ -249,6 +281,18 @@ class Restaurant(models.Model):
         "Tag",
         verbose_name="Rodzaje kochni: (many)",
         related_name="restaurant_tags",
+        blank=True,
+    )
+    filter_advantages = models.ManyToManyField(
+        "FilterAdvantage",
+        verbose_name="Dodatkowe atuty w filtrze: (many)",
+        related_name="filter_advantages",
+        blank=True,
+    )
+    filter_food = models.ManyToManyField(
+        "FilterFood",
+        verbose_name="Filtr potrawy: (many)",
+        related_name="filter_foods",
         blank=True,
     )
     food_suppliers = models.ManyToManyField(

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from web.models.restaurants import Restaurant, Tag, OpeningHours
+from web.models.restaurants import Restaurant, Tag, OpeningHours, FilterAdvantage, FilterFood
 from web.products.serializers import (
     CategoryWithProductsSerializer,
 )
@@ -109,3 +109,28 @@ class RestaurantDetailsSerializer(serializers.ModelSerializer):
             "distance"
         ]
         ordering = ["name"]
+
+
+class CountRestaurantWhenUseFilterSerializer(serializers.Serializer):
+    count = serializers.IntegerField(read_only=True)
+
+
+class FilterAdvantageListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = FilterAdvantage
+        fields = [
+            "id",
+            "name",
+        ]
+
+
+class FilterFoodListSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = FilterFood
+        fields = [
+            "id",
+            "name",
+        ]
+        

@@ -188,6 +188,16 @@
         filters.style.display = 'flex';
         var main = document.getElementById('main');
         main.style.backgroundColor = "#E3E3E3";
+
+        const domain = location.protocol + '//' + location.host
+        const url = domain + "/restauracje/licznik_restauracji_dla_filtrow/";
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                var restaurants_count = document.getElementById('restaurants_count');
+                restaurants_count.textContent = "(" + data.count + ")"
+                console.log(data);
+        })
     }
 
     function closeFilters() {
@@ -205,11 +215,36 @@
         });
     }
 
-    function filtersCounter() {
+    function filtersCounter(element) {
         var all_inputs = document.querySelectorAll('input.filter_sorted:checked');
         var count = all_inputs.length;
         document.getElementById("filters_counter").innerHTML = "(" + count + ")";
-    }
+        var input = element.querySelector('input');
+        var label = element.querySelector('span.filter_sorted');
+        if (input.checked) {
+            input.checked = 0
+            label.style.color = "black";
+        } else {
+            input.checked = 1
+            label.style.color = "#CA001C";
+        }
+        
+        var data = {"name": input.name, "value": input.value};
+        const domain = location.protocol + '//' + location.host
+        const url = domain + "/restauracje/licznik_restauracji_dla_filtrow/?"+ input.name + "=" + input.value + "&checked=" + input.checked;
+        
+        fetch(url, 
+                {
+                    method: 'get',
+                }
+            )
+            .then(response => response.json())
+            .then(data => {
+                var restaurants_count = document.getElementById('restaurants_count');
+                restaurants_count.textContent = "(" + data.count + ")"
+                console.log(data);
+        })
+    }   
 
     function addToBasket(food) {
 
@@ -288,13 +323,25 @@
     const inputSearchField = document.getElementById('inputSearchField');
     const submitButton = document.getElementById('submitButton');
 
-    inputSearchField.addEventListener('keydown', (event) => {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            submitButton.click();
-        } else {
-            console.log(event.key)
-        }
-    });
+    if (inputSearchField) {
+        inputSearchField.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                event.preventDefault();
+                submitButton.click();
+            } else {
+                console.log(event.key)
+            }
+        });
+    }
+    
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+            console.log("Twoja szerokość geograficzna to: " + position.coords.latitude);
+            console.log("Twoja długość geograficzna to: " + position.coords.longitude);
+        });
+    } else {
+        console.log("Brak danych")
+    }
+    console.log("Brak danych")
 </script>
 {% endblock %}

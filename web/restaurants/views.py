@@ -16,10 +16,12 @@ from django.views import View
 from django.shortcuts import redirect
 
 from web.front.functions import mobile
-from web.models.restaurants import Restaurant, Tag
+from web.models.restaurants import Restaurant, Tag, FilterAdvantage, FilterFood
 from web.restaurants.serializers import (
     RestaurantDetailsSerializer,
     RestaurantsListSerializer,
+    FilterAdvantageListSerializer,
+    FilterFoodListSerializer
 )
 
 User = get_user_model()
@@ -121,6 +123,8 @@ class RestaurantListView(ListView):
         context["header_white"] = True
         context["distance_max"] = self.distance_max
         context["tags"] = Tag.objects.all()
+        context["filter_advantages"] = FilterAdvantage.objects.filter(is_active=True)[0:10]
+        context["filter_foods"] = FilterFood.objects.filter(is_active=True)[0:10]
         return context
 
     def __restaurants_search(self, search: str) -> List[Restaurant]:

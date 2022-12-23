@@ -12,7 +12,7 @@ from web.models.addresses import (
     SubDistrictWarsaw,
     UserAddress,
 )
-from web.models.restaurants import Restaurant, OpeningHours, Tag, FoodSupplier, Room, Advantage
+from web.models.restaurants import Restaurant, OpeningHours, Tag, FoodSupplier, Room, Advantage, FilterAdvantage, FilterFood
 from web.models.products import Category, Product, RestaurantMenu
 from web.models.images import Thumbnail, Photo
 
@@ -188,6 +188,7 @@ class PhotoAdmin(ModelAdmin):
         "product_id",
     ]
 
+
 @admin.register(FoodSupplier)
 class FoodSupplierAdmin(ModelAdmin):
     list_display = [f.name for f in FoodSupplier._meta.fields]
@@ -209,6 +210,24 @@ class RoomAdmin(ModelAdmin):
 @admin.register(Advantage)
 class AdvantageAdmin(ModelAdmin):
     list_display = [f.name for f in Advantage._meta.fields]
+    search_fields = ("id", "name",)
+    list_display_links = (
+        "id",
+    )
+
+
+@admin.register(FilterAdvantage)
+class FilterAdvantageAdmin(ModelAdmin):
+    list_display = [f.name for f in FilterAdvantage._meta.fields]
+    search_fields = ("id", "name",)
+    list_display_links = (
+        "id",
+    )
+
+
+@admin.register(FilterFood)
+class FilterFoodAdmin(ModelAdmin):
+    list_display = [f.name for f in FilterFood._meta.fields]
     search_fields = ("id", "name",)
     list_display_links = (
         "id",
