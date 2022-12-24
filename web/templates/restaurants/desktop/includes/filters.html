@@ -178,7 +178,7 @@
                         {% for food in filter_foods %}
                         <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter(this)">
                             <div class="container flex w-100 j-center a-center no-wrap">
-                                <input name="filter_food_id" value="{{ food.id }}" type="checkbox" class="filter_sorted" {% if food.pk in request.session.filter_foods %}checked{% endif %}>
+                                <input name="filter_id" value="filter_foods-{{ food.id }}" type="checkbox" class="filter_sorted" {% if food.pk in request.session.filter_foods %}checked{% endif %}>
                                 <span class="checkmark square"></span>
                                 <span
                                     class="w-100 text-left filter_sorted {% if food.pk in request.session.filter_foods %}text-red{% endif %}">{{ food.name }}</span>
@@ -195,7 +195,7 @@
                         {% for advantage in filter_advantages %}
                         <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter(this)">
                             <div class="container flex w-100 j-center a-center no-wrap">
-                                <input name="filter_advantage_id" value="{{ advantage.id }}" type="checkbox" class="filter_sorted" {% if advantage.id in request.session.filter_advantages %}checked="checked" {% endif %}>
+                                <input name="filter_id" value="filter_advantages-{{ advantage.id }}" type="checkbox" class="filter_sorted" {% if advantage.id in request.session.filter_advantages %}checked="checked" {% endif %}>
                                 <span class="checkmark square"></span>
                                 <span
                                     class="w-100 text-left filter_sorted {% if advantage.id in request.session.filter_advantages %}text-red{% endif %}">{{ advantage.name }}</span>
@@ -213,7 +213,7 @@
                         {% for tag in tags %}
                         <div class="w-50 text-container flex wrap a-center j-center self-top" onclick="filtersCounter(this)">
                             <div class="container flex w-100 j-center a-center no-wrap">
-                                <input name="filter_tag_id" value="{{ tag.id }}" type="checkbox" class="filter_sorted" {% if tag.id in request.session.filter_tags %}checked="checked" {% endif %}>
+                                <input name="filter_tag_id" value="filter_tags-{{ tag.id }}" type="checkbox" class="filter_sorted" {% if tag.id in request.session.filter_tags %}checked="checked" {% endif %}>
                                 <span class="checkmark square"></span>
                                 <span
                                     class="w-100 text-left filter_sorted {% if tag.id in request.session.filter_tags %}text-red{% endif %}">{{ tag.name }}</span>

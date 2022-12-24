@@ -289,7 +289,7 @@ class Restaurant(models.Model):
         related_name="filter_advantages",
         blank=True,
     )
-    filter_food = models.ManyToManyField(
+    filter_foods = models.ManyToManyField(
         "FilterFood",
         verbose_name="Filtr potrawy: (many)",
         related_name="filter_foods",

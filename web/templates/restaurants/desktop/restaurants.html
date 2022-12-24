@@ -142,6 +142,31 @@
 
 {% block script_link %}
 <script>
+    window.sessionStorage.clear();
+
+    var all_inputs = document.querySelectorAll('input.filter_sorted:checked');
+    var count = all_inputs.length;
+    document.getElementById("filters_counter").innerHTML = "(" + count + ")";
+
+    function requestForCount(input) {
+        var data = {"name": input.name, "value": input.value};
+        const domain = location.protocol + '//' + location.host
+
+        var url = domain + "/restauracje/licznik_restauracji_dla_filtrow/";
+        if (input) {
+            url = url + "?"+ input.name + "=" + input.value + "&checked=" + input.checked;
+        }
+        fetch(url,
+                {
+                    method: 'get',
+                }
+            )
+            .then(response => response.json())
+            .then(data => {
+                var restaurants_count = document.getElementById('restaurants_count');
+                restaurants_count.textContent = "(" + data.count + ")"
+        })
+    };
 
     const inputField = document.getElementById('address-input');
     const resultsBox = document.getElementById('results-box');
@@ -181,7 +206,6 @@
         }
     });
 
-    window.sessionStorage.clear();
 
     function openFilters() {
         var filters = document.getElementById('filters');
@@ -189,15 +213,8 @@
         var main = document.getElementById('main');
         main.style.backgroundColor = "#E3E3E3";
 
-        const domain = location.protocol + '//' + location.host
-        const url = domain + "/restauracje/licznik_restauracji_dla_filtrow/";
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-                var restaurants_count = document.getElementById('restaurants_count');
-                restaurants_count.textContent = "(" + data.count + ")"
-                console.log(data);
-        })
+        var input = false;
+        requestForCount(input);
     }
 
     function closeFilters() {
@@ -213,12 +230,17 @@
             element.checked = 0;
             document.getElementById("filters_counter").innerHTML = "(0)";
         });
+
+        var all_label = document.querySelectorAll('span.filter_sorted');
+        all_label.forEach((element) => {
+            element.style.color = "#2F313E"
+        });
+        var input = false;
+        requestForCount(input);
     }
 
     function filtersCounter(element) {
-        var all_inputs = document.querySelectorAll('input.filter_sorted:checked');
-        var count = all_inputs.length;
-        document.getElementById("filters_counter").innerHTML = "(" + count + ")";
+
         var input = element.querySelector('input');
         var label = element.querySelector('span.filter_sorted');
         if (input.checked) {
@@ -228,22 +250,12 @@
             input.checked = 1
             label.style.color = "#CA001C";
         }
-        
-        var data = {"name": input.name, "value": input.value};
-        const domain = location.protocol + '//' + location.host
-        const url = domain + "/restauracje/licznik_restauracji_dla_filtrow/?"+ input.name + "=" + input.value + "&checked=" + input.checked;
-        
-        fetch(url, 
-                {
-                    method: 'get',
-                }
-            )
-            .then(response => response.json())
-            .then(data => {
-                var restaurants_count = document.getElementById('restaurants_count');
-                restaurants_count.textContent = "(" + data.count + ")"
-                console.log(data);
-        })
+
+        requestForCount(input);
+
+        var all_inputs = document.querySelectorAll('input.filter_sorted:checked');
+        var count = all_inputs.length;
+        document.getElementById("filters_counter").innerHTML = "(" + count + ")";
     }   
 
     function addToBasket(food) {
