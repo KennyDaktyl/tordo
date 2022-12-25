@@ -142,19 +142,22 @@
 
 {% block script_link %}
 <script>
-    window.sessionStorage.clear();
 
     var all_inputs = document.querySelectorAll('input.filter_sorted:checked');
     var count = all_inputs.length;
     document.getElementById("filters_counter").innerHTML = "(" + count + ")";
 
-    function requestForCount(input) {
+
+    function requestForCount(input=false, reset=false) {
         var data = {"name": input.name, "value": input.value};
         const domain = location.protocol + '//' + location.host
 
         var url = domain + "/restauracje/licznik_restauracji_dla_filtrow/";
         if (input) {
             url = url + "?"+ input.name + "=" + input.value + "&checked=" + input.checked;
+        }
+        if (reset) {
+            url = url + "?reset=true";
         }
         fetch(url,
                 {
@@ -168,44 +171,102 @@
         })
     };
 
-    const inputField = document.getElementById('address-input');
-    const resultsBox = document.getElementById('results-box');
-    const resultsList = document.getElementById('results-list');
-
-    inputField.addEventListener('keyup', function(event) {
-        if (event.key === ' ' || event.key === 'Enter') {
-            const address = inputField.value;
-            const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&countrycodes=pl&limit=10&format=json&sort=asc&addressdetails=1`;
-
-            const address_arr = address.split(' ');
-
-            if (address_arr.length >= 2) {
+    function getUserLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                console.log("Twoja szerokość geograficzna to: " + position.coords.latitude);
+                console.log("Twoja długość geograficzna to: " + position.coords.longitude);
+                var longitude = position.coords.longitude;
+                var latitude = position.coords.latitude;
+                var url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
+                
+                const resultsBox = document.getElementById('results-box');
+                const resultsList = document.getElementById('results-list');
+                
                 fetch(url)
                     .then(response => response.json())
                     .then(data => {
                         console.log(data);
-                        if (data.length >= 1) {
+                        if (data) {
                             resultsBox.style.display = 'Flex';
                             resultsList.innerHTML = '';
-                            data.forEach(item => {
-                                const addressElement = document.createElement('a');
-                                addressElement.classList.add("text-left", "text-grey", "w-100", "flex", "no-wrap", "j-left", "a-center", "container-text", "h-50", "pointer", "result-item", "border-r");
-                                addressElement.textContent = item.display_name;
-                                addressElement.href = '?sorted=distance&lon=' + item.lon + '&lat=' + item.lat + '&place_name=' + item.display_name;
-                                resultsList.appendChild(addressElement);
-                            });
+                            const addressInfo = document.createElement('span');
+                            addressInfo.textContent = "Pobrano lokalizację automatyczie:"
+                            addressInfo.classList.add("text-left", "text-red", "text-bold", "w-100", "margin-t-10", "container-text");
+                            const addressElement = document.createElement('a');
+                            addressElement.classList.add("text-left", "text-grey", "w-100", "flex", "no-wrap", "j-left", "a-center", "container-text", "h-50", "pointer", "result-item", "border-r");
+                            addressElement.textContent = data.display_name;
+                            addressElement.href = '?sorted=distance&lon=' + data.lon + '&lat=' + data.lat + '&place_name=' + data.display_name;
+                            resultsList.appendChild(addressInfo);
+                            resultsList.appendChild(addressElement);
                         } else {
                             resultsBox.style.display = 'None';
                             resultsList.innerHTML = '';
                         }
-                });
-            } else {
-                resultsBox.style.display = 'None';
-                resultsList.innerHTML = '';
-            }
+                    });
+            });
+        } else {
+            console.log("Brak danych");
+            return false;
         }
-    });
+    }
 
+    function sendRequestForLocation(inputField) {
+        const resultsBox = document.getElementById('results-box');
+        const resultsList = document.getElementById('results-list');
+        
+        inputField.addEventListener('keyup', function (event) {
+            if (event.key === ' ' || event.key === 'Enter') {
+                const address = inputField.value;
+                const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&countrycodes=pl&limit=10&format=json&sort=asc&addressdetails=1`;
+
+                const address_arr = address.split(' ');
+
+                if (address_arr.length >= 2) {
+                    fetch(url)
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data);
+                            if (data.length >= 1) {
+                                resultsBox.style.display = 'Flex';
+                                resultsList.innerHTML = '';
+                                data.forEach(item => {
+                                    const addressElement = document.createElement('a');
+                                    addressElement.classList.add("text-left", "text-grey", "w-100", "flex", "no-wrap", "j-left", "a-center", "container-text", "h-50", "pointer", "result-item", "border-r");
+                                    addressElement.textContent = item.display_name;
+                                    addressElement.href = '?sorted=distance&lon=' + item.lon + '&lat=' + item.lat + '&place_name=' + item.display_name;
+                                    resultsList.appendChild(addressElement);
+                                });
+                            } else {
+                                resultsBox.style.display = 'None';
+                                resultsList.innerHTML = '';
+                            }
+                        });
+                } else {
+                    resultsBox.style.display = 'None';
+                    resultsList.innerHTML = '';
+                }
+            }
+        });
+    }
+
+    function searchLocation(location=false) {
+        const inputField = document.getElementById('address-input');
+        
+
+        inputField.addEventListener('focus', function(event) {
+            var location = getUserLocation();
+            console.log(location);
+            if (location) {
+                console.log(location);
+            }
+        });
+
+        sendRequestForLocation(inputField)
+    
+    }
+
+    searchLocation();
 
     function openFilters() {
         var filters = document.getElementById('filters');
@@ -213,8 +274,7 @@
         var main = document.getElementById('main');
         main.style.backgroundColor = "#E3E3E3";
 
-        var input = false;
-        requestForCount(input);
+        requestForCount();
     }
 
     function closeFilters() {
@@ -229,14 +289,10 @@
         all_inputs.forEach((element) => {
             element.checked = 0;
             document.getElementById("filters_counter").innerHTML = "(0)";
+            var parent = element.parentNode;
+            parent.querySelector('span.filter_sorted').style.color = '#2F313E';
         });
-
-        var all_label = document.querySelectorAll('span.filter_sorted');
-        all_label.forEach((element) => {
-            element.style.color = "#2F313E"
-        });
-        var input = false;
-        requestForCount(input);
+        requestForCount(input=false, reset=true);
     }
 
     function filtersCounter(element) {
@@ -346,14 +402,6 @@
         });
     }
     
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
-            console.log("Twoja szerokość geograficzna to: " + position.coords.latitude);
-            console.log("Twoja długość geograficzna to: " + position.coords.longitude);
-        });
-    } else {
-        console.log("Brak danych")
-    }
-    console.log("Brak danych")
+    
 </script>
 {% endblock %}
