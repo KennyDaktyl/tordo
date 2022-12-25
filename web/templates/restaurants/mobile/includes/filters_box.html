@@ -39,13 +39,24 @@
     </div>
     <div class="filter_box bg-white  flex j-center a-center">
         <div class="flex j-center a-center w-100">
+            {% if not search %}
             <div class="w-10 flex j-center a-center margin-l-5 margin-r-5">
                 <img src="/media/svg/lupa.svg" alt="Ikonka lokalizacji" width="18" height="23">
             </div>
             <form method="get" class="w-90">
-                <input id="inputSearchField" name="search" class="t-left w-100" type="text" placeholder="{% if search %}{{ search }}{% else %}Szukaj lokalu lub potraw...{% endif %}">
+                <input id="inputSearchField" name="search" class="t-left w-100" type="text"
+                    placeholder="{% if search %}{{ search }}{% else %}Szukaj lokalu lub potraw...{% endif %}">
                 <button type="submit" id="submitButton" class="d-none">Wyślij</button>
             </form>
+            {% else %}
+            <div class="w-10 flex j-center a-center margin-l-5 margin-r-5">
+                <a href="{% url 'delete_search' %}"><img src="/media/svg/close.svg" alt="Ikonka kasowania lokalizacji" width="18"
+                        height="23"></a>
+            </div>
+            <div class="w-90 flex a-center j-left no-wrap">
+                <span class="w-100 text-left">{{ search }}</span>
+            </div>
+            {% endif %}
         </div>
     </div>
     <div class="filter_box bg-white  flex j-center a-center">
