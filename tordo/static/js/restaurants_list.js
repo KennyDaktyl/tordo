@@ -19,7 +19,7 @@ function requestForCount(input = false, reset = false) {
             var restaurants_count = document.getElementById('restaurants_count');
             restaurants_count.textContent = "(" + data.count + ")"
         })
-};
+}
 
 function createSpanInfo(text) {
     const addressInfo = document.createElement('span');
