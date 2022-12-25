@@ -104,6 +104,10 @@
     border: 1px solid gray;
 }
 
+#results-box a{
+    min-height: 50px;
+}
+
 .result-item:hover {
     background-color: lightslategray;
     color: white;

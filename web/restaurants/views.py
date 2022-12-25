@@ -299,8 +299,10 @@ class RestaurantDetailsView(DetailView):
 class DeleteLocation(View):
 
     def get(self, request):
-        del self.request.session["user_location"]
-        del self.request.session["place_name"]
+        if self.request.session.get("user_location"):
+            del self.request.session["user_location"]
+        if self.request.session.get("place_name"):
+            del self.request.session["place_name"]
         return redirect('restaurants')
 
 

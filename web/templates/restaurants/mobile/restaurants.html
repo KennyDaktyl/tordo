@@ -3,6 +3,13 @@
 {% load query_transform %}
 {% load image_tags %}
 
+{% block top_script %}
+    {% load compress %}
+        {% compress js %}
+            <script src="/static/js/restaurants_list.js"></script>
+        {% endcompress %}
+{% endblock %}
+
 {% block filters %}
     {% include "restaurants/mobile/includes/filters.html" %}
 {% endblock %}
@@ -141,138 +148,11 @@
 
 {% block script_link %}
 <script>
-
-    var all_inputs = document.querySelectorAll('input.filter_sorted:checked');
-    var count = all_inputs.length;
-    document.getElementById("filters_counter").innerHTML = "(" + count + ")";
-
-
-    function requestForCount(input = false, reset = false) {
-        var data = { "name": input.name, "value": input.value };
-        const domain = location.protocol + '//' + location.host
-
-        var url = domain + "/restauracje/licznik_restauracji_dla_filtrow/";
-        if (input) {
-            url = url + "?" + input.name + "=" + input.value + "&checked=" + input.checked;
-        }
-        if (reset) {
-            url = url + "?reset=true";
-        }
-        fetch(url,
-            {
-                method: 'get',
-            }
-        )
-            .then(response => response.json())
-            .then(data => {
-                var restaurants_count = document.getElementById('restaurants_count');
-                restaurants_count.textContent = "(" + data.count + ")"
-            })
-    };
-
-    function getUserLocation() {
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                console.log("Twoja szerokość geograficzna to: " + position.coords.latitude);
-                console.log("Twoja długość geograficzna to: " + position.coords.longitude);
-                var longitude = position.coords.longitude;
-                var latitude = position.coords.latitude;
-                var url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${latitude}&lon=${longitude}`;
-
-                const resultsBox = document.getElementById('results-box');
-                const resultsList = document.getElementById('results-list');
-
-                fetch(url)
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log(data);
-                        if (data) {
-                            resultsBox.style.display = 'Flex';
-                            resultsList.innerHTML = '';
-                            const addressInfo = document.createElement('span');
-                            addressInfo.textContent = "Pobrano lokalizację automatyczie:"
-                            addressInfo.classList.add("text-left", "text-red", "text-bold", "w-100", "margin-t-10", "container-text");
-                            const addressElement = document.createElement('a');
-                            addressElement.classList.add("text-left", "text-grey", "w-100", "flex", "no-wrap", "j-left", "a-center", "container-text", "margin-t-10", "margin-b-10", "pointer", "result-item", "border-r");
-                            addressElement.textContent = data.display_name;
-                            addressElement.href = '?sorted=distance&lon=' + data.lon + '&lat=' + data.lat + '&place_name=' + data.display_name;
-                            resultsList.appendChild(addressInfo);
-                            resultsList.appendChild(addressElement);
-                        } else {
-                            resultsBox.style.display = 'None';
-                            resultsList.innerHTML = '';
-                        }
-                    });
-            });
-        } else {
-            console.log("Brak danych");
-            return false;
-        }
-    }
-
-    function sendRequestForLocation(inputField) {
-        const resultsBox = document.getElementById('results-box');
-        const resultsList = document.getElementById('results-list');
-
-        inputField.addEventListener('keyup', function (event) {
-            if (event.key === ' ' || event.key === 'Enter') {
-                const address = inputField.value;
-                const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(address)}&countrycodes=pl&limit=10&format=json&sort=asc&addressdetails=1`;
-
-                const address_arr = address.split(' ');
-
-                if (address_arr.length >= 2) {
-                    fetch(url)
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log(data);
-                            if (data.length >= 1) {
-                                resultsBox.style.display = 'Flex';
-                                resultsList.innerHTML = '';
-                                data.forEach(item => {
-                                    const addressElement = document.createElement('a');
-                                    addressElement.classList.add("text-left", "text-grey", "w-100", "flex", "no-wrap", "j-left", "a-center", "container-text", "pointer", "result-item", "border-r",  "margin-t-10", "margin-b-10");
-                                    addressElement.textContent = item.display_name;
-                                    addressElement.href = '?sorted=distance&lon=' + item.lon + '&lat=' + item.lat + '&place_name=' + item.display_name;
-                                    resultsList.appendChild(addressElement);
-                                });
-                            } else {
-                                resultsBox.style.display = 'None';
-                                resultsList.innerHTML = '';
-                            }
-                        });
-                } else {
-                    resultsBox.style.display = 'None';
-                    resultsList.innerHTML = '';
-                }
-            }
-        });
-    }
-
-    function searchLocation(location = false) {
-        const inputField = document.getElementById('address-input');
-
-
-        inputField.addEventListener('focus', function (event) {
-            var location = getUserLocation();
-            console.log(location);
-            if (location) {
-                console.log(location);
-            }
-        });
-
-        sendRequestForLocation(inputField)
-
-    }
-
-    searchLocation();
-
     function openFilters() {
         var filters = document.getElementById('filters');
         filters.style.display = 'flex';
-        var main = document.getElementById('main');
-        main.style.backgroundColor = "#E3E3E3";
-
+        var main = document.getElementById("main");
+        main.style.display = "none";
         requestForCount();
     }
 
@@ -280,127 +160,8 @@
         var filters = document.getElementById('filters');
         filters.style.display = 'none';
         var main = document.getElementById('main');
+        main.style.display = "flex";
         main.style.backgroundColor = "#FFFFFF";
     };
-
-    function clearFilters(clear_button) {
-        var all_inputs = document.querySelectorAll('input.filter_sorted:checked');
-        all_inputs.forEach((element) => {
-            element.checked = 0;
-            document.getElementById("filters_counter").innerHTML = "(0)";
-            var parent = element.parentNode;
-            parent.querySelector('span.filter_sorted').style.color = '#2F313E';
-        });
-        requestForCount(input = false, reset = true);
-    }
-
-    function filtersCounter(element) {
-
-        var input = element.querySelector('input');
-        var label = element.querySelector('span.filter_sorted');
-        if (input.checked) {
-            input.checked = 0
-            label.style.color = "black";
-        } else {
-            input.checked = 1
-            label.style.color = "#CA001C";
-        }
-
-        requestForCount(input);
-
-        var all_inputs = document.querySelectorAll('input.filter_sorted:checked');
-        var count = all_inputs.length;
-        document.getElementById("filters_counter").innerHTML = "(" + count + ")";
-    }
-
-    function addToBasket(food) {
-
-        sessionStorage.setItem('scrollpos', window.scrollY);
-
-        var main = document.getElementById('main');
-        var freeze__container = document.getElementById('freeze__container');
-        var basket = document.getElementById('basekt_popup');
-        main.classList.add('freeze');
-        freeze__container.classList.add('active');
-        basket.classList.add('active');
-
-        var product_in_basket = document.getElementById("product_in_basket");
-        var product_id = (food.id).replace("product_id_", "");
-
-        product_in_basket.value = product_id;
-
-        var srcset = document.getElementById("srcset_basket");
-        var srcset_input = document.getElementById("srcset_basket_" + product_id);
-        srcset.srcset = srcset_input.value;
-
-        var src = document.getElementById("src_basket");
-        var src_input = document.getElementById("src_basket_" + product_id);
-        src.src = src_input.value;
-
-        var product_name = document.getElementById("product_name");
-        var product_name_input = document.getElementById("product_name_" + product_id);
-        product_name.innerHTML = product_name_input.value;
-
-        var product_price = document.getElementById("product_price");
-        var product_price_input = document.getElementById("product_price_" + product_id);
-        product_price.innerHTML = product_price_input.value;
-    }
-
-    function closeBasket(x_close) {
-        var main = document.getElementById('main');
-        var basket = document.getElementById('basekt_popup');
-        var freeze__container = document.getElementById('freeze__container');
-        main.classList.remove('freeze');
-        basket.classList.remove('active');
-        freeze__container.classList.remove('active');
-
-        var scrollpos = sessionStorage.getItem('scrollpos');
-        if (scrollpos) {
-            window.scrollTo(0, scrollpos);
-            sessionStorage.removeItem('scrollpos');
-        }
-    }
-
-    function addOneQty(plus) {
-        var food_qty = document.getElementById('food_qty');
-        var qty = parseInt(food_qty.value);
-        food_qty.value = qty + 1;
-
-        var product_in_basket = document.getElementById("product_in_basket");
-        var product_price_input = document.getElementById("product_price_" + product_in_basket.value);
-        var product_price = document.getElementById("product_price");
-        product_price.innerHTML = (food_qty.value * product_price_input.value).toFixed(2);
-    }
-
-    function remOneQty(plus) {
-        var food_qty = document.getElementById('food_qty');
-        var qty = parseInt(food_qty.value);
-        if (qty > 1) {
-            food_qty.value = qty - 1;
-        } else {
-            food_qty.value = 1;
-        }
-
-        var product_in_basket = document.getElementById("product_in_basket");
-        var product_price_input = document.getElementById("product_price_" + product_in_basket.value);
-        var product_price = document.getElementById("product_price");
-        product_price.innerHTML = (food_qty.value * product_price_input.value).toFixed(2);
-    }
-
-    const inputSearchField = document.getElementById('inputSearchField');
-    const submitButton = document.getElementById('submitButton');
-
-    if (inputSearchField) {
-        inputSearchField.addEventListener('keydown', (event) => {
-            if (event.key === 'Enter') {
-                event.preventDefault();
-                submitButton.click();
-            } else {
-                console.log(event.key)
-            }
-        });
-    }
-
-
 </script>
 {% endblock %}

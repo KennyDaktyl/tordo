@@ -113,8 +113,7 @@
                         </div>
                         <div class="w-100 text-container flex wrap a-center j-center self-top">
                             <label class="container flex w-100 j-center a-center no-wrap ">
-                                <input name="sorted" value="open_down" type="checkbox" class="check" {% if request.session.sorted == 'open_down' %}checked="checked" {% endif %}
-                                    onclick="onlyOne(this, 'check')">
+                                <input name="sorted" value="open_down" type="checkbox" class="check" {% if request.session.sorted == 'open_down' %}checked="checked" {% endif %} onclick="onlyOne(this, 'check')">
                                 <span class="checkmark circle"></span>
                                 <span
                                     class="w-100 text-left filter_sorted {% if request.session.sorted == 'open_down' %}text-red{% endif %}">Najdłużej

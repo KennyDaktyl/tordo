@@ -23,22 +23,21 @@
                     <span class="w-100 text-left filter_sorted" {% if request.session.sorted == 'abc' %}text-red{% endif %}">Alfabetycznie</span>
                 </label>
             </div>
-            <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
+            <div class="w-100 text-container flex wrap a-center j-center self-top">
                 <label class="container flex w-100 j-center a-center no-wrap ">
                     <input name="sorted" value="open_up" type="checkbox" class="check circle" {% if request.session.sorted == "open_up" %}checked{% endif %} onclick="onlyOne(this, 'check')">
                     <span class="checkmark circle"></span>
                     <span class="w-100 text-left filter_sorted {% if request.session.sorted == 'open_up' %}text-red{% endif %}">Najwcześniej otwarte</span>
                 </label>
             </div>
-            <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
+            <div class="w-100 text-container flex wrap a-center j-center self-top">
                 <label class="container flex w-100 j-center a-center no-wrap ">
-                    <input name="sorted" value="open_down" type="checkbox" class="check circle" {% if request.session.sorted == "open_down" %}checked="checked" {% endif %}
-                        onclick="onlyOne(this, 'check')">
+                    <input name="sorted" value="open_down" type="checkbox" class="check circle" {% if request.session.sorted == "open_down" %}checked="checked" {% endif %} onclick="onlyOne(this, 'check')">
                     <span class="checkmark circle"></span>
                     <span class="w-100 text-left filter_sorted {% if request.session.sorted == 'open_down' %}text-red{% endif %}">Najdłużej otwarte</span>
                 </label>
             </div>
-                <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
+                <div class="w-100 text-container flex wrap a-center j-center self-top">
                     <label class="container flex w-100 j-center a-center no-wrap ">
                         <input name="sorted" value="promo" type="checkbox" class="check circle" {% if request.session.sorted == "promo" %}checked="checked" {% endif %} onclick="onlyOne(this, 'check')">
                         <span class="checkmark circle"></span>
@@ -46,7 +45,7 @@
                             class="w-100 text-left filter_sorted {% if request.session.sorted == 'promo' %}text-red{% endif %}">Promocje</span>
                     </label>
                 </div>
-                <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
+                <div class="w-100 text-container flex wrap a-center j-center self-top">
                     <label class="container flex w-100 j-center a-center no-wrap ">
                         <input name="sorted" value="lunch" type="checkbox" class="check circle" {% if request.session.sorted == "lunch" %}checked="checked" {% endif %} onclick="onlyOne(this, 'check')">
                         <span class="checkmark circle"></span>
@@ -54,7 +53,7 @@
                             class="w-100 text-left filter_sorted {% if request.session.sorted == 'lunch' %}text-red{% endif %}">Lunch</span>
                     </label>
                 </div>
-                <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
+                <div class="w-100 text-container flex wrap a-center j-center self-top">
                     <label class="container flex w-100 j-center a-center no-wrap ">
                         <input name="sorted" value="food" type="checkbox" class="check circle" {% if request.session.sorted == "food" %}checked="checked" {% endif %} onclick="onlyOne(this, 'check')">
                         <span class="checkmark circle"></span>
@@ -62,7 +61,7 @@
                             class="w-100 text-left filter_sorted {% if request.session.sorted == 'food' %}text-red{% endif %}">Jedzenie</span>
                     </label>
                 </div>
-                <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
+                <div class="w-100 text-container flex wrap a-center j-center self-top">
                     <label class="container flex w-100 j-center a-center no-wrap ">
                         <input name="sorted" value="design" type="checkbox" class="check circle" {% if request.session.sorted == "design" %}checked="checked" {% endif %} onclick="onlyOne(this, 'check')">
                         <span class="checkmark circle"></span>
@@ -70,7 +69,7 @@
                             class="w-100 text-left filter_sorted {% if request.session.sorted == 'design' %}text-red{% endif %}">Wystrój</span>
                     </label>
                 </div>
-                <div class="w-100 text-container flex wrap a-center j-center self-top" onclick="filtersCounter()">
+                <div class="w-100 text-container flex wrap a-center j-center self-top">
                     <label class="container flex w-100 j-center a-center no-wrap ">
                         <input name="sorted" value="service" type="checkbox" class="check circle" {% if request.session.sorted == "service" %}checked="checked" {% endif %} onclick="onlyOne(this, 'check')">
                         <span class="checkmark circle"></span>

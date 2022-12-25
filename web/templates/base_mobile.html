@@ -8,6 +8,8 @@
         {% block head %}{% endblock %}
         {% block header %}{% endblock %}
 {% endblock %}
+
+
 {% block main_body %}
     {% block message %}
         {% if messages %}
@@ -94,6 +96,26 @@
                 let main = document.getElementById("main");
                 main.style.display = "flex"
             }
+            function onlyOne(checkbox, class_name) {
+                    var inputs = document.querySelectorAll('input.' + class_name);
+                    var spans = document.querySelectorAll('span.' + class_name);
+
+                    inputs.forEach((item) => {
+                        if (item !== checkbox) { item.checked = false }
+                        else {
+                            item.checked = true;
+                            var span = checkbox.parentNode.querySelector('span.' + class_name);
+                            spans.forEach((item) => {
+                                if (span !== item) {
+                                    item.classList.remove('checked');
+                                }
+                                else {
+                                    item.classList.add('checked');
+                                }
+                            })
+                        }
+                    });
+                }
         </script>
         {% block script %}{% endblock %}
     {% endcompress %}
