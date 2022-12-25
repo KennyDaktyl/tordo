@@ -73,7 +73,6 @@
     {% load compress %}
     {% block script_link %}{% endblock %}
 
-    {% compress js %}
         <script>
             function closeMessage(element) {
             var message_django = document.getElementById('message_django');
@@ -103,5 +102,4 @@
             
         </script>
         {% block script %}{% endblock %}
-    {% endcompress %}
 {% endblock %}
