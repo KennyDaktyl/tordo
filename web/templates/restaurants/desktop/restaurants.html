@@ -6,8 +6,26 @@
 
 {% block top_script %}
     {% load compress %}
-    {% compress js_top %}
+    {% compress js %}
         <script src="/static/js/restaurants_list.js"></script>
+        <script>
+            function openFilters() {
+                var filters = document.getElementById('filters');
+                filters.style.display = 'flex';
+                var main = document.getElementById('main');
+                main.style.backgroundColor = "#E3E3E3";
+
+
+                requestForCount();
+            }
+
+            function closeFilters() {
+                var filters = document.getElementById('filters');
+                filters.style.display = 'none';
+                var main = document.getElementById('main');
+                main.style.backgroundColor = "#FFFFFF";
+            };
+        </script>
     {% endcompress %}
 {% endblock %}
 
@@ -149,22 +167,5 @@
 {% endblock %}
 
 {% block script_link %}
-<script>
-    function openFilters() {
-        var filters = document.getElementById('filters');
-        filters.style.display = 'flex';
-        var main = document.getElementById('main');
-        main.style.backgroundColor = "#E3E3E3";
 
-
-        requestForCount();
-    }
-
-    function closeFilters() {
-        var filters = document.getElementById('filters');
-        filters.style.display = 'none';
-        var main = document.getElementById('main');
-        main.style.backgroundColor = "#FFFFFF";
-    };
-</script>
 {% endblock %}
