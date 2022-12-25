@@ -164,6 +164,8 @@ COMPRESS_DEBUG_TOGGLE = False
 COMPRESS_CSS_COMPRESSOR = "compressor.css.CssCompressor"
 COMPRESS_JS_COMPRESSOR = "compressor.js.JsCompressor"
 COMPRESS_PARSER = "compressor.parser.AutoSelectParser"
+COMPRESS_JS_FILTERS = "compressor.filters.jsmin.JSMinFilter"
+COMPRESS_ENABLED = True
 
 LANGUAGE_CODE = "pl"
 TIME_ZONE = "Europe/Warsaw"
