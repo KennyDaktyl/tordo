@@ -54,7 +54,7 @@ class RestaurantListView(ListView):
                         distance=Distance("location", user_location)
                     ).filter(
                         location__distance_lte=(user_location, D(km=MAX_DISTANCE))
-                    ).order_by("distance")
+                    ).order_by("name")
                     
         if self.request.GET.get("search") or self.request.session.get("search"):
             self.request.session["sorted"] = "name"
