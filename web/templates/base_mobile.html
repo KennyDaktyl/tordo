@@ -97,19 +97,19 @@
             }
             function onlyOne(checkbox, class_name) {
                     var inputs = document.querySelectorAll('input.' + class_name);
-                    var spans = document.querySelectorAll('span.' + class_name);
+                    var spans = document.querySelectorAll('span.filter_sorted');
 
                     inputs.forEach((item) => {
                         if (item !== checkbox) { item.checked = false }
                         else {
                             item.checked = true;
-                            var span = checkbox.parentNode.querySelector('span.' + class_name);
+                            var span = checkbox.parentNode.querySelector('span.filter_sorted');
                             spans.forEach((item) => {
                                 if (span !== item) {
-                                    item.classList.remove('checked');
+                                    item.style.color= "#2F313E";
                                 }
                                 else {
-                                    item.classList.add('checked');
+                                    item.style.color = "#CA001C";
                                 }
                             })
                         }

@@ -7,6 +7,16 @@ FilterMapping = {
     "filter_tags": Tag
 }
 
+def get_object_list_sorted(request, object_list):
+    
+    if request.session["sorted"] == "earliest_open":
+        object_list_not_None = [obj for obj in object_list if obj.from_hour is not None]
+        return sorted(object_list_not_None, key=lambda obj: obj.from_hour)
+
+    if request.session["sorted"] == "longest_open":
+        object_list_not_None = [obj for obj in object_list if obj.to_hour is not None]
+        return sorted(object_list_not_None, key=lambda obj: obj.to_hour, reverse=True)
+
 
 def get_object_list_filtered(request, object_list, reset=False):
     keys = list(FilterMapping.keys())

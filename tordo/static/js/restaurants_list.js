@@ -30,7 +30,7 @@ function createSpanInfo(text) {
 
 function createAddressItem(data) {
     const addressItem = document.createElement('a');
-    addressItem.classList.add("address_item", "text-left", "text-grey", "w-100", "flex", "no-wrap", "j-left", "a-center", "container-text", "pointer", "result-item", "border-r");
+    addressItem.classList.add("address_item", "margin-t-5", "margin-b-5", "text-left", "text-grey", "w-100", "flex", "no-wrap", "j-left", "a-center", "container-text", "pointer", "result-item", "border-r");
     addressItem.textContent = data.display_name;
     addressItem.href = '?sorted=distance&lon=' + data.lon + '&lat=' + data.lat + '&place_name=' + data.display_name;
     return addressItem

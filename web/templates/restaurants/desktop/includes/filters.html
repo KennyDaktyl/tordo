@@ -92,31 +92,41 @@
                         <p class="w-100 text-left text-bold margin-l-20">Sortowanie najbliżej Ciebie</p>
                     </div>
                     <div class="w-100 flex wrap a-top j-center elements">
+                        {% if request.session.user_location %}
                         <div class="w-100 text-container flex wrap a-center j-center self-top">
                             <label class="container flex w-100 j-center a-center no-wrap">
-                                <input name="sorted" value="abc" type="checkbox" class="check" {% if request.session.sorted == 'open_up' %}checked="checked" {% endif %}
+                                <input name="sorted" value="distance" type="checkbox" class="check" {% if request.session.sorted == 'distance' %}checked="checked" {% endif %} onclick="onlyOne(this, 'check')">
+                                <span class="checkmark circle"></span>
+                                <span
+                                    class="w-100 text-left filter_sorted {% if request.session.sorted == 'distance' %}text-red{% endif %}">Najbliżej Ciebie</span>
+                            </label>
+                        </div>
+                        {% endif %}
+                        <div class="w-100 text-container flex wrap a-center j-center self-top">
+                            <label class="container flex w-100 j-center a-center no-wrap">
+                                <input name="sorted" value="name" type="checkbox" class="check" {% if request.session.sorted == 'name' %}checked="checked" {% endif %}
                                 onclick="onlyOne(this, 'check')">
                                 <span class="checkmark circle"></span>
                                 <span
-                                    class="w-100 text-left filter_sorted {% if request.session.sorted == 'abc' %}text-red{% endif %}">Alfabetycznie</span>
+                                    class="w-100 text-left filter_sorted {% if request.session.sorted == 'name' %}text-red{% endif %}">Alfabetycznie</span>
                             </label>
                         </div>
                         <div class="w-100 text-container flex wrap a-center j-center self-top">
                             <label class="container flex w-100 j-center a-center no-wrap ">
-                                <input name="sorted" value="open_up" type="checkbox" class="check" {% if request.session.sorted == 'open_up' %}checked="checked" {% endif %}
+                                <input name="sorted" value="earliest_open" type="checkbox" class="check" {% if request.session.sorted == 'earliest_open' %}checked="checked" {% endif %}
                                     onclick="onlyOne(this, 'check')">
                                 <span class="checkmark circle"></span>
                                 <span
-                                    class="w-100 text-left filter_sorted {% if request.session.sorted == 'open_up' %}text-red{% endif %}">Najwcześniej
+                                    class="w-100 text-left filter_sorted {% if request.session.sorted == 'earliest_open' %}text-red{% endif %}">Najwcześniej
                                     otwarte</span>
                             </label>
                         </div>
                         <div class="w-100 text-container flex wrap a-center j-center self-top">
                             <label class="container flex w-100 j-center a-center no-wrap ">
-                                <input name="sorted" value="open_down" type="checkbox" class="check" {% if request.session.sorted == 'open_down' %}checked="checked" {% endif %} onclick="onlyOne(this, 'check')">
+                                <input name="sorted" value="longest_open" type="checkbox" class="check" {% if request.session.sorted == 'longest_open' %}checked="checked" {% endif %} onclick="onlyOne(this, 'check')">
                                 <span class="checkmark circle"></span>
                                 <span
-                                    class="w-100 text-left filter_sorted {% if request.session.sorted == 'open_down' %}text-red{% endif %}">Najdłużej
+                                    class="w-100 text-left filter_sorted {% if request.session.sorted == 'longest_open' %}text-red{% endif %}">Najdłużej
                                     otwarte</span>
                             </label>
                         </div>

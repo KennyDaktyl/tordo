@@ -21,7 +21,7 @@ from web.restaurants.serializers import (
     RestaurantDetailsSerializer,
     RestaurantsListSerializer,
 )
-from .queries import get_object_list_filtered
+from .queries import get_object_list_filtered, get_object_list_sorted
 
 User = get_user_model()
 
@@ -46,7 +46,16 @@ class RestaurantListView(ListView):
     def get_queryset(self):
         queryset = Restaurant.objects.filter(is_active=True)
         queryset = get_object_list_filtered(self.request, queryset)
-
+        user_location = self.request.session.get("user_location")
+        if user_location:
+            longitude, latitude, place_name = user_location[0], user_location[1], user_location[2]
+            user_location = Point(float(longitude), float(latitude), srid=4326)
+            queryset = queryset.annotate(
+                        distance=Distance("location", user_location)
+                    ).filter(
+                        location__distance_lte=(user_location, D(km=MAX_DISTANCE))
+                    ).order_by("distance")
+                    
         if self.request.GET.get("search") or self.request.session.get("search"):
             self.request.session["sorted"] = "name"
             search = self.request.GET.get("search") if self.request.GET.get("search") else self.request.session.get("search")
@@ -59,13 +68,16 @@ class RestaurantListView(ListView):
             
             sort_parametr = self.request.GET["sorted"]
             if sort_parametr == "distance":
-                # TODO Testujemy DIstance
+                self.request.session["sorted"] = "distance"
                 longitude = self.request.GET.get("lon")
                 latitude = self.request.GET.get("lat")
                 place_name = self.request.GET.get("place_name")
-                if not longitude or not latitude:
+                user_location = self.request.session.get("user_location")
+                if (not longitude or not latitude) and not user_location:
                     messages.error(self.request, f"Błąd lokalizacji")
                 else:
+                    if user_location:
+                        longitude, latitude, place_name = user_location[0], user_location[1], user_location[2]
                     user_location = Point(float(longitude), float(latitude), srid=4326)
                     self.request.session["user_location"] = (longitude, latitude, place_name)
                     self.request.session["place_name"] = place_name
@@ -79,14 +91,17 @@ class RestaurantListView(ListView):
 
             if sort_parametr == "name":
                 self.request.session["sorted"] = "name"
+                
                 return RestaurantsListSerializer(queryset, many=True).data
 
-            if sort_parametr == "start-time":
-                self.request.session["sorted"] = "start-time"
+            if sort_parametr == "earliest_open":
+                self.request.session["sorted"] = "earliest_open"
+                queryset = get_object_list_sorted(self.request, queryset)
                 return RestaurantsListSerializer(queryset, many=True).data
 
-            if sort_parametr == "end-time":
-                self.request.session["sorted"] = "end-time"
+            if sort_parametr == "longest_open":
+                self.request.session["sorted"] = "longest_open"
+                queryset = get_object_list_sorted(self.request, queryset)
                 return RestaurantsListSerializer(queryset, many=True).data
 
             if sort_parametr == "favorite-dishes":

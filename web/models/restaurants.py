@@ -465,11 +465,11 @@ class Restaurant(models.Model):
     @property
     def to_hour(self):
         weekday = datetime.today().isoweekday()
-        fh = OpeningHours.objects.filter(
+        th = OpeningHours.objects.filter(
             restaurant=self, weekday=weekday
         ).first()
-        if fh:
-            return fh.to_hour
+        if th:
+            return th.to_hour
         return None
 
     @property
