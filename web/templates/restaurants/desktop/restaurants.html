@@ -21,7 +21,7 @@
                 var filters = document.getElementById('filters');
                 filters.style.display = 'none';
                 var main = document.getElementById('main');
-                main.style.backgroundColor = "#FFFFFF";
+                main.style.backgroundColor = "#F5F5F5";
             };
         </script>
     {% endcompress %}
@@ -96,7 +96,9 @@
                     {% for product in category.products_filtered %}
                         {% include "products/desktop/product.html" %}
                     {% endfor %}
-               {% endfor %}
+                {% endfor %}
+                {% empty %}
+                <span class="margin-t-10 text-bold">Brak wyników.</span>
             {% endfor %}
             
             {% if is_paginated %}

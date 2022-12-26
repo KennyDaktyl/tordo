@@ -1,16 +1,11 @@
-import json
 from web.restaurants.serializers import CountRestaurantWhenUseFilterSerializer
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from web.models.restaurants import Restaurant, FilterFood, FilterAdvantage, Tag
+from web.models.restaurants import Restaurant
 
-
-FilterMapping = {
-    "filter_foods": FilterFood,
-    "filter_advantages": FilterAdvantage,
-    "filter_tags": Tag
-}
+from .queries import get_object_list_filtered
+from web.restaurants.queries import FilterMapping
 
 
 class CountRestaurantWhenUseFilters(APIView):
@@ -35,22 +30,7 @@ class CountRestaurantWhenUseFilters(APIView):
 
             request.session[filter_name] = filter_session
 
-        keys = list(FilterMapping.keys())
-        if request.session.get(keys[0]):
-            if reset:
-                del request.session[keys[0]]
-            else:
-                restaurants = restaurants.filter(filter_foods__id__in=request.session.get(keys[0])).distinct()
-        if request.session.get(keys[1]):
-            if reset:
-                del request.session[keys[1]]
-            else:
-                restaurants = restaurants.filter(filter_advantages__id__in=request.session.get(keys[1])).distinct()
-        if request.session.get(keys[2]):
-            if reset:
-                del request.session[keys[2]]
-            else:
-                restaurants = restaurants.filter(tags__id__in=request.session.get(keys[2])).distinct()
+        restaurants = get_object_list_filtered(request, restaurants, reset)        
 
         count_restaurants = {"count": restaurants.count()}
         return Response(CountRestaurantWhenUseFilterSerializer(count_restaurants).data)

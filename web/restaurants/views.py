@@ -20,9 +20,8 @@ from web.models.restaurants import Restaurant, Tag, FilterAdvantage, FilterFood
 from web.restaurants.serializers import (
     RestaurantDetailsSerializer,
     RestaurantsListSerializer,
-    FilterAdvantageListSerializer,
-    FilterFoodListSerializer
 )
+from .queries import get_object_list_filtered
 
 User = get_user_model()
 
@@ -45,25 +44,19 @@ class RestaurantListView(ListView):
         return "restaurants"
 
     def get_queryset(self):
+        queryset = Restaurant.objects.filter(is_active=True)
+        queryset = get_object_list_filtered(self.request, queryset)
+
         if self.request.GET.get("search") or self.request.session.get("search"):
             self.request.session["sorted"] = "name"
             search = self.request.GET.get("search") if self.request.GET.get("search") else self.request.session.get("search")
             self.request.session["search"] = search
             self.distance_max = False
-            queryset = self.__restaurants_search(search)
+            queryset = self.__restaurants_search(search, queryset)
             return RestaurantsListSerializer(queryset, many=True).data
 
-        if self.request.GET.getlist("tags"):
-            tags = self.request.GET.getlist("tags")
-            tags = [int(x) for x in tags]
-            queryset = Restaurant.objects.filter(
-                tags__in=tags, is_active=True
-            ).distinct()
-            serializer = RestaurantsListSerializer(queryset, many=True)
-            return serializer.data
-
         if self.request.GET.get("sorted"):
-            queryset = Restaurant.objects.filter(is_active=True)
+            
             sort_parametr = self.request.GET["sorted"]
             if sort_parametr == "distance":
                 # TODO Testujemy DIstance
@@ -77,7 +70,7 @@ class RestaurantListView(ListView):
                     self.request.session["user_location"] = (longitude, latitude, place_name)
                     self.request.session["place_name"] = place_name
                     
-                    restaurants = Restaurant.objects.annotate(
+                    restaurants = queryset.annotate(
                         distance=Distance("location", user_location)
                     ).filter(
                         location__distance_lte=(user_location, D(km=MAX_DISTANCE))
@@ -102,11 +95,10 @@ class RestaurantListView(ListView):
 
         self.distance_max = False
         self.request.session["sorted"] = "name"
-        queryset = Restaurant.objects.filter(is_active=True)
         if self.request.session.get("user_location"):
             longitude, latitude, place_name = self.request.session["user_location"]
             user_location = Point(float(longitude), float(latitude), srid=4326)
-            queryset = Restaurant.objects.filter(is_active=True).annotate(
+            queryset = queryset.filter(is_active=True).annotate(
                     distance=Distance("location", user_location)
                 ).order_by("distance")
         return RestaurantsListSerializer(queryset, many=True).data
@@ -127,15 +119,15 @@ class RestaurantListView(ListView):
         context["filter_foods"] = FilterFood.objects.filter(is_active=True)[0:10]
         return context
 
-    def __restaurants_search(self, search: str) -> List[Restaurant]:
+    def __restaurants_search(self, search: str, queryset) -> List[Restaurant]:
         if self.request.session.get("user_location"):
                 longitude, latitude, place_name = self.request.session["user_location"]
                 user_location = Point(float(longitude), float(latitude), srid=4326)
-                restaurants = Restaurant.objects.filter(is_active=True).annotate(
+                restaurants = queryset.filter(is_active=True).annotate(
                         distance=Distance("location", user_location)
                     ).order_by("distance")
         else:
-            restaurants = Restaurant.objects.filter(is_active=True)
+            restaurants = queryset.filter(is_active=True)
         restaurants_search = restaurants.filter(name__icontains=search)
         products_search = []
         for restaurant in restaurants:
@@ -174,9 +166,10 @@ class RestaurantsListMapView(TemplateView):
             user_location = None
             zoom = 6
 
-        restaurants = Restaurant.objects.all()
-        context["restaurants"] = restaurants
-        context["map"] = self.__create_folium_map(user_location, restaurants, zoom)
+        queryset = Restaurant.objects.filter(is_active=True)
+        queryset = get_object_list_filtered(self.request, queryset)
+        context["restaurants"] = queryset
+        context["map"] = self.__create_folium_map(user_location, queryset, zoom)
         return context
 
     def __create_folium_map(self, user_location, restaurants, zoom):

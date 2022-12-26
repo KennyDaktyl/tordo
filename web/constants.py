@@ -1,3 +1,5 @@
+
+
 USER_STATUS = (
     (0, "Klient"),
     (1, "Właściciel"),
