@@ -90,28 +90,29 @@ class RestaurantsListMapView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        queryset = Restaurant.objects.filter(is_active=True)
+
         if self.request.session.get("user_location"):
-            longitude, latitude, place_name = self.request.session["user_location"]
-            user_location = Point(float(latitude), float(longitude), srid=4326)
             zoom = 12
-            context["longitude"] = longitude
-            context["latitude"] = latitude
-            context["place_name"] = place_name
+            user_location = self.request.session["user_location"]
+            queryset = get_object_list_by_distance(self.request, queryset, self.request.session["user_location"])
         else:
             user_location = None
             zoom = 6
 
-        queryset = Restaurant.objects.filter(is_active=True)
         queryset = get_object_list_filtered(self.request, queryset)
-        context["restaurants"] = queryset
         context["map"] = self.__create_folium_map(user_location, queryset, zoom)
         return context
 
     def __create_folium_map(self, user_location, restaurants, zoom):
         if not user_location:
-            user_location = Point(52.237049, 21.017532, srid=4326)
+            user_location = {
+                "latitude": 52.237049, 
+                "longitude": 21.017532,
+                "place_name": False
+            }
         map = folium.Map(
-            location=[user_location[0], user_location[1]],
+            location=[user_location["latitude"], user_location["longitude"]],
             width="100%",
             position="relative",
             zoom_start=zoom,
@@ -129,14 +130,15 @@ class RestaurantsListMapView(TemplateView):
             )
         # if ('leaflet_css', 'https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css') in map.default_css:
         #     map.default_css.remove(('leaflet_css', 'https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css'))
-        tooltip = "Lokalizacja adresu"
-        marker = folium.Marker(
-            [user_location[0], user_location[1]],
-            popup="<i>Twoja lokalizacja</i>",
-            tooltip=tooltip,
-            icon=folium.Icon(color="red", icon="info-sign"),
-        )
-        marker.add_to(map)
+        if user_location["place_name"]:
+            tooltip = "Lokalizacja adresu"
+            marker = folium.Marker(
+                [user_location["latitude"], user_location["longitude"]],
+                popup="<i>Twoja lokalizacja</i>",
+                tooltip=tooltip,
+                icon=folium.Icon(color="red", icon="info-sign"),
+            )
+            marker.add_to(map)
 
         for restaurant in restaurants:
             tooltip = restaurant.name
