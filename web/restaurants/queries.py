@@ -36,7 +36,11 @@ def get_object_list_sorted(request, object_list):
         return object_list.order_by("name")
     
     if request.session["sorted"] == "distance":
-        return object_list.order_by("distance")
+        if request.session.get("user_location"):
+            return object_list.order_by("distance")
+        else:
+            request.session["sorted"] = "name"
+            return object_list.order_by("name")
 
     if request.session["sorted"] == "earliest_open":
         object_list_not_None = [obj for obj in object_list if obj.from_hour is not None]
