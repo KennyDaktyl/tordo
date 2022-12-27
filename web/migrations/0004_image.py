@@ -7,23 +7,50 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('web', '0003_restaurant_motto_and_more'),
+        ("web", "0003_restaurant_motto_and_more"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Image',
+            name="Image",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('image', models.ImageField(upload_to='images')),
-                ('image_type', models.IntegerField(choices=[(1, 'Galeria zdjęć'), (2, 'Galeria produktu')], verbose_name='Faktura')),
-                ('thumbnails_cache', models.JSONField(blank=True, default=dict, null=True)),
-                ('product_id', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='web.product', verbose_name='Produkt')),
-                ('restaurant_id', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='web.restaurant', verbose_name='Restauracja')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("image", models.ImageField(upload_to="images")),
+                (
+                    "image_type",
+                    models.IntegerField(
+                        choices=[(1, "Galeria zdjęć"), (2, "Galeria produktu")],
+                        verbose_name="Faktura",
+                    ),
+                ),
+                (
+                    "thumbnails_cache",
+                    models.JSONField(blank=True, default=dict, null=True),
+                ),
+                (
+                    "product_id",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="web.product",
+                        verbose_name="Produkt",
+                    ),
+                ),
+                (
+                    "restaurant_id",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="web.restaurant",
+                        verbose_name="Restauracja",
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Zdjęcia',
-                'ordering': ('-id',),
+                "verbose_name_plural": "Zdjęcia",
+                "ordering": ("-id",),
             },
         ),
     ]

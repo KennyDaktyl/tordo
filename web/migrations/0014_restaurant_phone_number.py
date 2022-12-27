@@ -6,13 +6,15 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('web', '0013_room_restaurant'),
+        ("web", "0013_room_restaurant"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='restaurant',
-            name='phone_number',
-            field=models.CharField(blank=True, max_length=12, null=True, verbose_name='Numer telefonu'),
+            model_name="restaurant",
+            name="phone_number",
+            field=models.CharField(
+                blank=True, max_length=12, null=True, verbose_name="Numer telefonu"
+            ),
         ),
     ]

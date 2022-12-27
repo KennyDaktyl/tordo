@@ -7,13 +7,19 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('web', '0010_advantage_restaurant_advantages'),
+        ("web", "0010_advantage_restaurant_advantages"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='advantage',
-            name='restaurant',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='web.restaurant', verbose_name='Dodatkowe atuty restauracji'),
+            model_name="advantage",
+            name="restaurant",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="web.restaurant",
+                verbose_name="Dodatkowe atuty restauracji",
+            ),
         ),
     ]

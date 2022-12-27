@@ -39,8 +39,7 @@ class UserAddress(models.Model):
         null=True,
         blank=True,
     )
-    is_located = models.BooleanField(
-        verbose_name="Lokalizacja Geo API", default=False)
+    is_located = models.BooleanField(verbose_name="Lokalizacja Geo API", default=False)
     geo_data = models.JSONField(
         verbose_name="Dane z geolokalizacji", null=True, blank=True
     )
@@ -58,7 +57,8 @@ class UserAddress(models.Model):
         validators=[MaxValueValidator(1000), MinValueValidator(0)],
     )
     distance_allowed = models.BooleanField(
-        verbose_name="Czy adres jest w strefie?", default=False)
+        verbose_name="Czy adres jest w strefie?", default=False
+    )
     distance_to_point = models.IntegerField(
         verbose_name="Odległość do punktu w metrach",
         default=999,
@@ -82,8 +82,7 @@ class UserAddress(models.Model):
     def delete(self, *args, **kwargs):
         if self.main:
             default_main = (
-                UserAddress.objects.filter(
-                    user=self.user).exclude(id=self.id).first()
+                UserAddress.objects.filter(user=self.user).exclude(id=self.id).first()
             )
             if default_main:
                 default_main.main = True
@@ -150,8 +149,7 @@ class CompanyData(models.Model):
     def delete(self, *args, **kwargs):
         if self.main:
             default_main = (
-                CompanyData.objects.filter(
-                    user=self.user).exclude(id=self.id).first()
+                CompanyData.objects.filter(user=self.user).exclude(id=self.id).first()
             )
             if default_main:
                 default_main.main = True
@@ -180,8 +178,7 @@ class CompanyData(models.Model):
 class DistrictWarsaw(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(verbose_name="Nazwa", max_length=128)
-    city = models.ForeignKey(
-        "City", verbose_name="Miato", on_delete=models.CASCADE)
+    city = models.ForeignKey("City", verbose_name="Miato", on_delete=models.CASCADE)
 
     class Meta:
         ordering = ("name",)
@@ -223,8 +220,7 @@ class City(models.Model):
 
 class StreetWarsaw(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(verbose_name="Ulica",
-                            max_length=128, db_index=True)
+    name = models.CharField(verbose_name="Ulica", max_length=128, db_index=True)
 
     district = models.ForeignKey(
         "DistrictWarsaw",
@@ -247,8 +243,7 @@ class StreetWarsaw(models.Model):
 
 class PostCodeWarsaw(models.Model):
     id = models.AutoField(primary_key=True)
-    name = models.CharField(verbose_name="Kod pocztowy",
-                            max_length=6, db_index=True)
+    name = models.CharField(verbose_name="Kod pocztowy", max_length=6, db_index=True)
     sub_district = models.ForeignKey(
         "SubDistrictWarsaw",
         db_index=True,
@@ -261,10 +256,8 @@ class PostCodeWarsaw(models.Model):
     precision = models.CharField(
         verbose_name="Precyzja Geo", max_length=64, default="Błędne dane"
     )
-    is_located = models.BooleanField(
-        verbose_name="GeoLokalizacja", default=False)
-    geo_data = models.JSONField(
-        verbose_name="Dane z geolokalizacji", default=dict)
+    is_located = models.BooleanField(verbose_name="GeoLokalizacja", default=False)
+    geo_data = models.JSONField(verbose_name="Dane z geolokalizacji", default=dict)
 
     class Meta:
         verbose_name_plural = "Kody pocztowe"

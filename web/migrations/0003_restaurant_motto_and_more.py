@@ -7,19 +7,31 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('web', '0002_city_districtwarsaw_postcodewarsaw_userphonenumber_and_more'),
+        ("web", "0002_city_districtwarsaw_postcodewarsaw_userphonenumber_and_more"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='restaurant',
-            name='motto',
-            field=models.CharField(default=1, max_length=100, verbose_name='Motto restauracji'),
+            model_name="restaurant",
+            name="motto",
+            field=models.CharField(
+                default=1, max_length=100, verbose_name="Motto restauracji"
+            ),
             preserve_default=False,
         ),
         migrations.AlterField(
-            model_name='restaurant',
-            name='image_listing_photo',
-            field=models.ImageField(blank=True, null=True, upload_to='restaurants', validators=[django.core.validators.FileExtensionValidator(allowed_extensions=['jpg', 'png'])], verbose_name='Zdjęcie na listing'),
+            model_name="restaurant",
+            name="image_listing_photo",
+            field=models.ImageField(
+                blank=True,
+                null=True,
+                upload_to="restaurants",
+                validators=[
+                    django.core.validators.FileExtensionValidator(
+                        allowed_extensions=["jpg", "png"]
+                    )
+                ],
+                verbose_name="Zdjęcie na listing",
+            ),
         ),
     ]

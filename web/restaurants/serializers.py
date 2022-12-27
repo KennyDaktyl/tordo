@@ -1,6 +1,12 @@
 from rest_framework import serializers
 
-from web.models.restaurants import Restaurant, Tag, OpeningHours, FilterAdvantage, FilterFood
+from web.models.restaurants import (
+    Restaurant,
+    Tag,
+    OpeningHours,
+    FilterAdvantage,
+    FilterFood,
+)
 from web.products.serializers import (
     CategoryWithProductsSerializer,
 )
@@ -58,7 +64,7 @@ class RestaurantsListSerializer(serializers.ModelSerializer):
             "likes_counter",
             "categories_filtered",
             "is_open",
-            "distance"
+            "distance",
         ]
         ordering = ["name"]
 
@@ -106,7 +112,7 @@ class RestaurantDetailsSerializer(serializers.ModelSerializer):
             "likes_counter",
             "categories_filtered",
             "is_open",
-            "distance"
+            "distance",
         ]
         ordering = ["name"]
 
@@ -116,7 +122,6 @@ class CountRestaurantWhenUseFilterSerializer(serializers.Serializer):
 
 
 class FilterAdvantageListSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = FilterAdvantage
         fields = [
@@ -126,11 +131,9 @@ class FilterAdvantageListSerializer(serializers.ModelSerializer):
 
 
 class FilterFoodListSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = FilterFood
         fields = [
             "id",
             "name",
         ]
-        

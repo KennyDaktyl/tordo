@@ -6,17 +6,20 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('web', '0006_foodsupplier_alter_photo_image_and_more'),
+        ("web", "0006_foodsupplier_alter_photo_image_and_more"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='foodsupplier',
-            options={'ordering': ('order', 'name'), 'verbose_name_plural': 'Dostawcy jedzenia'},
+            name="foodsupplier",
+            options={
+                "ordering": ("order", "name"),
+                "verbose_name_plural": "Dostawcy jedzenia",
+            },
         ),
         migrations.AddField(
-            model_name='foodsupplier',
-            name='order',
-            field=models.IntegerField(default=99, verbose_name='Kolejność'),
+            model_name="foodsupplier",
+            name="order",
+            field=models.IntegerField(default=99, verbose_name="Kolejność"),
         ),
     ]

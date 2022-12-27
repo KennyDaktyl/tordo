@@ -12,159 +12,377 @@ class Migration(migrations.Migration):
 
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('web', '0001_initial'),
+        ("web", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='City',
+            name="City",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=128, verbose_name='Nazwa')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("name", models.CharField(max_length=128, verbose_name="Nazwa")),
             ],
             options={
-                'verbose_name_plural': 'Miasto',
-                'ordering': ('name',),
+                "verbose_name_plural": "Miasto",
+                "ordering": ("name",),
             },
         ),
         migrations.CreateModel(
-            name='DistrictWarsaw',
+            name="DistrictWarsaw",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=128, verbose_name='Nazwa')),
-                ('city', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='web.city', verbose_name='Miato')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("name", models.CharField(max_length=128, verbose_name="Nazwa")),
+                (
+                    "city",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="web.city",
+                        verbose_name="Miato",
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Dzielnice',
-                'ordering': ('name',),
+                "verbose_name_plural": "Dzielnice",
+                "ordering": ("name",),
             },
         ),
         migrations.CreateModel(
-            name='PostCodeWarsaw',
+            name="PostCodeWarsaw",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(db_index=True, max_length=6, verbose_name='Kod pocztowy')),
-                ('location', django.contrib.gis.db.models.fields.PointField(srid=4326)),
-                ('precision', models.CharField(default='Błędne dane', max_length=64, verbose_name='Precyzja Geo')),
-                ('is_located', models.BooleanField(default=False, verbose_name='GeoLokalizacja')),
-                ('geo_data', models.JSONField(default=dict, verbose_name='Dane z geolokalizacji')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                (
+                    "name",
+                    models.CharField(
+                        db_index=True, max_length=6, verbose_name="Kod pocztowy"
+                    ),
+                ),
+                ("location", django.contrib.gis.db.models.fields.PointField(srid=4326)),
+                (
+                    "precision",
+                    models.CharField(
+                        default="Błędne dane",
+                        max_length=64,
+                        verbose_name="Precyzja Geo",
+                    ),
+                ),
+                (
+                    "is_located",
+                    models.BooleanField(default=False, verbose_name="GeoLokalizacja"),
+                ),
+                (
+                    "geo_data",
+                    models.JSONField(
+                        default=dict, verbose_name="Dane z geolokalizacji"
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Kody pocztowe',
+                "verbose_name_plural": "Kody pocztowe",
             },
         ),
         migrations.CreateModel(
-            name='UserPhoneNumber',
+            name="UserPhoneNumber",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('phone_number', models.CharField(max_length=18, verbose_name='Numer telefonu')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                (
+                    "phone_number",
+                    models.CharField(max_length=18, verbose_name="Numer telefonu"),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Numery telefonu użytkownika',
-                'ordering': ('user', '-id'),
+                "verbose_name_plural": "Numery telefonu użytkownika",
+                "ordering": ("user", "-id"),
             },
         ),
         migrations.CreateModel(
-            name='UserAddress',
+            name="UserAddress",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('street', models.CharField(max_length=128, verbose_name='Ulica')),
-                ('house', models.CharField(max_length=8, verbose_name='Nr domu')),
-                ('door', models.CharField(blank=True, max_length=16, null=True, verbose_name='Nr lokalu')),
-                ('city', models.CharField(max_length=64, verbose_name='Miasto')),
-                ('post_code', models.CharField(blank=True, max_length=6, null=True, verbose_name='Kod pocztowy')),
-                ('main', models.BooleanField(verbose_name='Główny adres?')),
-                ('location', django.contrib.gis.db.models.fields.PointField(blank=True, null=True, srid=4326)),
-                ('precision', models.CharField(blank=True, default='Brak danych', max_length=64, null=True, verbose_name='Precyzja Geo')),
-                ('is_located', models.BooleanField(default=False, verbose_name='Lokalizacja Geo API')),
-                ('geo_data', models.JSONField(blank=True, null=True, verbose_name='Dane z geolokalizacji')),
-                ('info', models.TextField(blank=True, null=True, verbose_name='Informacje')),
-                ('distance_to_center', models.IntegerField(default=999, validators=[django.core.validators.MaxValueValidator(1000), django.core.validators.MinValueValidator(0)], verbose_name='Odległość do Centrum w kilometrach')),
-                ('distance_allowed', models.BooleanField(default=False, verbose_name='Czy adres jest w strefie?')),
-                ('distance_to_point', models.IntegerField(default=999, validators=[django.core.validators.MinValueValidator(0)], verbose_name='Odległość do punktu w metrach')),
-                ('nearest_point', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='web.postcodewarsaw', verbose_name='Najbliższy punkt odległości')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='Użytkownik')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("street", models.CharField(max_length=128, verbose_name="Ulica")),
+                ("house", models.CharField(max_length=8, verbose_name="Nr domu")),
+                (
+                    "door",
+                    models.CharField(
+                        blank=True, max_length=16, null=True, verbose_name="Nr lokalu"
+                    ),
+                ),
+                ("city", models.CharField(max_length=64, verbose_name="Miasto")),
+                (
+                    "post_code",
+                    models.CharField(
+                        blank=True, max_length=6, null=True, verbose_name="Kod pocztowy"
+                    ),
+                ),
+                ("main", models.BooleanField(verbose_name="Główny adres?")),
+                (
+                    "location",
+                    django.contrib.gis.db.models.fields.PointField(
+                        blank=True, null=True, srid=4326
+                    ),
+                ),
+                (
+                    "precision",
+                    models.CharField(
+                        blank=True,
+                        default="Brak danych",
+                        max_length=64,
+                        null=True,
+                        verbose_name="Precyzja Geo",
+                    ),
+                ),
+                (
+                    "is_located",
+                    models.BooleanField(
+                        default=False, verbose_name="Lokalizacja Geo API"
+                    ),
+                ),
+                (
+                    "geo_data",
+                    models.JSONField(
+                        blank=True, null=True, verbose_name="Dane z geolokalizacji"
+                    ),
+                ),
+                (
+                    "info",
+                    models.TextField(blank=True, null=True, verbose_name="Informacje"),
+                ),
+                (
+                    "distance_to_center",
+                    models.IntegerField(
+                        default=999,
+                        validators=[
+                            django.core.validators.MaxValueValidator(1000),
+                            django.core.validators.MinValueValidator(0),
+                        ],
+                        verbose_name="Odległość do Centrum w kilometrach",
+                    ),
+                ),
+                (
+                    "distance_allowed",
+                    models.BooleanField(
+                        default=False, verbose_name="Czy adres jest w strefie?"
+                    ),
+                ),
+                (
+                    "distance_to_point",
+                    models.IntegerField(
+                        default=999,
+                        validators=[django.core.validators.MinValueValidator(0)],
+                        verbose_name="Odległość do punktu w metrach",
+                    ),
+                ),
+                (
+                    "nearest_point",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="web.postcodewarsaw",
+                        verbose_name="Najbliższy punkt odległości",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="Użytkownik",
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Adresy',
-                'ordering': ('user', '-main', 'street', '-id'),
+                "verbose_name_plural": "Adresy",
+                "ordering": ("user", "-main", "street", "-id"),
             },
         ),
         migrations.CreateModel(
-            name='SubDistrictWarsaw',
+            name="SubDistrictWarsaw",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=128, verbose_name='Nazwa')),
-                ('district', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='web.districtwarsaw', verbose_name='Dzielnica')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("name", models.CharField(max_length=128, verbose_name="Nazwa")),
+                (
+                    "district",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="web.districtwarsaw",
+                        verbose_name="Dzielnica",
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Małe Dzielnice',
-                'ordering': ('name',),
+                "verbose_name_plural": "Małe Dzielnice",
+                "ordering": ("name",),
             },
         ),
         migrations.CreateModel(
-            name='StreetWarsaw',
+            name="StreetWarsaw",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(db_index=True, max_length=128, verbose_name='Ulica')),
-                ('district', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='web.districtwarsaw', verbose_name='Dzielnica')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                (
+                    "name",
+                    models.CharField(
+                        db_index=True, max_length=128, verbose_name="Ulica"
+                    ),
+                ),
+                (
+                    "district",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="web.districtwarsaw",
+                        verbose_name="Dzielnica",
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Spis ulic',
-                'ordering': ('name',),
+                "verbose_name_plural": "Spis ulic",
+                "ordering": ("name",),
             },
         ),
         migrations.CreateModel(
-            name='Profile',
+            name="Profile",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('restaurant_name', models.CharField(blank=True, max_length=128, null=True, verbose_name='Nazwa restauracji')),
-                ('slug', models.SlugField(blank=True, max_length=128, null=True, verbose_name='Slug')),
-                ('status', models.IntegerField(choices=[(0, 'Klient'), (1, 'Właściciel'), (2, 'Menager'), (3, 'Kierowca'), (4, 'Restauracja'), (5, 'Pracownik restauracji'), (6, 'Dział IT')], db_index=True, verbose_name='Status użytkownika')),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                (
+                    "restaurant_name",
+                    models.CharField(
+                        blank=True,
+                        max_length=128,
+                        null=True,
+                        verbose_name="Nazwa restauracji",
+                    ),
+                ),
+                (
+                    "slug",
+                    models.SlugField(
+                        blank=True, max_length=128, null=True, verbose_name="Slug"
+                    ),
+                ),
+                (
+                    "status",
+                    models.IntegerField(
+                        choices=[
+                            (0, "Klient"),
+                            (1, "Właściciel"),
+                            (2, "Menager"),
+                            (3, "Kierowca"),
+                            (4, "Restauracja"),
+                            (5, "Pracownik restauracji"),
+                            (6, "Dział IT"),
+                        ],
+                        db_index=True,
+                        verbose_name="Status użytkownika",
+                    ),
+                ),
+                (
+                    "user",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Profil użytkownika',
-                'ordering': ('user', '-id'),
+                "verbose_name_plural": "Profil użytkownika",
+                "ordering": ("user", "-id"),
             },
         ),
         migrations.AddField(
-            model_name='postcodewarsaw',
-            name='sub_district',
-            field=models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to='web.subdistrictwarsaw', verbose_name='Mała dzielnica'),
+            model_name="postcodewarsaw",
+            name="sub_district",
+            field=models.ForeignKey(
+                blank=True,
+                null=True,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="web.subdistrictwarsaw",
+                verbose_name="Mała dzielnica",
+            ),
         ),
         migrations.CreateModel(
-            name='CompanyData',
+            name="CompanyData",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('company_name', models.CharField(max_length=128, verbose_name='Płatnik')),
-                ('company_name_l', models.CharField(blank=True, max_length=128, null=True, verbose_name='Odbiorca')),
-                ('street', models.CharField(max_length=128, verbose_name='Ulica')),
-                ('house', models.CharField(max_length=8, verbose_name='Nr domu')),
-                ('door', models.CharField(default='', max_length=8, verbose_name='Nr lokalu')),
-                ('city', models.CharField(max_length=64, verbose_name='Miasto')),
-                ('post_code', models.CharField(blank=True, max_length=6, null=True, verbose_name='Kod pocztowy')),
-                ('nip', models.CharField(max_length=13, validators=[django.core.validators.MinLengthValidator(10)], verbose_name='Numer nip')),
-                ('main', models.BooleanField(default=False, verbose_name='Firma domyślna ?')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL, verbose_name='Użytkownik')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                (
+                    "company_name",
+                    models.CharField(max_length=128, verbose_name="Płatnik"),
+                ),
+                (
+                    "company_name_l",
+                    models.CharField(
+                        blank=True, max_length=128, null=True, verbose_name="Odbiorca"
+                    ),
+                ),
+                ("street", models.CharField(max_length=128, verbose_name="Ulica")),
+                ("house", models.CharField(max_length=8, verbose_name="Nr domu")),
+                (
+                    "door",
+                    models.CharField(
+                        default="", max_length=8, verbose_name="Nr lokalu"
+                    ),
+                ),
+                ("city", models.CharField(max_length=64, verbose_name="Miasto")),
+                (
+                    "post_code",
+                    models.CharField(
+                        blank=True, max_length=6, null=True, verbose_name="Kod pocztowy"
+                    ),
+                ),
+                (
+                    "nip",
+                    models.CharField(
+                        max_length=13,
+                        validators=[django.core.validators.MinLengthValidator(10)],
+                        verbose_name="Numer nip",
+                    ),
+                ),
+                (
+                    "main",
+                    models.BooleanField(default=False, verbose_name="Firma domyślna ?"),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                        verbose_name="Użytkownik",
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Firmy użytkowników',
-                'ordering': ('user', '-main', 'company_name', '-id'),
+                "verbose_name_plural": "Firmy użytkowników",
+                "ordering": ("user", "-main", "company_name", "-id"),
             },
         ),
         migrations.CreateModel(
-            name='ActivateToken',
+            name="ActivateToken",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('created_time', models.DateTimeField(db_index=True, default=django.utils.timezone.now)),
-                ('activation_token', models.CharField(max_length=64, unique=True)),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                (
+                    "created_time",
+                    models.DateTimeField(
+                        db_index=True, default=django.utils.timezone.now
+                    ),
+                ),
+                ("activation_token", models.CharField(max_length=64, unique=True)),
+                (
+                    "user",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'verbose_name_plural': 'Token aktywacyjny',
-                'ordering': ('-id',),
+                "verbose_name_plural": "Token aktywacyjny",
+                "ordering": ("-id",),
             },
         ),
     ]

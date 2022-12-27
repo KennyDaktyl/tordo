@@ -97,4 +97,3 @@ class UserPhoneNumber(models.Model):
             "-id",
         )
         verbose_name_plural = "Numery telefonu użytkownika"
-        

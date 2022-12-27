@@ -10,8 +10,8 @@ from django.core.validators import FileExtensionValidator
 from web.constants import PHOTO_STATUS
 
 
-ALLOWED_IMAGE_EXTENSIONS = ['jpg', 'png']
-ALLOWED_ICON_EXTENSIONS = ['jpg', 'png', 'svg']
+ALLOWED_IMAGE_EXTENSIONS = ["jpg", "png"]
+ALLOWED_ICON_EXTENSIONS = ["jpg", "png", "svg"]
 IMAGE_TYPE = [
     (1, "Galeria zdjęć"),
     (2, "Galeria produktu"),
@@ -21,17 +21,27 @@ IMAGE_TYPE = [
 class Photo(models.Model):
     id = models.AutoField(primary_key=True)
     restaurant_id = models.ForeignKey(
-        "Restaurant", db_index=True, verbose_name="Restauracja", on_delete=models.CASCADE, null=True, blank=True)
+        "Restaurant",
+        db_index=True,
+        verbose_name="Restauracja",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
     product_id = models.ForeignKey(
-        "Product", db_index=True, verbose_name="Produkt", on_delete=models.CASCADE, null=True, blank=True)
-    image = models.ImageField(upload_to='images')
+        "Product",
+        db_index=True,
+        verbose_name="Produkt",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
+    image = models.ImageField(upload_to="images")
     image_type = models.IntegerField(verbose_name="Faktura", choices=IMAGE_TYPE)
     thumbnails_cache = models.JSONField(default=dict, null=True, blank=True)
 
     class Meta:
-        ordering = (
-            "-id",
-        )
+        ordering = ("-id",)
         verbose_name_plural = "Zdjęcia"
 
     def __str__(self):
@@ -40,17 +50,17 @@ class Photo(models.Model):
     def save(self, *args, **kwargs):
         if self.image_type == IMAGE_TYPE[0][0]:
             self.thumbnails_cache = {
-            "gallery": {},
-        }
+                "gallery": {},
+            }
         super(Photo, self).save()
-        #TODO Zrobić dla mobile
+        # TODO Zrobić dla mobile
         self.thumbnails_cache["gallery"] = make_thumbnail(
             self.image,
             [(289, 223)],
             3,
             self.restaurant_id,
             "restaurant",
-            overwrite=False
+            overwrite=False,
         )
         super(Photo, self).save()
 
@@ -58,10 +68,22 @@ class Photo(models.Model):
 class Thumbnail(models.Model):
     id = models.AutoField(primary_key=True)
     restaurant_id = models.ForeignKey(
-        "Restaurant", db_index=True, verbose_name="Restauracja", on_delete=models.CASCADE, null=True, blank=True)
+        "Restaurant",
+        db_index=True,
+        verbose_name="Restauracja",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
     product_id = models.ForeignKey(
-        "Product", db_index=True, verbose_name="Produkt", on_delete=models.CASCADE, null=True, blank=True)
-    photo = models.ImageField(upload_to='thumbs')
+        "Product",
+        db_index=True,
+        verbose_name="Produkt",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
+    photo = models.ImageField(upload_to="thumbs")
     mimetype = models.CharField(verbose_name="Typ pliku", max_length=16)
     width = models.IntegerField(verbose_name="Szerokość", default=0)
     height = models.IntegerField(verbose_name="Wysokość", default=0)
@@ -70,27 +92,29 @@ class Thumbnail(models.Model):
     )
 
     class Meta:
-        ordering = (
-            "photo",
-        )
+        ordering = ("photo",)
         verbose_name_plural = "Thumbnails"
 
     def __str__(self):
         return self.photo.path
 
 
-def make_thumbnail(photo, sizes, status, relation_object, relation_object_type, overwrite=True):
-    FTYPE = ['WEBP', 'JPEG']
+def make_thumbnail(
+    photo, sizes, status, relation_object, relation_object_type, overwrite=True
+):
+    FTYPE = ["WEBP", "JPEG"]
     thumb_name, thumb_extension = os.path.splitext(photo.name)
     if thumb_extension == ".png":
-        FTYPE = ['WEBP', 'PNG']
+        FTYPE = ["WEBP", "PNG"]
     if relation_object_type == "restaurant" and overwrite:
         thumbnail_to_delete = Thumbnail.objects.filter(
-            restaurant_id=relation_object, status=status)
+            restaurant_id=relation_object, status=status
+        )
         thumbnail_to_delete.delete()
     if relation_object_type == "product" and overwrite:
         thumbnail_to_delete = Thumbnail.objects.filter(
-            product_id=relation_object, status=status)
+            product_id=relation_object, status=status
+        )
         thumbnail_to_delete.delete()
     thumbails_data = {"webp": {}, "jpeg": {}}
     for size in sizes:
@@ -99,8 +123,7 @@ def make_thumbnail(photo, sizes, status, relation_object, relation_object_type, 
             image_crop = ImageOps.fit(image, size)
             width, height = image_crop.size
             thumb_extension = thumb_extension.lower()
-            thumb_filename = thumb_name + \
-                f'_{width}x{height}' + "." + ftype.lower()
+            thumb_filename = thumb_name + f"_{width}x{height}" + "." + ftype.lower()
             temp_thumb = BytesIO()
             image_crop.save(temp_thumb, ftype)
             temp_thumb.seek(0)
@@ -113,8 +136,9 @@ def make_thumbnail(photo, sizes, status, relation_object, relation_object_type, 
             thumbnail.height = height
             thumbnail.mimetype = "image/" + ftype.lower()
             thumbnail.status = status
-            thumbnail.photo.save(thumb_filename, ContentFile(
-                temp_thumb.read()), save=False)
+            thumbnail.photo.save(
+                thumb_filename, ContentFile(temp_thumb.read()), save=False
+            )
             thumbnail.save()
             temp_thumb.close()
             image_data = {f"{width}x{height}": str(thumbnail.photo)}

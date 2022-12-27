@@ -3,7 +3,7 @@ from django import template
 register = template.Library()
 
 
-@register.filter(name='get_width_from_key')
+@register.filter(name="get_width_from_key")
 def get_width_from_key(value):
     return value.split("x")[0]
 
@@ -15,6 +15,7 @@ def get_src_expected(images_data, size):
         return images_data.get(size)
     return None
 
+
 @register.simple_tag
 def get_thumbnails_by_type(images_data, size, mimetype):
     images_data = dict(images_data)
@@ -23,4 +24,3 @@ def get_thumbnails_by_type(images_data, size, mimetype):
         if images_data_type:
             return images_data_type.get(size)
     return None
-    

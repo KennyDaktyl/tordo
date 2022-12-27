@@ -18,7 +18,7 @@
 <div class="in-layout-content flex wrap j-center a-center">
     {% include "restaurants/mobile/includes/filters_box.html" %}    
     <div class="restaurants__container w-100 flex j-center a-top wrap padding-b-20 margin-b-20">
-        {% for restaurant in restaurants %}
+        {% for restaurant in object_list %}
         <a href="{% url 'restaurant_details' slug=restaurant.slug pk=restaurant.id %}" class="restaurant_box flex j-center a-top wrap w-100 margin-b-20">
             <picture class="w-100">
                 <source class="" srcset="{{ MEDIA_URL }}{% get_src_expected restaurant.listing_webp.items '500x145' %}" type="image/webp"/>

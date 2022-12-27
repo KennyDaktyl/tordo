@@ -13,7 +13,7 @@ class FirstPage(TemplateView):
         if mobile(self.request):
             self.template_name = self.template_name.replace("desktop", "mobile")
         return self.template_name
-    
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         return context

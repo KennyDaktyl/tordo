@@ -5,7 +5,6 @@ from web.models.products import Category, Product
 
 
 class ProductSerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Product
         fields = [
@@ -27,9 +26,7 @@ class ProductSerializer(serializers.ModelSerializer):
 
 class CategoryWithProductsSerializer(serializers.ModelSerializer):
     products_filtered = ListField(
-        child=ProductSerializer(),
-        required=False,
-        allow_empty=True
+        child=ProductSerializer(), required=False, allow_empty=True
     )
 
     class Meta:
@@ -38,7 +35,6 @@ class CategoryWithProductsSerializer(serializers.ModelSerializer):
 
 
 class CategorySerializer(serializers.ModelSerializer):
-
     class Meta:
         model = Category
         fields = ["restaurant", "name", "products"]
@@ -60,10 +56,8 @@ class RestaurantMenuSerializer(serializers.ModelSerializer):
     images_listing_jpg = serializers.ImageField(
         source="product.images_mobile_listing_jpg"
     )
-    images_basket_webp = serializers.ImageField(
-        source="product.images_basket_webp")
-    images_basket_jpg = serializers.ImageField(
-        source="product.images_basket_jpg")
+    images_basket_webp = serializers.ImageField(source="product.images_basket_webp")
+    images_basket_jpg = serializers.ImageField(source="product.images_basket_jpg")
 
     class Meta:
         model = Product

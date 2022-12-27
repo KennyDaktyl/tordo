@@ -30,7 +30,7 @@ class CountRestaurantWhenUseFilters(APIView):
 
             request.session[filter_name] = filter_session
 
-        restaurants = get_object_list_filtered(request, restaurants, reset)        
+        restaurants = get_object_list_filtered(request, restaurants, reset)
 
         count_restaurants = {"count": restaurants.count()}
         return Response(CountRestaurantWhenUseFilterSerializer(count_restaurants).data)

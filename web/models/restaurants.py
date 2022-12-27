@@ -23,9 +23,7 @@ from web.products.serializers import CategoryWithProductsSerializer, ProductSeri
 def file_size(value):
     limit = 6 * 1024 * 1024
     if value.size > limit:
-        raise ValidationError(
-            "Plik który chcesz wrzucić jest większy niż 6MB."
-        )
+        raise ValidationError("Plik który chcesz wrzucić jest większy niż 6MB.")
 
 
 WEEKDAYS = [
@@ -86,7 +84,7 @@ class FilterAdvantage(models.Model):
     name = models.CharField(max_length=100)
     order = models.IntegerField(verbose_name="Kolejność", default=1)
     is_active = models.BooleanField(default=True)
-    
+
     class Meta:
         ordering = (
             "order",
@@ -119,9 +117,7 @@ class FoodSupplier(models.Model):
     image = models.FileField(
         verbose_name="Logo firmy świadczącej dostawy",
         upload_to="others",
-        validators=[
-            FileExtensionValidator(allowed_extensions=ALLOWED_ICON_EXTENSIONS)
-        ],
+        validators=[FileExtensionValidator(allowed_extensions=ALLOWED_ICON_EXTENSIONS)],
         null=True,
         blank=True,
     )
@@ -150,9 +146,7 @@ class Advantage(models.Model):
     image = models.FileField(
         verbose_name="Logo atutu",
         upload_to="others",
-        validators=[
-            FileExtensionValidator(allowed_extensions=ALLOWED_ICON_EXTENSIONS)
-        ],
+        validators=[FileExtensionValidator(allowed_extensions=ALLOWED_ICON_EXTENSIONS)],
         null=True,
         blank=True,
     )
@@ -208,9 +202,7 @@ class Restaurant(models.Model):
     )
     name = models.CharField(verbose_name="Nazwa restauracji", max_length=100)
     motto = models.CharField(verbose_name="Motto restauracji", max_length=100)
-    slug = models.SlugField(
-        verbose_name="Slug", blank=True, null=True, max_length=128
-    )
+    slug = models.SlugField(verbose_name="Slug", blank=True, null=True, max_length=128)
     location = models.PointField()
     street = models.CharField(verbose_name="Ulica", max_length=128)
     house = models.CharField(verbose_name="Nr domu", max_length=8)
@@ -221,25 +213,17 @@ class Restaurant(models.Model):
     post_code = models.CharField(
         verbose_name="Kod pocztowy", max_length=6, null=True, blank=True
     )
-    phone_number = models.CharField(
-        verbose_name="Numer telefonu", max_length=12
-    )
-    is_located = models.BooleanField(
-        verbose_name="Lokalizacja Geo API", default=False
-    )
+    phone_number = models.CharField(verbose_name="Numer telefonu", max_length=12)
+    is_located = models.BooleanField(verbose_name="Lokalizacja Geo API", default=False)
     is_active = models.BooleanField(verbose_name="Czy aktywna?", default=True)
     geo_data = models.TextField(
         verbose_name="Dane z geolokalizacji", null=True, blank=True
     )
-    home_page = models.URLField(
-        verbose_name="Strona WWW", default="www.brak-strony.pl"
-    )
+    home_page = models.URLField(verbose_name="Strona WWW", default="www.brak-strony.pl")
     description = models.TextField(
         verbose_name="Opis restauracji", blank=True, null=True
     )
-    likes_counter = models.IntegerField(
-        verbose_name="Licznik lików", default=0
-    )
+    likes_counter = models.IntegerField(verbose_name="Licznik lików", default=0)
     image_listing_photo = models.ImageField(
         verbose_name="Zdjęcie na listing",
         upload_to="restaurants",
@@ -390,7 +374,6 @@ class Restaurant(models.Model):
     def categories(self):
         return Category.objects.filter(restaurant=self, is_active=True)
 
-
     @property
     def gallery(self):
         gallery = Photo.objects.filter(restaurant_id=self)
@@ -455,9 +438,7 @@ class Restaurant(models.Model):
     @property
     def from_hour(self):
         weekday = datetime.today().isoweekday()
-        fh = OpeningHours.objects.filter(
-            restaurant=self, weekday=weekday
-        ).first()
+        fh = OpeningHours.objects.filter(restaurant=self, weekday=weekday).first()
         if fh:
             return fh.from_hour
         return None
@@ -465,9 +446,7 @@ class Restaurant(models.Model):
     @property
     def to_hour(self):
         weekday = datetime.today().isoweekday()
-        th = OpeningHours.objects.filter(
-            restaurant=self, weekday=weekday
-        ).first()
+        th = OpeningHours.objects.filter(restaurant=self, weekday=weekday).first()
         if th:
             return th.to_hour
         return None
@@ -475,9 +454,7 @@ class Restaurant(models.Model):
     @property
     def weekday(self):
         weekday = datetime.today().isoweekday()
-        fh = OpeningHours.objects.filter(
-            restaurant=self, weekday=weekday
-        ).first()
+        fh = OpeningHours.objects.filter(restaurant=self, weekday=weekday).first()
         if fh:
             return fh.weekday_name
         return None
@@ -511,9 +488,7 @@ class Restaurant(models.Model):
     #     return CategoryWithProductsSerializer(categories, many=True).data
 
     def products_search(self, search):
-        products = self.products.objects.filter(
-            name__icontains=search, is_active=True
-        )
+        products = self.products.objects.filter(name__icontains=search, is_active=True)
         return products
 
 
@@ -548,9 +523,7 @@ def auto_delete_file_on_change(sender, instance, **kwargs):
         return False
 
     try:
-        old_file = Restaurant.objects.get(
-            pk=instance.pk
-        ).image_main_photo_desktop
+        old_file = Restaurant.objects.get(pk=instance.pk).image_main_photo_desktop
         new_file = instance.image_main_photo_desktop
         if old_file and not old_file == new_file:
             if os.path.isfile(old_file.path):
@@ -560,9 +533,7 @@ def auto_delete_file_on_change(sender, instance, **kwargs):
         return False
 
     try:
-        old_file = Restaurant.objects.get(
-            pk=instance.pk
-        ).image_main_photo_mobile
+        old_file = Restaurant.objects.get(pk=instance.pk).image_main_photo_mobile
         new_file = instance.image_main_photo_mobile
         if old_file and not old_file == new_file:
             if os.path.isfile(old_file.path):

@@ -12,7 +12,16 @@ from web.models.addresses import (
     SubDistrictWarsaw,
     UserAddress,
 )
-from web.models.restaurants import Restaurant, OpeningHours, Tag, FoodSupplier, Room, Advantage, FilterAdvantage, FilterFood
+from web.models.restaurants import (
+    Restaurant,
+    OpeningHours,
+    Tag,
+    FoodSupplier,
+    Room,
+    Advantage,
+    FilterAdvantage,
+    FilterFood,
+)
 from web.models.products import Category, Product, RestaurantMenu
 from web.models.images import Thumbnail, Photo
 
@@ -168,21 +177,22 @@ class StreetWarsawAdmin(ModelAdmin):
 @admin.register(Thumbnail)
 class ThumbnailAdmin(ModelAdmin):
     list_display = [f.name for f in Thumbnail._meta.fields]
-    search_fields = ("id", "photo", )
-    list_display_links = (
+    search_fields = (
         "id",
+        "photo",
     )
-    list_filter = [
-        "status"
-    ]
+    list_display_links = ("id",)
+    list_filter = ["status"]
+
 
 @admin.register(Photo)
 class PhotoAdmin(ModelAdmin):
     list_display = [f.name for f in Photo._meta.fields]
-    search_fields = ("id", "image", )
-    list_display_links = (
+    search_fields = (
         "id",
+        "image",
     )
+    list_display_links = ("id",)
     list_filter = [
         "restaurant_id",
         "product_id",
@@ -192,43 +202,49 @@ class PhotoAdmin(ModelAdmin):
 @admin.register(FoodSupplier)
 class FoodSupplierAdmin(ModelAdmin):
     list_display = [f.name for f in FoodSupplier._meta.fields]
-    search_fields = ("id", "name", "image", )
-    list_display_links = (
+    search_fields = (
         "id",
+        "name",
+        "image",
     )
-    
+    list_display_links = ("id",)
+
 
 @admin.register(Room)
 class RoomAdmin(ModelAdmin):
     list_display = [f.name for f in Room._meta.fields]
-    search_fields = ("id", "name",)
-    list_display_links = (
+    search_fields = (
         "id",
+        "name",
     )
+    list_display_links = ("id",)
 
 
 @admin.register(Advantage)
 class AdvantageAdmin(ModelAdmin):
     list_display = [f.name for f in Advantage._meta.fields]
-    search_fields = ("id", "name",)
-    list_display_links = (
+    search_fields = (
         "id",
+        "name",
     )
+    list_display_links = ("id",)
 
 
 @admin.register(FilterAdvantage)
 class FilterAdvantageAdmin(ModelAdmin):
     list_display = [f.name for f in FilterAdvantage._meta.fields]
-    search_fields = ("id", "name",)
-    list_display_links = (
+    search_fields = (
         "id",
+        "name",
     )
+    list_display_links = ("id",)
 
 
 @admin.register(FilterFood)
 class FilterFoodAdmin(ModelAdmin):
     list_display = [f.name for f in FilterFood._meta.fields]
-    search_fields = ("id", "name",)
-    list_display_links = (
+    search_fields = (
         "id",
+        "name",
     )
+    list_display_links = ("id",)
