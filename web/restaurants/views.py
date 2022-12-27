@@ -40,7 +40,6 @@ class RestaurantListView(ListView):
 
     def get_queryset(self):
         queryset = Restaurant.objects.filter(is_active=True)
-        
         if not self.request.GET.get("sorted"):
             if not self.request.session.get("sorted"):
                 self.request.session["sorted"] = "name"
