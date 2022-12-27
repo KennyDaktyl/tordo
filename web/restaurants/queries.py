@@ -89,11 +89,11 @@ def get_object_list_search(request, object_list):
         return sorted(object_list, key=lambda d: d.name)
     
     if request.session["sorted"] == "distance":
-        if request.session["user_location"]:
+        if request.session.get("user_location"):
             return sorted(object_list, key=lambda d: d.distance)
         else:
             return sorted(object_list, key=lambda d: d.name)
-            
+
     if request.session["sorted"] == "earliest_open":
         object_list_not_None = [obj for obj in object_list if obj.from_hour is not None]
         object_list_sorted = sorted(object_list_not_None, key=lambda obj: obj.from_hour)
