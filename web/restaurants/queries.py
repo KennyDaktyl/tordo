@@ -92,6 +92,7 @@ def get_object_list_search(request, object_list):
         if request.session.get("user_location"):
             return sorted(object_list, key=lambda d: d.distance)
         else:
+            request.session["sorted"] = "name"
             return sorted(object_list, key=lambda d: d.name)
 
     if request.session["sorted"] == "earliest_open":
