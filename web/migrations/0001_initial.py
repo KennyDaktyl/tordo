@@ -24,22 +24,32 @@ class Migration(migrations.Migration):
                 (
                     "number",
                     models.IntegerField(
-                        blank=True, default=0, null=True, verbose_name="Numer kategorii"
+                        blank=True,
+                        default=0,
+                        null=True,
+                        verbose_name="Numer kategorii",
                     ),
                 ),
                 (
                     "name",
-                    models.CharField(max_length=128, verbose_name="Nazwa kategorii"),
+                    models.CharField(
+                        max_length=128, verbose_name="Nazwa kategorii"
+                    ),
                 ),
                 (
                     "slug",
                     models.SlugField(
-                        blank=True, max_length=128, null=True, verbose_name="Slug"
+                        blank=True,
+                        max_length=128,
+                        null=True,
+                        verbose_name="Slug",
                     ),
                 ),
                 (
                     "is_active",
-                    models.BooleanField(default=True, verbose_name="Czy jest dostępny"),
+                    models.BooleanField(
+                        default=True, verbose_name="Czy jest dostępny"
+                    ),
                 ),
             ],
             options={
@@ -53,12 +63,17 @@ class Migration(migrations.Migration):
                 ("id", models.AutoField(primary_key=True, serialize=False)),
                 (
                     "name",
-                    models.CharField(max_length=128, verbose_name="Nazwa produktu"),
+                    models.CharField(
+                        max_length=128, verbose_name="Nazwa produktu"
+                    ),
                 ),
                 (
                     "slug",
                     models.SlugField(
-                        blank=True, max_length=128, null=True, verbose_name="Slug"
+                        blank=True,
+                        max_length=128,
+                        null=True,
+                        verbose_name="Slug",
                     ),
                 ),
                 (
@@ -117,7 +132,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "is_active",
-                    models.BooleanField(default=True, verbose_name="Czy jest dostępny"),
+                    models.BooleanField(
+                        default=True, verbose_name="Czy jest dostępny"
+                    ),
                 ),
                 (
                     "category",
@@ -151,31 +168,57 @@ class Migration(migrations.Migration):
                         db_index=True, default=django.utils.timezone.now
                     ),
                 ),
-                ("modified_time", models.DateTimeField(auto_now=True, db_index=True)),
+                (
+                    "modified_time",
+                    models.DateTimeField(auto_now=True, db_index=True),
+                ),
                 (
                     "name",
-                    models.CharField(max_length=100, verbose_name="Nazwa restauracji"),
+                    models.CharField(
+                        max_length=100, verbose_name="Nazwa restauracji"
+                    ),
                 ),
                 (
                     "slug",
                     models.SlugField(
-                        blank=True, max_length=128, null=True, verbose_name="Slug"
+                        blank=True,
+                        max_length=128,
+                        null=True,
+                        verbose_name="Slug",
                     ),
                 ),
-                ("location", django.contrib.gis.db.models.fields.PointField(srid=4326)),
-                ("street", models.CharField(max_length=128, verbose_name="Ulica")),
-                ("house", models.CharField(max_length=8, verbose_name="Nr domu")),
+                (
+                    "location",
+                    django.contrib.gis.db.models.fields.PointField(srid=4326),
+                ),
+                (
+                    "street",
+                    models.CharField(max_length=128, verbose_name="Ulica"),
+                ),
+                (
+                    "house",
+                    models.CharField(max_length=8, verbose_name="Nr domu"),
+                ),
                 (
                     "door",
                     models.CharField(
-                        blank=True, max_length=8, null=True, verbose_name="Nr lokalu"
+                        blank=True,
+                        max_length=8,
+                        null=True,
+                        verbose_name="Nr lokalu",
                     ),
                 ),
-                ("city", models.CharField(max_length=64, verbose_name="Miasto")),
+                (
+                    "city",
+                    models.CharField(max_length=64, verbose_name="Miasto"),
+                ),
                 (
                     "post_code",
                     models.CharField(
-                        blank=True, max_length=6, null=True, verbose_name="Kod pocztowy"
+                        blank=True,
+                        max_length=6,
+                        null=True,
+                        verbose_name="Kod pocztowy",
                     ),
                 ),
                 (
@@ -186,12 +229,16 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "is_active",
-                    models.BooleanField(default=True, verbose_name="Czy aktywna?"),
+                    models.BooleanField(
+                        default=True, verbose_name="Czy aktywna?"
+                    ),
                 ),
                 (
                     "geo_data",
                     models.TextField(
-                        blank=True, null=True, verbose_name="Dane z geolokalizacji"
+                        blank=True,
+                        null=True,
+                        verbose_name="Dane z geolokalizacji",
                     ),
                 ),
                 (
@@ -208,7 +255,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "likes_counter",
-                    models.IntegerField(default=0, verbose_name="Licznik lików"),
+                    models.IntegerField(
+                        default=0, verbose_name="Licznik lików"
+                    ),
                 ),
                 (
                     "image_listing_photo",
@@ -300,9 +349,18 @@ class Migration(migrations.Migration):
             fields=[
                 ("id", models.AutoField(primary_key=True, serialize=False)),
                 ("photo", models.ImageField(upload_to="thumbs")),
-                ("mimetype", models.CharField(max_length=16, verbose_name="Typ pliku")),
-                ("width", models.IntegerField(default=0, verbose_name="Szerokość")),
-                ("height", models.IntegerField(default=0, verbose_name="Wysokość")),
+                (
+                    "mimetype",
+                    models.CharField(max_length=16, verbose_name="Typ pliku"),
+                ),
+                (
+                    "width",
+                    models.IntegerField(default=0, verbose_name="Szerokość"),
+                ),
+                (
+                    "height",
+                    models.IntegerField(default=0, verbose_name="Wysokość"),
+                ),
                 (
                     "status",
                     models.IntegerField(
@@ -421,8 +479,14 @@ class Migration(migrations.Migration):
                         ]
                     ),
                 ),
-                ("from_hour", models.TimeField(verbose_name="Godzina otwarcia")),
-                ("to_hour", models.TimeField(verbose_name="Godzina zamknięcia")),
+                (
+                    "from_hour",
+                    models.TimeField(verbose_name="Godzina otwarcia"),
+                ),
+                (
+                    "to_hour",
+                    models.TimeField(verbose_name="Godzina zamknięcia"),
+                ),
                 (
                     "default_hours",
                     models.BooleanField(
@@ -443,7 +507,9 @@ class Migration(migrations.Migration):
             options={
                 "verbose_name_plural": "Godziny otwarcia restauracji",
                 "ordering": ("weekday", "from_hour"),
-                "unique_together": {("restaurant", "weekday", "from_hour", "to_hour")},
+                "unique_together": {
+                    ("restaurant", "weekday", "from_hour", "to_hour")
+                },
             },
         ),
     ]

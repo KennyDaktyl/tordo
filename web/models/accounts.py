@@ -10,7 +10,9 @@ from web.constants import USER_STATUS
 class ActivateToken(models.Model):
     id = models.AutoField(primary_key=True)
     created_time = models.DateTimeField(default=timezone.now, db_index=True)
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE
+    )
     activation_token = models.CharField(max_length=64, unique=True)
 
     class Meta:
@@ -26,7 +28,9 @@ class Profile(models.Model):
     restaurant_name = models.CharField(
         verbose_name="Nazwa restauracji", max_length=128, blank=True, null=True
     )
-    slug = models.SlugField(verbose_name="Slug", blank=True, null=True, max_length=128)
+    slug = models.SlugField(
+        verbose_name="Slug", blank=True, null=True, max_length=128
+    )
     status = models.IntegerField(
         db_index=True, verbose_name="Status użytkownika", choices=USER_STATUS
     )
@@ -65,11 +69,15 @@ class Profile(models.Model):
     @property
     def has_main_address(self):
         if self.has_addresses:
-            address_main = UserAddress.objects.filter(user=self.user, main=True).first()
+            address_main = UserAddress.objects.filter(
+                user=self.user, main=True
+            ).first()
             if address_main:
                 return address_main
             else:
-                address_first = UserAddress.objects.filter(user=self.user).first()
+                address_first = UserAddress.objects.filter(
+                    user=self.user
+                ).first()
                 address_first.main = True
                 address_first.save()
                 return address_first
@@ -89,7 +97,9 @@ class UserPhoneNumber(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, db_index=True, on_delete=models.CASCADE
     )
-    phone_number = models.CharField(verbose_name="Numer telefonu", max_length=18)
+    phone_number = models.CharField(
+        verbose_name="Numer telefonu", max_length=18
+    )
 
     class Meta:
         ordering = (

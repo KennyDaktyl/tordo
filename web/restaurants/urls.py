@@ -26,6 +26,8 @@ urlpatterns = [
     path("kasowanie_lokalizacji/", delete_location, name="delete_location"),
     path("kasowanie_frazy/", delete_search, name="delete_search"),
     path(
-        "licznik_restauracji_dla_filtrow/", count_restaurants, name="count_restaurants"
+        "licznik_restauracji_dla_filtrow/",
+        count_restaurants,
+        name="count_restaurants",
     ),
 ]

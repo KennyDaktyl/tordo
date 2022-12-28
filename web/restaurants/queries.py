@@ -17,24 +17,26 @@ FilterMapping = {
 
 def get_object_list_by_distance(request, object_list, user_location):
     longitude, latitude, place_name = (
-                user_location["longitude"],
-                user_location["latitude"],
-                user_location["place_name"],
-            )
+        user_location["longitude"],
+        user_location["latitude"],
+        user_location["place_name"],
+    )
     user_location = Point(float(longitude), float(latitude), srid=4326)
     object_list = (
         object_list.annotate(distance=Distance("location", user_location))
-        .filter(location__distance_lte=(user_location, D(km=settings.MAX_DISTANCE)))
+        .filter(
+            location__distance_lte=(user_location, D(km=settings.MAX_DISTANCE))
+        )
         .order_by("name")
     )
     return object_list
 
 
 def get_object_list_sorted(request, object_list):
-    
+
     if request.session["sorted"] == "name":
         return object_list.order_by("name")
-    
+
     if request.session["sorted"] == "distance":
         if request.session.get("user_location"):
             return object_list.order_by("distance")
@@ -43,13 +45,21 @@ def get_object_list_sorted(request, object_list):
             return object_list.order_by("name")
 
     if request.session["sorted"] == "earliest_open":
-        object_list_not_None = [obj for obj in object_list if obj.from_hour is not None]
-        object_list_sorted = sorted(object_list_not_None, key=lambda obj: obj.from_hour)
+        object_list_not_None = [
+            obj for obj in object_list if obj.from_hour is not None
+        ]
+        object_list_sorted = sorted(
+            object_list_not_None, key=lambda obj: obj.from_hour
+        )
         return object_list_sorted
 
     if request.session["sorted"] == "longest_open":
-        object_list_not_None = [obj for obj in object_list if obj.to_hour is not None]
-        object_list_sorted = sorted(object_list_not_None, key=lambda obj: obj.to_hour, reverse=True)
+        object_list_not_None = [
+            obj for obj in object_list if obj.to_hour is not None
+        ]
+        object_list_sorted = sorted(
+            object_list_not_None, key=lambda obj: obj.to_hour, reverse=True
+        )
         return object_list_sorted
     return object_list
 
@@ -88,10 +98,10 @@ def get_object_list_search(request, object_list):
     )
     request.session["search"] = search
     object_list = __restaurants_search(search, object_list)
-    
+
     if request.session["sorted"] == "name":
         return sorted(object_list, key=lambda d: d.name)
-    
+
     if request.session["sorted"] == "distance":
         if request.session.get("user_location"):
             return sorted(object_list, key=lambda d: d.distance)
@@ -100,29 +110,39 @@ def get_object_list_search(request, object_list):
             return sorted(object_list, key=lambda d: d.name)
 
     if request.session["sorted"] == "earliest_open":
-        object_list_not_None = [obj for obj in object_list if obj.from_hour is not None]
-        object_list_sorted = sorted(object_list_not_None, key=lambda obj: obj.from_hour)
+        object_list_not_None = [
+            obj for obj in object_list if obj.from_hour is not None
+        ]
+        object_list_sorted = sorted(
+            object_list_not_None, key=lambda obj: obj.from_hour
+        )
         return object_list_sorted
 
     if request.session["sorted"] == "longest_open":
-        object_list_not_None = [obj for obj in object_list if obj.from_hour is not None]
-        object_list_sorted = sorted(object_list_not_None, key=lambda obj: obj.from_hour)
+        object_list_not_None = [
+            obj for obj in object_list if obj.from_hour is not None
+        ]
+        object_list_sorted = sorted(
+            object_list_not_None, key=lambda obj: obj.from_hour
+        )
         return object_list_sorted
 
     return object_list
 
 
 def __restaurants_search(search, object_list):
-        restaurants_search = object_list.filter(name__icontains=search)
-        products_search = []
-        for restaurant in object_list:
-            categories = []
-            for category in restaurant.categories:
-                products_filtered = category.products.filter(name__icontains=search)
-                if products_filtered:
-                    category.products_filtered = products_filtered
-                    categories.append(category)
-            if categories:
-                restaurant.categories_filtered = categories
-                products_search.append(restaurant)
-        return set(products_search) | set(restaurants_search)
+    restaurants_search = object_list.filter(name__icontains=search)
+    products_search = []
+    for restaurant in object_list:
+        categories = []
+        for category in restaurant.categories:
+            products_filtered = category.products.filter(
+                name__icontains=search
+            )
+            if products_filtered:
+                category.products_filtered = products_filtered
+                categories.append(category)
+        if categories:
+            restaurant.categories_filtered = categories
+            products_search.append(restaurant)
+    return set(products_search) | set(restaurants_search)

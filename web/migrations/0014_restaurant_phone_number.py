@@ -14,7 +14,10 @@ class Migration(migrations.Migration):
             model_name="restaurant",
             name="phone_number",
             field=models.CharField(
-                blank=True, max_length=12, null=True, verbose_name="Numer telefonu"
+                blank=True,
+                max_length=12,
+                null=True,
+                verbose_name="Numer telefonu",
             ),
         ),
     ]

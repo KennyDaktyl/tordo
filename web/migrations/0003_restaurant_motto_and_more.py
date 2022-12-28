@@ -7,7 +7,10 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("web", "0002_city_districtwarsaw_postcodewarsaw_userphonenumber_and_more"),
+        (
+            "web",
+            "0002_city_districtwarsaw_postcodewarsaw_userphonenumber_and_more",
+        ),
     ]
 
     operations = [

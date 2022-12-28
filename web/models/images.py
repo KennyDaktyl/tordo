@@ -37,7 +37,9 @@ class Photo(models.Model):
         blank=True,
     )
     image = models.ImageField(upload_to="images")
-    image_type = models.IntegerField(verbose_name="Faktura", choices=IMAGE_TYPE)
+    image_type = models.IntegerField(
+        verbose_name="Faktura", choices=IMAGE_TYPE
+    )
     thumbnails_cache = models.JSONField(default=dict, null=True, blank=True)
 
     class Meta:
@@ -123,7 +125,9 @@ def make_thumbnail(
             image_crop = ImageOps.fit(image, size)
             width, height = image_crop.size
             thumb_extension = thumb_extension.lower()
-            thumb_filename = thumb_name + f"_{width}x{height}" + "." + ftype.lower()
+            thumb_filename = (
+                thumb_name + f"_{width}x{height}" + "." + ftype.lower()
+            )
             temp_thumb = BytesIO()
             image_crop.save(temp_thumb, ftype)
             temp_thumb.seek(0)

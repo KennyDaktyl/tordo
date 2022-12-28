@@ -11,7 +11,9 @@ class FirstPage(TemplateView):
 
     def get_template_names(self):
         if mobile(self.request):
-            self.template_name = self.template_name.replace("desktop", "mobile")
+            self.template_name = self.template_name.replace(
+                "desktop", "mobile"
+            )
         return self.template_name
 
     def get_context_data(self, **kwargs):

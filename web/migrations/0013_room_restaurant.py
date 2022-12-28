@@ -7,7 +7,10 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("web", "0012_alter_advantage_description_alter_advantage_image_and_more"),
+        (
+            "web",
+            "0012_alter_advantage_description_alter_advantage_image_and_more",
+        ),
     ]
 
     operations = [

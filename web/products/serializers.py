@@ -56,8 +56,12 @@ class RestaurantMenuSerializer(serializers.ModelSerializer):
     images_listing_jpg = serializers.ImageField(
         source="product.images_mobile_listing_jpg"
     )
-    images_basket_webp = serializers.ImageField(source="product.images_basket_webp")
-    images_basket_jpg = serializers.ImageField(source="product.images_basket_jpg")
+    images_basket_webp = serializers.ImageField(
+        source="product.images_basket_webp"
+    )
+    images_basket_jpg = serializers.ImageField(
+        source="product.images_basket_jpg"
+    )
 
     class Meta:
         model = Product

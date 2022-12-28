@@ -7,7 +7,10 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("web", "0009_restaurant_link_facebook_restaurant_link_instagram_and_more"),
+        (
+            "web",
+            "0009_restaurant_link_facebook_restaurant_link_instagram_and_more",
+        ),
     ]
 
     operations = [
@@ -40,9 +43,14 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "description",
-                    models.CharField(max_length=100, verbose_name="Opis atutu"),
+                    models.CharField(
+                        max_length=100, verbose_name="Opis atutu"
+                    ),
                 ),
-                ("order", models.IntegerField(default=1, verbose_name="Kolejność")),
+                (
+                    "order",
+                    models.IntegerField(default=1, verbose_name="Kolejność"),
+                ),
             ],
             options={
                 "verbose_name_plural": "Dodatkowe atuty",

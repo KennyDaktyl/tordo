@@ -15,7 +15,10 @@ class Migration(migrations.Migration):
             model_name="advantage",
             name="description",
             field=models.CharField(
-                blank=True, max_length=100, null=True, verbose_name="Opis atutu"
+                blank=True,
+                max_length=100,
+                null=True,
+                verbose_name="Opis atutu",
             ),
         ),
         migrations.AlterField(

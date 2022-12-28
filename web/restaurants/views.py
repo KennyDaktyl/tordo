@@ -1,13 +1,6 @@
 import folium
-
-from django.contrib.gis.db.models.functions import Distance
-from django.contrib.gis.measure import D
-from django.contrib.gis.geos import Point
-
 from datetime import datetime
-from typing import List
 
-from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.views.generic import TemplateView
 from django.views.generic.detail import DetailView
@@ -21,7 +14,12 @@ from web.restaurants.serializers import (
     RestaurantDetailsSerializer,
     RestaurantsListSerializer,
 )
-from .queries import get_object_list_filtered, get_object_list_sorted, get_object_list_search, get_object_list_by_distance
+from .queries import (
+    get_object_list_filtered,
+    get_object_list_sorted,
+    get_object_list_search,
+    get_object_list_by_distance,
+)
 
 User = get_user_model()
 
@@ -35,7 +33,9 @@ class RestaurantListView(ListView):
 
     def get_template_names(self):
         if mobile(self.request):
-            self.template_name = self.template_name.replace("desktop", "mobile")
+            self.template_name = self.template_name.replace(
+                "desktop", "mobile"
+            )
         return self.template_name
 
     def get_queryset(self):
@@ -45,38 +45,48 @@ class RestaurantListView(ListView):
                 self.request.session["sorted"] = "name"
         else:
             self.request.session["sorted"] = self.request.GET["sorted"]
-            if self.request.GET["sorted"] == "distance" and (self.request.GET.get("lon") and self.request.GET.get("lat")):
+            if self.request.GET["sorted"] == "distance" and (
+                self.request.GET.get("lon") and self.request.GET.get("lat")
+            ):
 
                 self.request.session["user_location"] = {
                     "longitude": self.request.GET.get("lon"),
                     "latitude": self.request.GET.get("lat"),
-                    "place_name": self.request.GET.get("place_name")
-                    }
+                    "place_name": self.request.GET.get("place_name"),
+                }
         user_location = self.request.session.get("user_location")
         if user_location:
-            queryset = get_object_list_by_distance(self.request, queryset, user_location)
-        
+            queryset = get_object_list_by_distance(
+                self.request, queryset, user_location
+            )
+
         queryset = get_object_list_filtered(self.request, queryset)
-        if self.request.GET.get("search") or self.request.session.get("search"):
-            queryset = get_object_list_search(self.request, queryset) 
-            return RestaurantsListSerializer(queryset, many=True).data 
-        
+        if self.request.GET.get("search") or self.request.session.get(
+            "search"
+        ):
+            queryset = get_object_list_search(self.request, queryset)
+            return RestaurantsListSerializer(queryset, many=True).data
+
         queryset = get_object_list_sorted(self.request, queryset)
         return RestaurantsListSerializer(queryset, many=True).data
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.request.session.get("user_location"):
-            context["place_name"] = self.request.session.get("user_location")["place_name"]
+            context["place_name"] = self.request.session.get("user_location")[
+                "place_name"
+            ]
         if self.request.session.get("search"):
             context["search"] = self.request.session.get("search")
-        
+
         context["header_white"] = True
         context["tags"] = Tag.objects.all()
-        context["filter_advantages"] = FilterAdvantage.objects.filter(is_active=True)[
+        context["filter_advantages"] = FilterAdvantage.objects.filter(
+            is_active=True
+        )[0:10]
+        context["filter_foods"] = FilterFood.objects.filter(is_active=True)[
             0:10
         ]
-        context["filter_foods"] = FilterFood.objects.filter(is_active=True)[0:10]
         return context
 
 
@@ -85,7 +95,9 @@ class RestaurantsListMapView(TemplateView):
 
     def get_template_names(self):
         if mobile(self.request):
-            self.template_name = self.template_name.replace("desktop", "mobile")
+            self.template_name = self.template_name.replace(
+                "desktop", "mobile"
+            )
         return self.template_name
 
     def get_context_data(self, **kwargs):
@@ -95,21 +107,25 @@ class RestaurantsListMapView(TemplateView):
         if self.request.session.get("user_location"):
             zoom = 12
             user_location = self.request.session["user_location"]
-            queryset = get_object_list_by_distance(self.request, queryset, self.request.session["user_location"])
+            queryset = get_object_list_by_distance(
+                self.request, queryset, self.request.session["user_location"]
+            )
         else:
             user_location = None
             zoom = 6
 
         queryset = get_object_list_filtered(self.request, queryset)
-        context["map"] = self.__create_folium_map(user_location, queryset, zoom)
+        context["map"] = self.__create_folium_map(
+            user_location, queryset, zoom
+        )
         return context
 
     def __create_folium_map(self, user_location, restaurants, zoom):
         if not user_location:
             user_location = {
-                "latitude": 52.237049, 
+                "latitude": 52.237049,
                 "longitude": 21.017532,
-                "place_name": False
+                "place_name": False,
             }
         map = folium.Map(
             location=[user_location["latitude"], user_location["longitude"]],
@@ -120,16 +136,14 @@ class RestaurantsListMapView(TemplateView):
 
         if (
             "bootstrap_css",
-            "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css",
+            "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css",  # type: ignore
         ) in map.default_css:
             map.default_css.remove(
                 (
                     "bootstrap_css",
-                    "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css",
+                    "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css",  # type: ignore
                 )
             )
-        # if ('leaflet_css', 'https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css') in map.default_css:
-        #     map.default_css.remove(('leaflet_css', 'https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css'))
         if user_location["place_name"]:
             tooltip = "Lokalizacja adresu"
             marker = folium.Marker(
@@ -159,14 +173,18 @@ class RestaurantMapView(TemplateView):
 
     def get_template_names(self):
         if mobile(self.request):
-            self.template_name = self.template_name.replace("desktop", "mobile")
+            self.template_name = self.template_name.replace(
+                "desktop", "mobile"
+            )
         return self.template_name
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         restaurant = Restaurant.objects.get(pk=self.kwargs["pk"])
         context["restaurant"] = restaurant
-        context["map"] = self.__create_folium_map(restaurant.location, restaurant.name)
+        context["map"] = self.__create_folium_map(
+            restaurant.location, restaurant.name
+        )
         return context
 
     def __create_folium_map(self, loc, name):
@@ -178,12 +196,12 @@ class RestaurantMapView(TemplateView):
         tooltip = name
         if (
             "bootstrap_css",
-            "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css",
+            "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css",  # type: ignore
         ) in map.default_css:
             map.default_css.remove(
                 (
                     "bootstrap_css",
-                    "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css",
+                    "https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css",  # type: ignore
                 )
             )
         folium.Marker(
@@ -201,7 +219,9 @@ class RestaurantDetailsView(DetailView):
 
     def get_template_names(self):
         if mobile(self.request):
-            self.template_name = self.template_name.replace("desktop", "mobile")
+            self.template_name = self.template_name.replace(
+                "desktop", "mobile"
+            )
         return self.template_name
 
     def get_context_object_name(self, model):
@@ -213,18 +233,22 @@ class RestaurantDetailsView(DetailView):
         context["current_weekday_number"] = datetime.today().isoweekday()
 
         search = self.request.GET.get("search")
-        menu_category = self.request.GET.get("menu_category")
+        # menu_category = self.request.GET.get("menu_category")
 
         if search:
             categories = []
             for category in self.object.categories:
-                filtered_products = category.products.filter(name__icontains=search)
+                filtered_products = category.products.filter(
+                    name__icontains=search
+                )
                 if filtered_products:
                     category.products_filtered = filtered_products
                     categories.append(category)
             if categories:
                 self.object.categories_filtered = categories
-                context["restaurant"] = RestaurantDetailsSerializer(self.object).data
+                context["restaurant"] = RestaurantDetailsSerializer(
+                    self.object
+                ).data
         return context
 
 

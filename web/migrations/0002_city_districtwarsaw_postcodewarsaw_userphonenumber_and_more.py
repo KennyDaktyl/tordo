@@ -20,7 +20,10 @@ class Migration(migrations.Migration):
             name="City",
             fields=[
                 ("id", models.AutoField(primary_key=True, serialize=False)),
-                ("name", models.CharField(max_length=128, verbose_name="Nazwa")),
+                (
+                    "name",
+                    models.CharField(max_length=128, verbose_name="Nazwa"),
+                ),
             ],
             options={
                 "verbose_name_plural": "Miasto",
@@ -31,7 +34,10 @@ class Migration(migrations.Migration):
             name="DistrictWarsaw",
             fields=[
                 ("id", models.AutoField(primary_key=True, serialize=False)),
-                ("name", models.CharField(max_length=128, verbose_name="Nazwa")),
+                (
+                    "name",
+                    models.CharField(max_length=128, verbose_name="Nazwa"),
+                ),
                 (
                     "city",
                     models.ForeignKey(
@@ -53,10 +59,15 @@ class Migration(migrations.Migration):
                 (
                     "name",
                     models.CharField(
-                        db_index=True, max_length=6, verbose_name="Kod pocztowy"
+                        db_index=True,
+                        max_length=6,
+                        verbose_name="Kod pocztowy",
                     ),
                 ),
-                ("location", django.contrib.gis.db.models.fields.PointField(srid=4326)),
+                (
+                    "location",
+                    django.contrib.gis.db.models.fields.PointField(srid=4326),
+                ),
                 (
                     "precision",
                     models.CharField(
@@ -67,7 +78,9 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "is_located",
-                    models.BooleanField(default=False, verbose_name="GeoLokalizacja"),
+                    models.BooleanField(
+                        default=False, verbose_name="GeoLokalizacja"
+                    ),
                 ),
                 (
                     "geo_data",
@@ -86,7 +99,9 @@ class Migration(migrations.Migration):
                 ("id", models.AutoField(primary_key=True, serialize=False)),
                 (
                     "phone_number",
-                    models.CharField(max_length=18, verbose_name="Numer telefonu"),
+                    models.CharField(
+                        max_length=18, verbose_name="Numer telefonu"
+                    ),
                 ),
                 (
                     "user",
@@ -105,19 +120,34 @@ class Migration(migrations.Migration):
             name="UserAddress",
             fields=[
                 ("id", models.AutoField(primary_key=True, serialize=False)),
-                ("street", models.CharField(max_length=128, verbose_name="Ulica")),
-                ("house", models.CharField(max_length=8, verbose_name="Nr domu")),
+                (
+                    "street",
+                    models.CharField(max_length=128, verbose_name="Ulica"),
+                ),
+                (
+                    "house",
+                    models.CharField(max_length=8, verbose_name="Nr domu"),
+                ),
                 (
                     "door",
                     models.CharField(
-                        blank=True, max_length=16, null=True, verbose_name="Nr lokalu"
+                        blank=True,
+                        max_length=16,
+                        null=True,
+                        verbose_name="Nr lokalu",
                     ),
                 ),
-                ("city", models.CharField(max_length=64, verbose_name="Miasto")),
+                (
+                    "city",
+                    models.CharField(max_length=64, verbose_name="Miasto"),
+                ),
                 (
                     "post_code",
                     models.CharField(
-                        blank=True, max_length=6, null=True, verbose_name="Kod pocztowy"
+                        blank=True,
+                        max_length=6,
+                        null=True,
+                        verbose_name="Kod pocztowy",
                     ),
                 ),
                 ("main", models.BooleanField(verbose_name="Główny adres?")),
@@ -146,12 +176,16 @@ class Migration(migrations.Migration):
                 (
                     "geo_data",
                     models.JSONField(
-                        blank=True, null=True, verbose_name="Dane z geolokalizacji"
+                        blank=True,
+                        null=True,
+                        verbose_name="Dane z geolokalizacji",
                     ),
                 ),
                 (
                     "info",
-                    models.TextField(blank=True, null=True, verbose_name="Informacje"),
+                    models.TextField(
+                        blank=True, null=True, verbose_name="Informacje"
+                    ),
                 ),
                 (
                     "distance_to_center",
@@ -174,7 +208,9 @@ class Migration(migrations.Migration):
                     "distance_to_point",
                     models.IntegerField(
                         default=999,
-                        validators=[django.core.validators.MinValueValidator(0)],
+                        validators=[
+                            django.core.validators.MinValueValidator(0)
+                        ],
                         verbose_name="Odległość do punktu w metrach",
                     ),
                 ),
@@ -206,7 +242,10 @@ class Migration(migrations.Migration):
             name="SubDistrictWarsaw",
             fields=[
                 ("id", models.AutoField(primary_key=True, serialize=False)),
-                ("name", models.CharField(max_length=128, verbose_name="Nazwa")),
+                (
+                    "name",
+                    models.CharField(max_length=128, verbose_name="Nazwa"),
+                ),
                 (
                     "district",
                     models.ForeignKey(
@@ -263,7 +302,10 @@ class Migration(migrations.Migration):
                 (
                     "slug",
                     models.SlugField(
-                        blank=True, max_length=128, null=True, verbose_name="Slug"
+                        blank=True,
+                        max_length=128,
+                        null=True,
+                        verbose_name="Slug",
                     ),
                 ),
                 (
@@ -317,35 +359,54 @@ class Migration(migrations.Migration):
                 (
                     "company_name_l",
                     models.CharField(
-                        blank=True, max_length=128, null=True, verbose_name="Odbiorca"
+                        blank=True,
+                        max_length=128,
+                        null=True,
+                        verbose_name="Odbiorca",
                     ),
                 ),
-                ("street", models.CharField(max_length=128, verbose_name="Ulica")),
-                ("house", models.CharField(max_length=8, verbose_name="Nr domu")),
+                (
+                    "street",
+                    models.CharField(max_length=128, verbose_name="Ulica"),
+                ),
+                (
+                    "house",
+                    models.CharField(max_length=8, verbose_name="Nr domu"),
+                ),
                 (
                     "door",
                     models.CharField(
                         default="", max_length=8, verbose_name="Nr lokalu"
                     ),
                 ),
-                ("city", models.CharField(max_length=64, verbose_name="Miasto")),
+                (
+                    "city",
+                    models.CharField(max_length=64, verbose_name="Miasto"),
+                ),
                 (
                     "post_code",
                     models.CharField(
-                        blank=True, max_length=6, null=True, verbose_name="Kod pocztowy"
+                        blank=True,
+                        max_length=6,
+                        null=True,
+                        verbose_name="Kod pocztowy",
                     ),
                 ),
                 (
                     "nip",
                     models.CharField(
                         max_length=13,
-                        validators=[django.core.validators.MinLengthValidator(10)],
+                        validators=[
+                            django.core.validators.MinLengthValidator(10)
+                        ],
                         verbose_name="Numer nip",
                     ),
                 ),
                 (
                     "main",
-                    models.BooleanField(default=False, verbose_name="Firma domyślna ?"),
+                    models.BooleanField(
+                        default=False, verbose_name="Firma domyślna ?"
+                    ),
                 ),
                 (
                     "user",
@@ -371,7 +432,10 @@ class Migration(migrations.Migration):
                         db_index=True, default=django.utils.timezone.now
                     ),
                 ),
-                ("activation_token", models.CharField(max_length=64, unique=True)),
+                (
+                    "activation_token",
+                    models.CharField(max_length=64, unique=True),
+                ),
                 (
                     "user",
                     models.OneToOneField(

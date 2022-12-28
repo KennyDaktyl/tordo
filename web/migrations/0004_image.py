@@ -19,7 +19,10 @@ class Migration(migrations.Migration):
                 (
                     "image_type",
                     models.IntegerField(
-                        choices=[(1, "Galeria zdjęć"), (2, "Galeria produktu")],
+                        choices=[
+                            (1, "Galeria zdjęć"),
+                            (2, "Galeria produktu"),
+                        ],
                         verbose_name="Faktura",
                     ),
                 ),
