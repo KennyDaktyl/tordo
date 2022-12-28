@@ -403,6 +403,10 @@ input {
     margin-bottom: 250px;
 }
 
+.margin-b-100 {
+    margin-bottom: 100px;
+}
+
 .margin-t-140 {
     margin-top: 140px;
 }
@@ -437,6 +441,10 @@ input {
 
 .margin-t-5 {
     margin-top: 5px;
+}
+
+.margin-b-5 {
+    margin-bottom: 5px;
 }
 
 .margin-b-20 {

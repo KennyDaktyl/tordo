@@ -1,6 +1,6 @@
 <form id="filters" class="in-layout filters_box bg-white flex j-center a-top wrap">
     {% csrf_token %}
-    <div class="in-layout-content bg-white flex j-center a-top wrap">
+    <div class="in-layout-content bg-white flex j-center a-top wrap margin-b-100">
         <div class="w-100 text-container flex j-center a-center filters_header h-80 p-fixed bg-white z-index-top">
             <div class="w-90 flex j-left a-center">
                 <p class="text-left text-bold margin-r-10">Filtry</p>
@@ -140,8 +140,8 @@
                 {% endfor %}
             </div>
         </div>
-        <div class="w-100 flex j-center a-center h-100 red_container">
-            <button class="button_box button flex j-center a-center bg-red" type="submit"><span class="text-white text-bold">Pokaż wyniki</span><span id="restaurants_count" class="text-white text-bold">(25)</span></button>
-        </div>
+    </div>
+    <div class="bottom_filter_button w-100 p-fixed flex j-center a-center h-100 red_container bg-white">
+        <button class="button_box button flex j-center a-center bg-red" type="submit"><span class="text-white text-bold">Pokaż wyniki</span><span id="restaurants_count" class="text-white text-bold">(25)</span></button>
     </div>
 </form>

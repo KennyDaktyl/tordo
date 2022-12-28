@@ -264,3 +264,10 @@ img.advertisement_image {
 .product_image {
     border-radius: 5px 5px;
 }
+
+.bottom_filter_button {
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 100px;
+}
