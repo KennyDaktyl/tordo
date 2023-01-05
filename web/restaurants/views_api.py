@@ -4,13 +4,14 @@ from rest_framework.response import Response
 
 from web.models.restaurants import Restaurant
 
-from .queries import get_object_list_filtered
+from .queries import get_object_list_filtered, get_object_list_sorted
 from web.restaurants.queries import FilterMapping
 
 
 class CountRestaurantWhenUseFilters(APIView):
     def get(self, request):
-        restaurants = Restaurant.objects.filter(is_active=True)
+        queryset = Restaurant.objects.filter(is_active=True)
+        
         checked = bool(request.GET.get("checked", False))
         reset = request.GET.get("reset", False)
         filter_id = request.GET.get("filter_id")
@@ -30,9 +31,10 @@ class CountRestaurantWhenUseFilters(APIView):
 
             request.session[filter_name] = filter_session
 
-        restaurants = get_object_list_filtered(request, restaurants, reset)
+        queryset = get_object_list_filtered(request, queryset, reset)
+        queryset = get_object_list_sorted(request, queryset)
 
-        count_restaurants = {"count": restaurants.count()}
+        count_restaurants = {"count": len(queryset)}
         return Response(
             CountRestaurantWhenUseFilterSerializer(count_restaurants).data
         )

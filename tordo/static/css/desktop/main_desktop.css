@@ -191,10 +191,11 @@ a.restaurant_image_listing {
 }
 
 .promo_box.p-absolute {
-    width: 181px;
+    width: auto;
     height: 24px;
     bottom: 30px;
     left: 40px;
+    padding: 10px;
 }
 
 .promo_box span {
@@ -208,6 +209,7 @@ a.underline {
 
 .advertisement__container picture {
     border-radius: 30px;
+    max-height: 229px;
 }
 
 .advertisement__container img {
@@ -220,7 +222,7 @@ a.underline {
     top: 50%;
     transform: translate(0, -50%);
     left: 40px;
-    max-width: 173px;
+    /* max-width: 173px; */
 }
 
 .container {

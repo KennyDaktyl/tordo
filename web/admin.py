@@ -24,6 +24,7 @@ from web.models.restaurants import (
 )
 from web.models.products import Category, Product, RestaurantMenu
 from web.models.images import Thumbnail, Photo
+from web.models.advertisements import Advertisement
 
 
 @admin.register(Restaurant)
@@ -246,5 +247,16 @@ class FilterFoodAdmin(ModelAdmin):
     search_fields = (
         "id",
         "name",
+    )
+    list_display_links = ("id",)
+
+
+@admin.register(Advertisement)
+class AdvertisementAdmin(ModelAdmin):
+    list_display = [f.name for f in Advertisement._meta.fields]
+    search_fields = (
+        "date_start",
+        "id",
+        "content",
     )
     list_display_links = ("id",)

@@ -15,6 +15,7 @@ ALLOWED_ICON_EXTENSIONS = ["jpg", "png", "svg"]
 IMAGE_TYPE = [
     (1, "Galeria zdjęć"),
     (2, "Galeria produktu"),
+    (3, "Reklama"),
 ]
 
 
@@ -85,6 +86,14 @@ class Thumbnail(models.Model):
         null=True,
         blank=True,
     )
+    advertisement_id = models.ForeignKey(
+        "Advertisement",
+        db_index=True,
+        verbose_name="Reklama",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
     photo = models.ImageField(upload_to="thumbs")
     mimetype = models.CharField(verbose_name="Typ pliku", max_length=16)
     width = models.IntegerField(verbose_name="Szerokość", default=0)
@@ -136,6 +145,8 @@ def make_thumbnail(
                 thumbnail.restaurant_id = relation_object
             if relation_object_type == "product":
                 thumbnail.product_id = relation_object
+            if relation_object_type == "Advertisement":
+                thumbnail.Advertisement_id = relation_object
             thumbnail.width = width
             thumbnail.height = height
             thumbnail.mimetype = "image/" + ftype.lower()

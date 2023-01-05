@@ -126,36 +126,18 @@
 
         <div class="advertisement__container flex j-center a-top wrap">
             <span class="w-100 text-right">Reklama</span>
-            <a href="" class="advertisement_box p-relative w-100 flex j-right a-center margin-b-15">
+            {% for ad in ads %}
+            <a href="{{ ad.link }}" class="advertisement_box p-relative w-100 flex j-right a-center margin-b-15">
                 <picture class="bg-dark">
-                    <source class="" srcset="{{ MEDIA_URL }}main/desktop/testowy-obrazek-reklama.webp" type="image/webp"/>
-                    <img class="" src="{{ MEDIA_URL }}main/desktop/testowy-obrazek-reklama.jpg" >
+                    <source class="" srcset="{{ MEDIA_URL }}{% get_src_expected ad.desktop_webp.items '355x229' %}" type="image/webp"/>
+                    <img class="" src="{{ MEDIA_URL }}{% get_src_expected ad.desktop_jpg.items '355x229' %}" alt="" width="355" height="229">
                 </picture>
-                <strong class="p-absolute text-bold text-white">Promocja miesiąca</strong>
+                <strong class="p-absolute text-bold text-white">{{ ad.content }}</strong>
                 <div class="promo_box bg-red flex a-center j-center p-absolute">
-                    <small class="w-100 text-center text-white text-bold">-50% na wszystkie dania</small>
+                    <small class="w-100 text-center text-white text-bold">{{ ad.description }}</small>
                 </div>
             </a>
-            <a href="" class="advertisement_box p-relative w-100 flex j-right a-center margin-b-15">
-                <picture class="bg-dark">
-                    <source class="" srcset="{{ MEDIA_URL }}main/desktop/testowy-obrazek-reklama.webp" type="image/webp"/>
-                    <img class="b-radius" src="{{ MEDIA_URL }}main/desktop/testowy-obrazek-reklama.jpg" >
-                </picture>
-                <strong class="p-absolute text-bold text-white">Promocja miesiąca</strong>
-                <div class="promo_box bg-red flex a-center j-center p-absolute">
-                    <small class="w-100 text-center text-white text-bold">-50% na wszystkie dania</small>
-                </div>
-            </a>
-            <a href="" class="advertisement_box p-relative w-100 flex j-right a-center margin-b-15">
-                <picture class="bg-dark">
-                    <source class="" srcset="{{ MEDIA_URL }}main/desktop/testowy-obrazek-reklama-2.webp" type="image/webp"/>
-                    <img class="b-radius" src="{{ MEDIA_URL }}main/desktop/testowy-obrazek-reklama-2.jpg" >
-                </picture>
-                <strong class="p-absolute text-bold text-white">Promocja miesiąca</strong>
-                <div class="promo_box bg-red flex a-center j-center p-absolute">
-                    <small class="w-100 text-center text-white text-bold">-50% na wszystkie dania</small>
-                </div>
-            </a>
+            {% endfor %}
         </div>
     </div>
 </div>

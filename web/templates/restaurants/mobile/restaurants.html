@@ -87,36 +87,18 @@
             <div class="advertisement__container w-100 flex a-center j-left wrap margin-b-20">
                 <span class="w-100 text-left">Reklama</span>
                 <div class="w-100 flex j-left a-center no-wrap slider_box">
-                    <a href="" class="w-100 flex a-center j-left no-wrap p-relative">
-                        <picture id="slide-1" class="w-100 margin-r-20 slide">
-                            <source class="" srcset="{{ MEDIA_URL }}main/mobile/restaurants/reklama_1.webp" type="image/webp"/>
-                            <img class="advertisement_image" src="{{ MEDIA_URL }}main/mobile/restaurants/reklama_1.jpg" height="145">
+                    {% for ad in ads %}
+                    <a href="{{ ad.link }}" class="advertisement_box w-100 flex a-center j-left no-wrap p-relative">
+                        <picture id="slide-{{ forloop.counter }}" class="margin-r-20 slide bg-dark border-r">
+                            <source class="" srcset="{{ MEDIA_URL }}{% get_src_expected ad.mobile_webp.items '309x293' %}" type="image/webp"/>
+                            <img class="advertisement_image" src="{{ MEDIA_URL }}{% get_src_expected ad.mobile_jpg.items '309x293' %}" alt="" width="309" height="293">
                         </picture>
-                        <strong class="p-absolute text-bold text-white">Promocja miesiąca</strong>
+                        <strong class="p-absolute text-bold text-white">{{ ad.content }}</strong>
                         <div class="bg-red flex a-center j-center p-absolute">
-                            <small class="w-100 text-center text-white text-bold">-50% na wszystkie dania</small>
+                            <small class="w-100 text-center text-white text-bold">{{ ad.description }}</small>
                         </div>
                     </a>
-                    <a href="" class="w-100 flex a-center j-left no-wrap p-relative">
-                        <picture id="slide-1" class="w-100 margin-r-20 slide">
-                            <source class="" srcset="{{ MEDIA_URL }}main/mobile/restaurants/reklama_1.webp" type="image/webp"/>
-                            <img class="advertisement_image" src="{{ MEDIA_URL }}main/mobile/restaurants/reklama_1.jpg" height="145">
-                        </picture>
-                        <strong class="p-absolute text-bold text-white">Promocja miesiąca</strong>
-                        <div class="bg-red flex a-center j-center p-absolute">
-                            <small class="w-100 text-center text-white text-bold">-50% na wszystkie dania</small>
-                        </div>
-                    </a>
-                    <a href="" class="w-100 flex a-center j-left no-wrap p-relative">
-                        <picture id="slide-1" class="w-100 margin-r-20 slide">
-                            <source class="" srcset="{{ MEDIA_URL }}main/mobile/restaurants/reklama_1.webp" type="image/webp"/>
-                            <img class="advertisement_image" src="{{ MEDIA_URL }}main/mobile/restaurants/reklama_1.jpg" height="145">
-                        </picture>
-                        <strong class="p-absolute text-bold text-white">Promocja miesiąca</strong>
-                        <div class="bg-red flex a-center j-center p-absolute">
-                            <small class="w-100 text-center text-white text-bold">-50% na wszystkie dania</small>
-                        </div>
-                    </a>
+                    {% endfor %}
                 </div>
             </div>
             {% endif %}

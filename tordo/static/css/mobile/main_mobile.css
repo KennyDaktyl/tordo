@@ -218,6 +218,7 @@ div.restaurant_info_box {
 
 .slide {
     flex-shrink: 0;
+    max-height: 293px;
 }
 
 .slider_box strong {
@@ -243,8 +244,9 @@ div.restaurant_info_box {
 img.advertisement_image {
     border-radius: 30px;
     width: 309px;
-    height: 293px;
+    height: 100%;
     object-fit: cover;
+    opacity: .7;
 }
 
 #map_render {
