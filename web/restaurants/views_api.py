@@ -11,10 +11,13 @@ from web.restaurants.queries import FilterMapping
 class CountRestaurantWhenUseFilters(APIView):
     def get(self, request):
         queryset = Restaurant.objects.filter(is_active=True)
-        
+
         checked = bool(request.GET.get("checked", False))
         reset = request.GET.get("reset", False)
         filter_id = request.GET.get("filter_id")
+        query_sorted = request.GET.get("sorted")
+        if query_sorted:
+            request.session["sorted"] = query_sorted
 
         if filter_id:
             filter_name, id = filter_id.split("-")
@@ -31,13 +34,12 @@ class CountRestaurantWhenUseFilters(APIView):
 
             request.session[filter_name] = filter_session
 
+        queryset = get_object_list_sorted(request, queryset)
         queryset = get_object_list_filtered(request, queryset, reset)
         queryset = get_object_list_sorted(request, queryset)
 
         count_restaurants = {"count": len(queryset)}
-        return Response(
-            CountRestaurantWhenUseFilterSerializer(count_restaurants).data
-        )
+        return Response(CountRestaurantWhenUseFilterSerializer(count_restaurants).data)
 
 
 count_restaurants = CountRestaurantWhenUseFilters.as_view()

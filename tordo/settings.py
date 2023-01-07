@@ -99,7 +99,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "django.template.context_processors.media",
-                "web.models.context_manager.ads_active"
+                "web.models.context_manager.ads_active",
             ],
         },
     },
@@ -159,9 +159,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
 COMPRESS_URL = STATIC_URL
 COMPRESS_ROOT = STATIC_ROOT
-COMPRESS_PRECOMPILERS = (
-    ("text/jsx", "third_party.react_compressor.ReactFilter"),
-)
+COMPRESS_PRECOMPILERS = (("text/jsx", "third_party.react_compressor.ReactFilter"),)
 COMPRESS_DEBUG_TOGGLE = False
 COMPRESS_CSS_COMPRESSOR = "compressor.css.CssCompressor"
 COMPRESS_JS_COMPRESSOR = "compressor.js.JsCompressor"

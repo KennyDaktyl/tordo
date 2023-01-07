@@ -34,8 +34,7 @@ class RestaurantListView(ListView):
     def get_template_names(self):
         if mobile(self.request):
             self.template_name = self.template_name.replace(
-                "desktop", "mobile"
-            )
+                "desktop", "mobile")
         return self.template_name
 
     def get_queryset(self):
@@ -61,9 +60,7 @@ class RestaurantListView(ListView):
             )
 
         queryset = get_object_list_filtered(self.request, queryset)
-        if self.request.GET.get("search") or self.request.session.get(
-            "search"
-        ):
+        if self.request.GET.get("search") or self.request.session.get("search"):
             queryset = get_object_list_search(self.request, queryset)
             return RestaurantsListSerializer(queryset, many=True).data
 
@@ -81,12 +78,12 @@ class RestaurantListView(ListView):
 
         context["header_white"] = True
         context["tags"] = Tag.objects.all()
-        context["filter_advantages"] = FilterAdvantage.objects.filter(
-            is_active=True
-        )[0:10]
-        context["filter_foods"] = FilterFood.objects.filter(is_active=True)[
+        context["filter_advantages"] = FilterAdvantage.objects.filter(is_active=True)[
             0:10
         ]
+        context["filter_foods"] = FilterFood.objects.filter(is_active=True)[
+            0:10]
+        context["restaurants_count"] = super().get_queryset().count()
         return context
 
 
@@ -96,8 +93,7 @@ class RestaurantsListMapView(TemplateView):
     def get_template_names(self):
         if mobile(self.request):
             self.template_name = self.template_name.replace(
-                "desktop", "mobile"
-            )
+                "desktop", "mobile")
         return self.template_name
 
     def get_context_data(self, **kwargs):
@@ -116,8 +112,7 @@ class RestaurantsListMapView(TemplateView):
 
         queryset = get_object_list_filtered(self.request, queryset)
         context["map"] = self.__create_folium_map(
-            user_location, queryset, zoom
-        )
+            user_location, queryset, zoom)
         return context
 
     def __create_folium_map(self, user_location, restaurants, zoom):
@@ -174,8 +169,7 @@ class RestaurantMapView(TemplateView):
     def get_template_names(self):
         if mobile(self.request):
             self.template_name = self.template_name.replace(
-                "desktop", "mobile"
-            )
+                "desktop", "mobile")
         return self.template_name
 
     def get_context_data(self, **kwargs):
@@ -183,8 +177,7 @@ class RestaurantMapView(TemplateView):
         restaurant = Restaurant.objects.get(pk=self.kwargs["pk"])
         context["restaurant"] = restaurant
         context["map"] = self.__create_folium_map(
-            restaurant.location, restaurant.name
-        )
+            restaurant.location, restaurant.name)
         return context
 
     def __create_folium_map(self, loc, name):
@@ -220,8 +213,7 @@ class RestaurantDetailsView(DetailView):
     def get_template_names(self):
         if mobile(self.request):
             self.template_name = self.template_name.replace(
-                "desktop", "mobile"
-            )
+                "desktop", "mobile")
         return self.template_name
 
     def get_context_object_name(self, model):
@@ -239,16 +231,14 @@ class RestaurantDetailsView(DetailView):
             categories = []
             for category in self.object.categories:
                 filtered_products = category.products.filter(
-                    name__icontains=search
-                )
+                    name__icontains=search)
                 if filtered_products:
                     category.products_filtered = filtered_products
                     categories.append(category)
             if categories:
                 self.object.categories_filtered = categories
                 context["restaurant"] = RestaurantDetailsSerializer(
-                    self.object
-                ).data
+                    self.object).data
         return context
 
 

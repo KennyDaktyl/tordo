@@ -156,6 +156,28 @@ function filtersCounter(element) {
     document.getElementById("filters_counter").innerHTML = "(" + count + ")";
 }
 
+function onlyOne(input, class_name) {
+    var inputs = document.querySelectorAll('input.' + class_name);
+    var spans = document.querySelectorAll('span.filter_sorted');
+
+    inputs.forEach((item) => {
+        if (item !== input) { item.checked = false }
+        else {
+            item.checked = true;
+            var span = input.parentNode.querySelector('span.filter_sorted');
+            spans.forEach((item) => {
+                if (span !== item) {
+                    item.style.color= "#2F313E";
+                }
+                else {
+                    item.style.color = "#CA001C";
+                }
+            })
+        }
+    });
+    requestForCount(input);  
+}
+
 function addToBasket(food) {
 
     sessionStorage.setItem('scrollpos', window.scrollY);

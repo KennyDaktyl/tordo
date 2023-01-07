@@ -30,7 +30,7 @@ class Advertisement(models.Model):
     class Meta:
         ordering = ("date_start", "order")
         verbose_name_plural = "Reklamy"
-    
+
     def save(self, *args, **kwargs):
         self.thumbnails_cache = {
             "desktop": {},
@@ -63,7 +63,7 @@ class Advertisement(models.Model):
         if self.thumbnails_cache["mobile"].get("jpeg"):
             return self.thumbnails_cache["mobile"]["jpeg"]
         return None
-    
+
     @property
     def mobile_webp(self):
         if self.thumbnails_cache["mobile"].get("webp"):

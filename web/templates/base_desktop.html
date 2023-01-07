@@ -79,28 +79,6 @@
             var message_django = document.getElementById('message_django');
                 message_django.style.display = 'none';
             }
-
-            function onlyOne(checkbox, class_name) {
-                var inputs = document.querySelectorAll('input.' + class_name);
-                var spans = document.querySelectorAll('span.filter_sorted');
-
-                inputs.forEach((item) => {
-                    if (item !== checkbox) { item.checked = false }
-                    else {
-                        item.checked = true;
-                        var span = checkbox.parentNode.querySelector('span.filter_sorted');
-                        spans.forEach((item) => {
-                            if (span !== item) {
-                                item.style.color = "#2F313E";
-                            }
-                            else {
-                                item.style.color = "#CA001C";
-                            }
-                        })
-                    }
-                });
-            }
-            
         </script>
         {% block script %}{% endblock %}
     {% endcompress %}

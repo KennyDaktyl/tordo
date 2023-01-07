@@ -78,9 +78,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "is_located",
-                    models.BooleanField(
-                        default=False, verbose_name="GeoLokalizacja"
-                    ),
+                    models.BooleanField(default=False, verbose_name="GeoLokalizacja"),
                 ),
                 (
                     "geo_data",
@@ -99,9 +97,7 @@ class Migration(migrations.Migration):
                 ("id", models.AutoField(primary_key=True, serialize=False)),
                 (
                     "phone_number",
-                    models.CharField(
-                        max_length=18, verbose_name="Numer telefonu"
-                    ),
+                    models.CharField(max_length=18, verbose_name="Numer telefonu"),
                 ),
                 (
                     "user",
@@ -183,9 +179,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "info",
-                    models.TextField(
-                        blank=True, null=True, verbose_name="Informacje"
-                    ),
+                    models.TextField(blank=True, null=True, verbose_name="Informacje"),
                 ),
                 (
                     "distance_to_center",
@@ -208,9 +202,7 @@ class Migration(migrations.Migration):
                     "distance_to_point",
                     models.IntegerField(
                         default=999,
-                        validators=[
-                            django.core.validators.MinValueValidator(0)
-                        ],
+                        validators=[django.core.validators.MinValueValidator(0)],
                         verbose_name="Odległość do punktu w metrach",
                     ),
                 ),
@@ -396,17 +388,13 @@ class Migration(migrations.Migration):
                     "nip",
                     models.CharField(
                         max_length=13,
-                        validators=[
-                            django.core.validators.MinLengthValidator(10)
-                        ],
+                        validators=[django.core.validators.MinLengthValidator(10)],
                         verbose_name="Numer nip",
                     ),
                 ),
                 (
                     "main",
-                    models.BooleanField(
-                        default=False, verbose_name="Firma domyślna ?"
-                    ),
+                    models.BooleanField(default=False, verbose_name="Firma domyślna ?"),
                 ),
                 (
                     "user",

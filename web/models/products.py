@@ -12,9 +12,7 @@ from web.models.images import ALLOWED_IMAGE_EXTENSIONS, make_thumbnail
 def file_size(value):
     limit = 10 * 1024 * 1024
     if value.size > limit:
-        raise ValidationError(
-            "Plik który chcesz wrzucić jest większy niż 10MB."
-        )
+        raise ValidationError("Plik który chcesz wrzucić jest większy niż 10MB.")
 
 
 TAX = [
@@ -35,12 +33,8 @@ class Category(models.Model):
         verbose_name="Numer kategorii", null=True, blank=True, default=0
     )
     name = models.CharField(verbose_name="Nazwa kategorii", max_length=128)
-    slug = models.SlugField(
-        verbose_name="Slug", blank=True, null=True, max_length=128
-    )
-    is_active = models.BooleanField(
-        verbose_name="Czy jest dostępny", default=True
-    )
+    slug = models.SlugField(verbose_name="Slug", blank=True, null=True, max_length=128)
+    is_active = models.BooleanField(verbose_name="Czy jest dostępny", default=True)
 
     class Meta:
         ordering = (
@@ -70,9 +64,7 @@ class Product(models.Model):
         db_index=True,
     )
     name = models.CharField(verbose_name="Nazwa produktu", max_length=128)
-    slug = models.SlugField(
-        verbose_name="Slug", blank=True, null=True, max_length=128
-    )
+    slug = models.SlugField(verbose_name="Slug", blank=True, null=True, max_length=128)
     price = models.DecimalField(
         verbose_name="Cena podstawowa brutto",
         default=0,
@@ -80,9 +72,7 @@ class Product(models.Model):
         max_digits=7,
     )
     tax = models.IntegerField(verbose_name="Faktura", choices=TAX)
-    description = models.TextField(
-        verbose_name="Opis produktu", blank=True, null=True
-    )
+    description = models.TextField(verbose_name="Opis produktu", blank=True, null=True)
     image_listing_jpg = models.ImageField(
         verbose_name="Zdjęcie na listing 200x130",
         upload_to="products",
@@ -103,9 +93,7 @@ class Product(models.Model):
     )
     thumbnails_cache = models.JSONField(default=dict, null=True, blank=True)
 
-    is_active = models.BooleanField(
-        verbose_name="Czy jest dostępny", default=True
-    )
+    is_active = models.BooleanField(verbose_name="Czy jest dostępny", default=True)
 
     class Meta:
         ordering = ("name",)
@@ -140,9 +128,7 @@ class Product(models.Model):
         super(Product, self).save()
 
     def __str__(self):
-        return "{}, {}zł, vat{}".format(
-            self.name, self.price, self.get_tax_display()
-        )
+        return "{}, {}zł, vat{}".format(self.name, self.price, self.get_tax_display())
 
     @property
     def images_listing_jpg(self) -> dict:

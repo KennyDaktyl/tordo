@@ -32,9 +32,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "name",
-                    models.CharField(
-                        max_length=128, verbose_name="Nazwa kategorii"
-                    ),
+                    models.CharField(max_length=128, verbose_name="Nazwa kategorii"),
                 ),
                 (
                     "slug",
@@ -47,9 +45,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "is_active",
-                    models.BooleanField(
-                        default=True, verbose_name="Czy jest dostępny"
-                    ),
+                    models.BooleanField(default=True, verbose_name="Czy jest dostępny"),
                 ),
             ],
             options={
@@ -63,9 +59,7 @@ class Migration(migrations.Migration):
                 ("id", models.AutoField(primary_key=True, serialize=False)),
                 (
                     "name",
-                    models.CharField(
-                        max_length=128, verbose_name="Nazwa produktu"
-                    ),
+                    models.CharField(max_length=128, verbose_name="Nazwa produktu"),
                 ),
                 (
                     "slug",
@@ -132,9 +126,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "is_active",
-                    models.BooleanField(
-                        default=True, verbose_name="Czy jest dostępny"
-                    ),
+                    models.BooleanField(default=True, verbose_name="Czy jest dostępny"),
                 ),
                 (
                     "category",
@@ -174,9 +166,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "name",
-                    models.CharField(
-                        max_length=100, verbose_name="Nazwa restauracji"
-                    ),
+                    models.CharField(max_length=100, verbose_name="Nazwa restauracji"),
                 ),
                 (
                     "slug",
@@ -229,9 +219,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "is_active",
-                    models.BooleanField(
-                        default=True, verbose_name="Czy aktywna?"
-                    ),
+                    models.BooleanField(default=True, verbose_name="Czy aktywna?"),
                 ),
                 (
                     "geo_data",
@@ -255,9 +243,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "likes_counter",
-                    models.IntegerField(
-                        default=0, verbose_name="Licznik lików"
-                    ),
+                    models.IntegerField(default=0, verbose_name="Licznik lików"),
                 ),
                 (
                     "image_listing_photo",
@@ -507,9 +493,7 @@ class Migration(migrations.Migration):
             options={
                 "verbose_name_plural": "Godziny otwarcia restauracji",
                 "ordering": ("weekday", "from_hour"),
-                "unique_together": {
-                    ("restaurant", "weekday", "from_hour", "to_hour")
-                },
+                "unique_together": {("restaurant", "weekday", "from_hour", "to_hour")},
             },
         ),
     ]

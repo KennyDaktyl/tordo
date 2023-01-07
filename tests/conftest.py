@@ -22,9 +22,7 @@ def restaurants_data():
                 restaurant=restaurant, name=f"Kategoria_{category_num}"
             )
             for product_num in range(1, 5):
-                ProductFactory.create(
-                    category=category, name=f"Produkt_{product_num}"
-                )
+                ProductFactory.create(category=category, name=f"Produkt_{product_num}")
         for tag_num in range(1, 3):
             tag = TagFactory.create(name=f"Tag_{tag_num}")
             restaurant.tags.add(tag)

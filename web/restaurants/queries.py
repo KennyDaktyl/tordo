@@ -7,6 +7,7 @@ from django.conf import settings
 from typing import List
 from django.db.models import Count
 from django.db.models.query import QuerySet
+from web.models.restaurants import Restaurant
 
 FilterMapping = {
     "filter_foods": FilterFood,
@@ -31,7 +32,7 @@ def get_object_list_by_distance(request, object_list, user_location):
 
 
 def get_object_list_sorted(request, object_list):
-
+    a = request.session["sorted"]
     if request.session["sorted"] == "name":
         return object_list.order_by("name")
 
@@ -47,7 +48,9 @@ def get_object_list_sorted(request, object_list):
             obj for obj in object_list if obj.from_hour is not None]
         object_list_sorted = sorted(
             object_list_not_None, key=lambda obj: obj.from_hour)
-        return object_list_sorted
+        restaurant_queryset = Restaurant.objects.filter(
+            pk__in=[r.pk for r in object_list_sorted])
+        return restaurant_queryset
 
     if request.session["sorted"] == "longest_open":
         object_list_not_None = [
@@ -55,7 +58,10 @@ def get_object_list_sorted(request, object_list):
         object_list_sorted = sorted(
             object_list_not_None, key=lambda obj: obj.to_hour, reverse=True
         )
-        return object_list_sorted
+        restaurant_queryset = Restaurant.objects.filter(
+            pk__in=[r.pk for r in object_list_sorted])
+        return restaurant_queryset
+
     return object_list
 
 

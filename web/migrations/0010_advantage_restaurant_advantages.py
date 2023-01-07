@@ -43,9 +43,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "description",
-                    models.CharField(
-                        max_length=100, verbose_name="Opis atutu"
-                    ),
+                    models.CharField(max_length=100, verbose_name="Opis atutu"),
                 ),
                 (
                     "order",

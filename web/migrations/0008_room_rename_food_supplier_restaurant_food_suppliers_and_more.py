@@ -24,9 +24,7 @@ class Migration(migrations.Migration):
                 ),
                 (
                     "name",
-                    models.CharField(
-                        max_length=64, verbose_name="Nazwa pomieszczenia"
-                    ),
+                    models.CharField(max_length=64, verbose_name="Nazwa pomieszczenia"),
                 ),
                 ("qty", models.IntegerField(verbose_name="Ilość miejsc")),
                 (

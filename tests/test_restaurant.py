@@ -47,9 +47,7 @@ class TestRestaurantView:
         product_expected = self.__get_product_expected()
         product_expected.name = "Szukany produkt"
         product_expected.save()
-        response = self.client.get(
-            f"/restauracje/?search={product_expected.name}"
-        )
+        response = self.client.get(f"/restauracje/?search={product_expected.name}")
         object_list = response.context_data["object_list"]
         for restaurant in object_list:
             for category in restaurant["categories_filtered"]:
