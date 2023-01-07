@@ -10,9 +10,12 @@
         </div>
     </div>
     <div class="filter_box w-100 bg-green flex j-center a-center" onclick="openFilters()">
-        <div class="flex j-between a-center w-80">
+        <div class="flex j-between a-center w-80 p-relative">
             <span class="text-white text-bold">Filtry</span>
             <img src="/media/svg/filtr.svg" alt="Ikonka filtrów" width="30" height="18">
+            <span class="filter_count_info radius-circle p-absolute flex j-center a-center">
+                <small id="" class="text-white w-100 text-center">{{ filters_count }}</small>
+            </span>
         </div>
     </div>
     <div class="filter_box bg-white  flex j-center a-center p-relative">

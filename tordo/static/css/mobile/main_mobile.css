@@ -273,3 +273,12 @@ img.advertisement_image {
     right: 0;
     height: 100px;
 }
+
+.filter_count_info {
+    top: 5%;
+    left: 30%;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 30px;
+    border: 1px white solid;
+}

@@ -176,3 +176,10 @@ def __restaurants_search(search, object_list):
             restaurant.categories_filtered = categories
             products_search.append(restaurant)
     return set(products_search) | set(restaurants_search)
+
+
+def get_filters_count(request):
+    filter_food = len(request.session.get("filter_foods", []))
+    filter_advantages = len(request.session.get("filter_advantages", []))
+    filter_tags = len(request.session.get("filter_tags", []))
+    return sum([filter_food, filter_advantages, filter_tags])

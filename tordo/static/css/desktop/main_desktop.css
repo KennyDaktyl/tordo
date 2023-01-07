@@ -416,3 +416,12 @@ img.x_close {
     background-color: transparent;
     display: block;
 }
+
+.filter_count_info {
+    top: 32%;
+    left: 35%;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 30px;
+    border: 1px white solid;
+}

@@ -19,6 +19,7 @@ from .queries import (
     get_object_list_sorted,
     get_object_list_search,
     get_object_list_by_distance,
+    get_filters_count
 )
 
 User = get_user_model()
@@ -84,6 +85,7 @@ class RestaurantListView(ListView):
         context["filter_foods"] = FilterFood.objects.filter(is_active=True)[
             0:10]
         context["restaurants_count"] = super().get_queryset().count()
+        context["filters_count"] = get_filters_count(self.request)
         return context
 
 

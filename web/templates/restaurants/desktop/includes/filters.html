@@ -10,10 +10,13 @@
         </div>
     </div>
     <div class="text-container filters w-100 flex j-between a-center no-wrap margin-r-20 p-relative">
-        <div class="filter_box bg-green flex j-center a-center pointer" onclick="openFilters()">
+        <div class="filter_box bg-green flex j-center a-center pointer  p-relative" onclick="openFilters()">
             <div class="flex j-between a-center w-80">
                 <span class="text-white text-bold">Filtry</span>
                 <img src="/media/svg/filtr.svg" alt="Ikonka filtrów" width="30" height="18">
+                <span class="filter_count_info radius-circle p-absolute flex j-center a-center">
+                    <small id="" class="text-white w-100 text-center">{{ filters_count }}</small>
+                </span>
             </div>
         </div>
         <div class="filter_box bg-white  flex j-center a-center pointer">
