@@ -32,7 +32,12 @@ def get_object_list_by_distance(request, object_list, user_location):
 
 
 def get_object_list_sorted(request, object_list):
-    a = request.session["sorted"]
+    if request.session.get("user_location"):
+        user_location = request.session.get("user_location")
+        object_list = get_object_list_by_distance(
+            request, object_list, user_location
+        )
+
     if request.session["sorted"] == "name":
         return object_list.order_by("name")
 
