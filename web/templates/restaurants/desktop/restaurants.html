@@ -37,7 +37,7 @@
                 <div class="flex j-center a-center">
                     <picture class="flex j-center a-center wrap">
                         <source class="" srcset="{{ MEDIA_URL }}{% get_src_expected restaurant.listing_webp.items '277x187' %}" type="image/webp"/>
-                        <img class="restaurant_image_listing" src="{{ MEDIA_URL }}{% get_src_expected restaurant.listing_jpg.items '277x187' %}"  alt="{{ listing_image_alt }}" title="{{ listing_image_title }}" width="277" height="187">
+                        <img class="restaurant_image_listing" src="{{ MEDIA_URL }}{% get_src_expected restaurant.listing_jpg.items '277x187' %}"  alt="{{ restaurant.listing_image_alt }}" title="{{ restaurant.listing_image_title }}" width="277" height="187">
                     </picture>
                 </div>    
                 <div class="flex text-container j-between a-top w-100">
@@ -130,7 +130,7 @@
             <a href="{{ ad.link }}" class="advertisement_box p-relative w-100 flex j-right a-center margin-b-15">
                 <picture class="bg-dark">
                     <source class="" srcset="{{ MEDIA_URL }}{% get_src_expected ad.desktop_webp.items '355x229' %}" type="image/webp"/>
-                    <img class="" src="{{ MEDIA_URL }}{% get_src_expected ad.desktop_jpg.items '355x229' %}" alt="" width="355" height="229">
+                    <img class="" src="{{ MEDIA_URL }}{% get_src_expected ad.desktop_jpg.items '355x229' %}" alt="{{ ad.image_alt }}" title="{{ ad.image_title }}" width="355" height="229">
                 </picture>
                 <strong class="p-absolute text-bold text-white">{{ ad.content }}</strong>
                 <div class="promo_box bg-red flex a-center j-center p-absolute">

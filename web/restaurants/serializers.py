@@ -102,8 +102,6 @@ class RestaurantDetailsSerializer(serializers.ModelSerializer):
             "main_jpg_desktop",
             "main_webp_mobile",
             "main_jpg_mobile",
-            "listing_image_alt",
-            "listing_image_title",
             "logo_webp",
             "logo_jpg",
             "from_hour",

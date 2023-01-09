@@ -81,3 +81,11 @@ class Advertisement(models.Model):
         if self.thumbnails_cache["desktop"].get("webp"):
             return self.thumbnails_cache["desktop"]["webp"]
         return True
+
+    @property
+    def image_alt(self):
+        return f"Zdjęcię proujące reklamę o tytule {self.content}"
+
+    @property
+    def image_title(self):
+        return f"Motto reklamy to {self.description} a link to {self.link}."
