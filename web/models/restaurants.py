@@ -401,6 +401,14 @@ class Restaurant(models.Model):
         if self.thumbnails_cache["listing"].get("webp"):
             return self.thumbnails_cache["listing"]["webp"]
         return True
+    
+    @property
+    def listing_image_alt(self):
+        return f"Zdjęcię restauracji {self.name}"
+
+    @property
+    def listing_image_title(self):
+        return f"Motto restauracji {self.name} to {self.motto}"
 
     @property
     def main_jpg_desktop(self):

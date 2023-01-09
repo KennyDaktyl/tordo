@@ -22,7 +22,7 @@
         <a href="{% url 'restaurant_details' slug=restaurant.slug pk=restaurant.id %}" class="restaurant_box flex j-center a-top wrap w-100 margin-b-20">
             <picture class="w-100">
                 <source class="" srcset="{{ MEDIA_URL }}{% get_src_expected restaurant.listing_webp.items '500x145' %}" type="image/webp"/>
-                <img class="restaurant_image_listing" src="{{ MEDIA_URL }}{% get_src_expected restaurant.listing_jpg.items '500x145' %}" height="145">
+                <img class="restaurant_image_listing" src="{{ MEDIA_URL }}{% get_src_expected restaurant.listing_jpg.items '500x145' %}" alt="listing_image_alt" title="listing_image_title" height="145">
             </picture>
             <div class="restaurant_info_box w-100 text-container bg-white flex j-center a-top wrap padding-b-20">
                 <p class="w-100 text-left text-bold">{{ restaurant.name }}</p>
