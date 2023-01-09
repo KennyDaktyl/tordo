@@ -12,8 +12,8 @@ env.hosts = os.environ.get("IP_HOST", "51.75.64.242")
 env.port = os.environ.get("SSH_PORT", "62211")
 env.user = os.environ.get("HOST_USER", "kenny")
 env.password = os.environ.get("SSH_PASSWORD")
-# env.key_filename = "/home/michalp/.ssh/id_rsa_vps"
-env.key_filename = "/home/kenny/.ssh/id_rsa_vps"
+env.key_filename = "/home/michalp/.ssh/id_rsa_vps"
+# env.key_filename = "/home/kenny/.ssh/id_rsa_vps"
 env.directory = "/home/kenny/www/tordo"
 env.activate = "source {}/env/bin/activate".format(env.directory)
 env.export = f'export DB_USER={os.environ.get("DB_USER")} && export DB_PASSWORD={os.environ.get("DB_PASSWORD")}'.format(
